@@ -7,7 +7,11 @@ export default {
   theme: {
     extend: {
       colors:{
-        mainBlue:'#7BC6F1'
+        koop:{ // main koop blue
+          'def':'#7BC6F1', //default
+          'l':'#B3DEF7', //light
+          'd':'#1792D8' //dark
+        }
       }
     },
   },
