@@ -1,25 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import koop from '/koop.png'
 import { mainDiapo } from "../helpers/fakeData";
-import { clFormButton, clInputText, sizeFormBtnIcon } from "../helpers/class";
+import { clFormButton, clInputText, sizeFormBtnIcon, clPage } from "../helpers/class";
 import { FORMS } from "../helpers/flow";
 import styles from '../styles/main.module.css'
 import icoUser from '../assets/icons/user.png'
+import DiapoItem from "../comps/DiapoItem";
 
-function DiapoItem(props){
-    const { data } = props;
-    const img = `/diapo/${data.img}.jpg`;
-    
-    function onClick(e){
-        console.log(img)
-    }
-
-    return (
-        <button onClick={onClick}  className="flex-shrink-0 object-cover  cursor-pointer  overflow-hidden w-[240pt] rounded-[14pt] h-[140pt] bg-slate-500 mx-2"  >
-            <img src={img} className="object-cover w-full " />
-        </button>
-    )
-}
 
 function FormTabTitle(props){
     const { data, onFormTabClicked, selectedTab } = props;
@@ -48,7 +35,8 @@ function FormTabTitlesCont(props){
 export default function PageLogin(props){
 
     const [selectedTab, setSelectedTab] = useState(FORMS.LOGIN.tabname)
-    const [agree, setAgree] = useState(false)
+    const [agree, setAgree] = useState(false);
+    const { setSelectedPage } = props;
 
     function onFormTabClicked(data){
         console.warn(data)
@@ -60,58 +48,64 @@ export default function PageLogin(props){
     }
 
     return(
-        <section className="bg-koop-def text-white h-screen w-full">
-            
-            <div className="top p-4 flex-col flex justify-center items-center ">
-                <img className="w-[200px]" src={koop} />
+        <section className={clPage}>
+           
+            <article className="pg-login" page='login'>
 
-                <p className="text-slate-900 text-center mb-2">+ 1 millions de services et des professionels au bout de vos doigts</p>
+                <div className="top p-4 flex-col flex justify-center items-center ">
+                    <img className="w-[200px]" src={koop} />
 
-                <div className={`diapo-cont rounded-[14pt] overflow-x-auto w-full pb-4 `}>
-                    <div className="flex flex-row">
+                    <p className="text-slate-900 text-center mb-2">+ 1 millions de services et des professionels au bout de vos doigts</p>
 
-                       {
-                         mainDiapo.map((it, i) => <DiapoItem key={i} data={it}   /> )
-                       } 
-                     
+                    <div className={`diapo-cont rounded-[14pt] overflow-x-auto w-full pb-4 `}>
+                        <div className="flex flex-row">
+
+                        {
+                            mainDiapo.map((it, i) => <DiapoItem key={i} data={it}   /> )
+                        } 
+                        
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div className="shadow-lg shadow-slate-500 m-8 form-cont bg-white rounded-t-[40px] p-8">
+                    
+                    <FormTabTitlesCont data={null} onFormTabClicked={onFormTabClicked} selectedTab={selectedTab }  />
+
+                    <div className="text-black " tabCont='loginSignup'>
+                        { FORMS.SIGNUP.tabname === selectedTab && 
+                        <form  tabName='signup'>
+                            <input className={clInputText}  type="text" placeholder="Nom" />
+                            <input className={clInputText}  type="text" placeholder="Phone" />
+                            <input className={clInputText}  type="text" placeholder="OTP" />
+                            <input className={clInputText}  type="password" placeholder="Password" />
+                            <input className={clInputText}  type="password" placeholder="Re-Password" />
+                            <div className="my-2 py-2" >
+                                <input className="mr-2" type="checkbox" value={agree} onChange={e => setAgree(!agree)}/>
+                                Agree to <a href="http://www.google.com">terms and conditions</a>
+                            </div>
+                            <button onClick={e => setSelectedPage('home')} disabled={!agree} className={` flex justify-center items-center ${clFormButton}`}>
+                                <span><img width={sizeFormBtnIcon}  src={icoUser}/></span><span className="w-[10pt]"></span>Sign up
+                            </button>
+                        </form> }
+
+                        {
+                            FORMS.LOGIN.tabname === selectedTab &&
+                            
+                            <form tabName='login'>
+                            <input className={clInputText}  type="text" placeholder="Phone" />
+                            <input className={clInputText}  type="text" placeholder="Password" />
+                            <button  onClick={e => setSelectedPage('home')}  className={clFormButton}>Login</button>
+                            <button className="text-red-600 hover:text-red-500 w-full text-center">Mot de passe oublie?</button>
+                        </form>}
                     </div>
                 </div>
 
-
-            </div>
-
-            <div className="shadow-lg shadow-slate-500 m-8 form-cont bg-white rounded-t-[40px] p-8">
-                
-                <FormTabTitlesCont data={null} onFormTabClicked={onFormTabClicked} selectedTab={selectedTab }  />
-
-                <div className="text-black " tabCont='loginSignup'>
-                    { FORMS.SIGNUP.tabname === selectedTab && 
-                    <form  tabName='signup'>
-                        <input className={clInputText}  type="text" placeholder="Nom" />
-                        <input className={clInputText}  type="text" placeholder="Phone" />
-                        <input className={clInputText}  type="text" placeholder="OTP" />
-                        <input className={clInputText}  type="password" placeholder="Password" />
-                        <input className={clInputText}  type="password" placeholder="Re-Password" />
-                        <div className="my-2 py-2" >
-                            <input className="mr-2" type="checkbox" value={agree} onChange={e => setAgree(!agree)}/>
-                            Agree to <a href="http://www.google.com">terms and conditions</a>
-                        </div>
-                        <button disabled={!agree} className={` flex justify-center items-center ${clFormButton}`}>
-                            <span><img width={sizeFormBtnIcon}  src={icoUser}/></span><span className="w-[10pt]"></span>Sign up
-                        </button>
-                    </form> }
-
-                    {
-                        FORMS.LOGIN.tabname === selectedTab &&
-                        
-                        <form tabName='login'>
-                        <input className={clInputText}  type="text" placeholder="Phone" />
-                        <input className={clInputText}  type="text" placeholder="Password" />
-                        <button className={clFormButton}>Login</button>
-                        <button className="text-red-600 hover:text-red-500 w-full text-center">Mot de passe oublie?</button>
-                    </form>}
-                </div>
-            </div>
+            </article>
+            
+           
 
         </section>
     )
