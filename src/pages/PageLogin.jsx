@@ -55,8 +55,7 @@ export default function PageLogin(props){
     function onFormTabClicked(data){
         console.warn(data)
         const { title, tabName, tabContName, active } = data;
-        
-        
+    
         setSelectedForm(tabName);
     }
 
