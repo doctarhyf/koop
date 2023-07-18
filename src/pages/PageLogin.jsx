@@ -8,12 +8,15 @@ import styles from '../styles/main.module.css'
 
 function DiapoItem(props){
     const { data } = props;
-    //const img = require( `../assets/diapo/p1.jpg` )
+    
+    function onClick(e){
+        console.log(e)
+    }
 
     return (
-        <div className="flex-shrink-0 overflow-hidden w-[240pt] rounded-[14pt] h-[140pt] bg-slate-500 m-2"  >
+        <button onClick={onClick}  className="flex-shrink-0 cursor-pointer  overflow-hidden w-[240pt] rounded-[14pt] h-[140pt] bg-slate-500 mx-2"  >
             <img src={img} className="object-cover w-full " />
-        </div>
+        </button>
     )
 }
 
@@ -38,7 +41,7 @@ function FormTabTitlesCont(props){
     const { onFormTabClicked } = props;
 
     return(
-        <div className="text-black flex justify-around">
+        <div className="text-black flex justify-around mb-2">
            { Object.values(FORMS).map((it, i) => <FormTabTitle onFormTabClicked={onFormTabClicked} key={i} data={it} /> ) }
         </div>
     )
@@ -47,10 +50,12 @@ function FormTabTitlesCont(props){
 export default function PageLogin(props){
 
     const [selectedForm, setSelectedForm] = useState(FORMS.LOGIN.tabName)
+    const [agree, setAgree] = useState(false)
 
     function onFormTabClicked(data){
         console.warn(data)
         const { title, tabName, tabContName, active } = data;
+        
         
         setSelectedForm(tabName);
     }
@@ -61,9 +66,9 @@ export default function PageLogin(props){
             <div className="top p-4 flex-col flex justify-center items-center ">
                 <img className="w-[200px]" src={koop} />
 
-                <p className="text-slate-900 text-center">+ 1 millions de services et des professionels au bout de vos doigts</p>
+                <p className="text-slate-900 text-center mb-2">+ 1 millions de services et des professionels au bout de vos doigts</p>
 
-                <div className={`diapo-cont overflow-x-auto w-full ${ styles.diapoBox }`}>
+                <div className={`diapo-cont rounded-[14pt] overflow-x-auto w-full `}>
                     <div className="flex flex-row">
                        {
                          mainDiapo.map((it, i) => <DiapoItem key={i} data={i}  /> )
@@ -80,21 +85,25 @@ export default function PageLogin(props){
                 <FormTabTitlesCont data={null} onFormTabClicked={onFormTabClicked}  />
 
                 <div className="text-black " tabCont='loginSignup'>
-                    { FORMS.LOGIN.tabName === selectedForm && 
+                    { FORMS.SIGNUP.tabName === selectedForm && 
                     <form className="p-2" tabName='signup'>
                         <input className={clInputText} type="text" placeholder="Nom" />
-                        <input className={clInputText}  type="text" placeholder="Nom" />
-                        <input className={clInputText}  type="text" placeholder="Nom" />
-                        <input className={clInputText}  type="text" placeholder="Nom" />
-                        <button className={clFormButton}>Sign up</button>
+                        <input className={clInputText}  type="text" placeholder="Phone" />
+                        <input className={clInputText}  type="text" placeholder="OTP" />
+                        <input className={clInputText}  type="text" placeholder="Password" />
+                        <div className="my-2 py-2" >
+                            <input type="checkbox" value={agree} onChange={e => setAgree(!agree)}/>
+                            Agree to <a href="http://www.google.com">terms and conditions</a>
+                        </div>
+                        <button disabled={!agree} className={clFormButton}>Sign up</button>
                     </form> }
 
                     {
-                        FORMS.SIGNUP.tabName === selectedForm &&
+                        FORMS.LOGIN.tabName === selectedForm &&
                         
                         <form tabName='login'>
-                        <input className={clInputText}  type="text" placeholder="Nom" />
-                        <input className={clInputText}  type="text" placeholder="Nom" />
+                        <input className={clInputText}  type="text" placeholder="Phone" />
+                        <input className={clInputText}  type="text" placeholder="Password" />
                         <button className={clFormButton}>Login</button>
                     </form>}
                 </div>
