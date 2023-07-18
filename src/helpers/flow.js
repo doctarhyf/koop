@@ -1,7 +1,7 @@
 
 const FORMS =  {
-    LOGIN:{title:'Login', tabName:'login', tabContName:'loginSignup'}, 
-    SIGNUP:{title:'Signup', tabName:'signup', tabContName:'loginSignup' }
+    LOGIN:{title:'Login', tabname:'login', tabContName:'loginSignup'}, 
+    SIGNUP:{title:'Signup', tabname:'signup', tabContName:'loginSignup' }
 }
 
 export {

@@ -1,36 +1,32 @@
 import React, { useState } from "react";
 import koop from '/koop.png'
 import { mainDiapo } from "../helpers/fakeData";
-import { clFormButton, clInputText } from "../helpers/class";
-import img from '../assets/diapo/p1.jpg'
+import { clFormButton, clInputText, sizeFormBtnIcon } from "../helpers/class";
 import { FORMS } from "../helpers/flow";
 import styles from '../styles/main.module.css'
+import icoUser from '../assets/icons/user.png'
 
 function DiapoItem(props){
     const { data } = props;
+    const img = `/diapo/${data.img}.jpg`;
     
     function onClick(e){
-        console.log(e)
+        console.log(img)
     }
 
     return (
-        <button onClick={onClick}  className="flex-shrink-0 cursor-pointer  overflow-hidden w-[240pt] rounded-[14pt] h-[140pt] bg-slate-500 mx-2"  >
+        <button onClick={onClick}  className="flex-shrink-0 object-cover  cursor-pointer  overflow-hidden w-[240pt] rounded-[14pt] h-[140pt] bg-slate-500 mx-2"  >
             <img src={img} className="object-cover w-full " />
         </button>
     )
 }
 
 function FormTabTitle(props){
-    //const [active, setActive] = useState(true);
     const { data, onFormTabClicked, selectedTab } = props;
-    const isSelected = selectedTab === data.tabName
+    const isSelected = selectedTab === data.tabname
 
     function onClick(e){
-        
-        //setActive(isSelected)
-        console.log('selectedTab', selectedTab, 'data.tabName', data.tabName, 'isSelected', isSelected)
-
-      onFormTabClicked(data)
+        onFormTabClicked(data)
     }
 
     return(
@@ -51,16 +47,16 @@ function FormTabTitlesCont(props){
 
 export default function PageLogin(props){
 
-    const [selectedTab, setSelectedTab] = useState(FORMS.LOGIN.tabName)
+    const [selectedTab, setSelectedTab] = useState(FORMS.LOGIN.tabname)
     const [agree, setAgree] = useState(false)
 
     function onFormTabClicked(data){
         console.warn(data)
-        const { title, tabName, tabContName, active } = data;
+        const { title,  tabname } = data;
     
-        setSelectedTab(tabName);
+        setSelectedTab(tabname);
 
-        console.log(tabName)
+        console.log(tabname)
     }
 
     return(
@@ -71,10 +67,11 @@ export default function PageLogin(props){
 
                 <p className="text-slate-900 text-center mb-2">+ 1 millions de services et des professionels au bout de vos doigts</p>
 
-                <div className={`diapo-cont rounded-[14pt] overflow-x-auto w-full `}>
+                <div className={`diapo-cont rounded-[14pt] overflow-x-auto w-full pb-4 `}>
                     <div className="flex flex-row">
+
                        {
-                         mainDiapo.map((it, i) => <DiapoItem key={i} data={i}   /> )
+                         mainDiapo.map((it, i) => <DiapoItem key={i} data={it}   /> )
                        } 
                      
                     </div>
@@ -88,26 +85,30 @@ export default function PageLogin(props){
                 <FormTabTitlesCont data={null} onFormTabClicked={onFormTabClicked} selectedTab={selectedTab }  />
 
                 <div className="text-black " tabCont='loginSignup'>
-                    { FORMS.SIGNUP.tabName === selectedTab && 
-                    <form className="p-2" tabName='signup'>
-                        <input className={clInputText} type="text" placeholder="Nom" />
+                    { FORMS.SIGNUP.tabname === selectedTab && 
+                    <form  tabName='signup'>
+                        <input className={clInputText}  type="text" placeholder="Nom" />
                         <input className={clInputText}  type="text" placeholder="Phone" />
                         <input className={clInputText}  type="text" placeholder="OTP" />
-                        <input className={clInputText}  type="text" placeholder="Password" />
+                        <input className={clInputText}  type="password" placeholder="Password" />
+                        <input className={clInputText}  type="password" placeholder="Re-Password" />
                         <div className="my-2 py-2" >
-                            <input type="checkbox" value={agree} onChange={e => setAgree(!agree)}/>
+                            <input className="mr-2" type="checkbox" value={agree} onChange={e => setAgree(!agree)}/>
                             Agree to <a href="http://www.google.com">terms and conditions</a>
                         </div>
-                        <button disabled={!agree} className={clFormButton}>Sign up</button>
+                        <button disabled={!agree} className={` flex justify-center items-center ${clFormButton}`}>
+                            <span><img width={sizeFormBtnIcon}  src={icoUser}/></span><span className="w-[10pt]"></span>Sign up
+                        </button>
                     </form> }
 
                     {
-                        FORMS.LOGIN.tabName === selectedTab &&
+                        FORMS.LOGIN.tabname === selectedTab &&
                         
                         <form tabName='login'>
                         <input className={clInputText}  type="text" placeholder="Phone" />
                         <input className={clInputText}  type="text" placeholder="Password" />
                         <button className={clFormButton}>Login</button>
+                        <button className="text-red-600 hover:text-red-500 w-full text-center">Mot de passe oublie?</button>
                     </form>}
                 </div>
             </div>
