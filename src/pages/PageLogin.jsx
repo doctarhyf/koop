@@ -21,42 +21,46 @@ function DiapoItem(props){
 }
 
 function FormTabTitle(props){
-    const [active, setActive] = useState(true);
-    const { data, onFormTabClicked } = props;
+    //const [active, setActive] = useState(true);
+    const { data, onFormTabClicked, selectedTab } = props;
+    const isSelected = selectedTab === data.tabName
 
     function onClick(e){
-        const newState = !active;
-        setActive(newState);
-        data.active  = newState;
-        onFormTabClicked(data);
+        
+        //setActive(isSelected)
+        console.log('selectedTab', selectedTab, 'data.tabName', data.tabName, 'isSelected', isSelected)
+
+      onFormTabClicked(data)
     }
 
     return(
-        <button onClick={onClick} className={`p-2 border border-white ${ active ? 'border border-white border-b-koop-def text-koop-def' : '' }`} >{ data.title }</button> 
+        <button onClick={onClick} className={`p-2 border border-white ${ isSelected ? 'border border-white border-b-koop-def text-koop-def' : '' }`} >{ data.title }</button> 
     )
 }
 
 function FormTabTitlesCont(props){
 
-    const { onFormTabClicked } = props;
+    const { onFormTabClicked, selectedTab } = props;
 
     return(
         <div className="text-black flex justify-around mb-2">
-           { Object.values(FORMS).map((it, i) => <FormTabTitle onFormTabClicked={onFormTabClicked} key={i} data={it} /> ) }
+           { Object.values(FORMS).map((it, i) => <FormTabTitle onFormTabClicked={onFormTabClicked} key={i} data={it} selectedTab={selectedTab} /> ) }
         </div>
     )
 }
 
 export default function PageLogin(props){
 
-    const [selectedForm, setSelectedForm] = useState(FORMS.LOGIN.tabName)
+    const [selectedTab, setSelectedTab] = useState(FORMS.LOGIN.tabName)
     const [agree, setAgree] = useState(false)
 
     function onFormTabClicked(data){
         console.warn(data)
         const { title, tabName, tabContName, active } = data;
     
-        setSelectedForm(tabName);
+        setSelectedTab(tabName);
+
+        console.log(tabName)
     }
 
     return(
@@ -70,7 +74,7 @@ export default function PageLogin(props){
                 <div className={`diapo-cont rounded-[14pt] overflow-x-auto w-full `}>
                     <div className="flex flex-row">
                        {
-                         mainDiapo.map((it, i) => <DiapoItem key={i} data={i}  /> )
+                         mainDiapo.map((it, i) => <DiapoItem key={i} data={i}   /> )
                        } 
                      
                     </div>
@@ -81,10 +85,10 @@ export default function PageLogin(props){
 
             <div className="shadow-lg shadow-slate-500 m-8 form-cont bg-white rounded-t-[40px] p-8">
                 
-                <FormTabTitlesCont data={null} onFormTabClicked={onFormTabClicked}  />
+                <FormTabTitlesCont data={null} onFormTabClicked={onFormTabClicked} selectedTab={selectedTab }  />
 
                 <div className="text-black " tabCont='loginSignup'>
-                    { FORMS.SIGNUP.tabName === selectedForm && 
+                    { FORMS.SIGNUP.tabName === selectedTab && 
                     <form className="p-2" tabName='signup'>
                         <input className={clInputText} type="text" placeholder="Nom" />
                         <input className={clInputText}  type="text" placeholder="Phone" />
@@ -98,7 +102,7 @@ export default function PageLogin(props){
                     </form> }
 
                     {
-                        FORMS.LOGIN.tabName === selectedForm &&
+                        FORMS.LOGIN.tabName === selectedTab &&
                         
                         <form tabName='login'>
                         <input className={clInputText}  type="text" placeholder="Phone" />
