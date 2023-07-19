@@ -10,7 +10,8 @@ export default {
         koop:{ // main koop blue
           'def':'#7BC6F1', //default
           'l':'#B3DEF7', //light
-          'd':'#1792D8' //dark
+          'd':'#1792D8', //dark
+          'green':'#4CA069'
         }
       }
     },

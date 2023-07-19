@@ -61,7 +61,7 @@ export default function PageLogin(props){
                         <div className="flex flex-row">
 
                         {
-                            mainDiapo.map((it, i) => <DiapoItem key={i} data={it}   /> )
+                            mainDiapo.map((it, i) => <DiapoItem key={i}  data={it}   /> )
                         } 
                         
                         </div>
@@ -74,7 +74,7 @@ export default function PageLogin(props){
                     
                     <FormTabTitlesCont data={null} onFormTabClicked={onFormTabClicked} selectedTab={selectedTab }  />
 
-                    <div className="text-black " tabCont='loginSignup'>
+                    <div className="text-black " tabcont='loginSignup'>
                         { FORMS.SIGNUP.tabname === selectedTab && 
                         <form  tabName='signup'>
                             <input className={clInputText}  type="text" placeholder="Nom" />

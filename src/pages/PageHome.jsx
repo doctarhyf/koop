@@ -4,7 +4,11 @@ import menu from '../assets/icons/menu.png'
 import provserv from '../assets/icons/provserv.png'
 import lookserv from '../assets/icons/lookserv.png'
 import otherserv from '../assets/icons/otherserv.png'
-
+import rhyf from '../assets/icons/rhyf.png'
+import reqserv from '../assets/icons/reqserv.png'
+import postedserv from '../assets/icons/postedserv.png'
+import inbox from '../assets/icons/inbox.png'
+import '../App.css'
 
 function ButtonHomeMenu(props){
     
@@ -21,14 +25,17 @@ function ButtonHomeMenu(props){
 
 function ItemTopMenu(props){
 
-    let { icon, title } = props;
+    let { icon, title, badge, divide } = props;
 
 
     return(
-        <div className="text-black" >
+        <button className={` hover:bg-sky-100/30  w-full ${ divide ? ' border-b border-b-slate-200  ' : '' }  text-black flex items-center gap-2 p-2`} >
             <img src={icon} width={32} height={32} />
             <span>{ title }</span>
-        </div>
+            <span className="flex-grow" ></span>
+            <span className={`${ badge ? '' : 'hidden' } leading-[18pt] text-[10pt] bg-koop-green text-white w-[18pt] h-[18pt] rounded-full text-center font-bold`} >{ badge  }</span>
+            
+        </button>
     )
 }
 
@@ -45,8 +52,11 @@ export default function PageHome(props){
             <div className="menu-bar flex justify-between p-2">
                 <button><img src={menu} /></button>
                 <button><img onClick={e => setShowMenu(!showMenu)} className="rounded-full" width={32} height={32} src={'https://pbs.twimg.com/profile_images/664701790537973760/PF7GvcBA_400x400.jpg'} /></button>
-                <div className={` ${ showMenu ? 'hidden' : '' } absolute right-4 min-h-[120pt] bg-white min-w-[200pt] top-[46pt] shadow-xl rounded-[18pt]`}>
-                    <ItemTopMenu icon={provserv} title='My Account' badge='0' />
+                <div className={`top-menu overflow-hidden ${ showMenu ? 'hidden' : '' } transition-2  absolute right-4 min-h-[120pt] bg-white min-w-[200pt] top-[46pt] shadow-xl rounded-[18pt]`}>
+                    <ItemTopMenu icon={rhyf} title='My Account'  divide />
+                    <ItemTopMenu icon={inbox} title='Inbox' badge={2}   />
+                    <ItemTopMenu icon={reqserv} title='Requested Services' badge={7}   />
+                    <ItemTopMenu icon={postedserv} title='Posted Services' badge={23}   />
                 </div>
             </div>
 
