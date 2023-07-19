@@ -8,19 +8,7 @@ import reqserv from '../assets/icons/reqserv.png'
 import '../App.css'
 import MenuTopBar from "../comps/MenuTopBar";
 import SectionTitle from '../comps/SectionTitle'
-
-function ButtonHomeMenu(props){
-    
-    const {label, icon} = props;
-    
-    
-    return (
-        <button className="border w-max min-w-[50%] hover:bg-koop-d hover:text-white hover:shadow-md shadow-koop-d flex items-center space-x-2 border-koop-def px-4 py-2 bg-white rounded-xl text-black" >
-            <span><img className="  object-cover " width={40} height={40} src={icon} /></span>
-            <span>{label}</span>
-        </button>
-    )
-}
+import ButtonHomeMenu from "../comps/ButtonHomeMenu";
 
 export default function PageLookingForServ(props){
 
@@ -29,8 +17,12 @@ export default function PageLookingForServ(props){
 
     const ar = new Array(8).fill(0);
 
-    function onShowServiceDetails(d){
-        console.log('onShowServiceDetails', d)
+    function onShowServiceDetails(service){
+        console.log('onShowServiceDetails', service)
+    }
+
+    function onShowShopDetails(shop){
+        console.log(shop)
     }
 
     return(
