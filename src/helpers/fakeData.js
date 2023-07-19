@@ -27,6 +27,13 @@ const mainDiapo = [
     }
 ]
 
+const diapoTopFeatures = [
+    {
+        link:'',
+        img:''
+    }
+]
+
 export {
     mainDiapo,
 }
