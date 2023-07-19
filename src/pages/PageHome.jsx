@@ -8,6 +8,7 @@ import rhyf from '../assets/icons/rhyf.png'
 import reqserv from '../assets/icons/reqserv.png'
 import postedserv from '../assets/icons/postedserv.png'
 import inbox from '../assets/icons/inbox.png'
+import shutdown from '../assets/icons/shutdown.png'
 import '../App.css'
 
 function ButtonHomeMenu(props){
@@ -50,13 +51,14 @@ export default function PageHome(props){
         <section className={` p-2 ${classes.clPage}`}>
            
             <div className="menu-bar flex justify-between p-2">
-                <button><img src={menu} /></button>
+                <button onClick={e => setSelectedPage('login')} ><img src={menu} /></button>
                 <button><img onClick={e => setShowMenu(!showMenu)} className="rounded-full" width={32} height={32} src={'https://pbs.twimg.com/profile_images/664701790537973760/PF7GvcBA_400x400.jpg'} /></button>
                 <div className={`top-menu overflow-hidden ${ showMenu ? 'hidden' : '' } transition-2  absolute right-4 min-h-[120pt] bg-white min-w-[200pt] top-[46pt] shadow-xl rounded-[18pt]`}>
                     <ItemTopMenu icon={rhyf} title='My Account'  divide />
                     <ItemTopMenu icon={inbox} title='Inbox' badge={2}   />
                     <ItemTopMenu icon={reqserv} title='Requested Services' badge={7}   />
-                    <ItemTopMenu icon={postedserv} title='Posted Services' badge={23}   />
+                    <ItemTopMenu icon={postedserv} title='Posted Services' badge={23} divide   />
+                    <button className="w-full" onClick={ e => setSelectedPage('login') } ><ItemTopMenu icon={shutdown} title='Signout'    /></button>
                 </div>
             </div>
 
