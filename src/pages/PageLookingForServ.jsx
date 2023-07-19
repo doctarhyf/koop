@@ -40,7 +40,7 @@ export default function PageLookingForServ(props){
             </div>
 
             <div className="shadow-xl text-black flex flex-col gap-4 items-center  menu-cont bg-white rounded-[30pt] p-8 mt-8 mx-2">
-                <ButtonHomeMenu label='Request New Service' icon={reqserv} />
+                <ButtonHomeMenu setSelectedPage={setSelectedPage} label='Request New Service' icon={reqserv} route={'reqserv'} />
                 <p>To request a new which is not listed below</p>
 
                 <section className="text-left w-full" >

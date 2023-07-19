@@ -16,7 +16,7 @@ function App() {
       { 'login' === selectedPage && <PageLogin setSelectedPage={setSelectedPage} /> }
       { 'home' === selectedPage && <PageHome setSelectedPage={setSelectedPage} /> }
       { 'lookingforserv' === selectedPage && <PageLookingForServ setSelectedPage={setSelectedPage} /> } 
-      { 'reqnewserv' === selectedPage && <PageReqNewServ setSelectedPage={setSelectedPage} /> }
+      { 'reqserv' === selectedPage && <PageReqNewServ setSelectedPage={setSelectedPage} /> }
     </>
   )
 }
