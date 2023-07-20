@@ -28,7 +28,7 @@ export default function PageLookingForServ(props){
     return(
         <section className={` p-2 ${classes.clPage}`}>
            
-            <MenuTopBar setSelectedPage={setSelectedPage} />
+            <MenuTopBar setSelectedPage={setSelectedPage} title='LOOKING ...' />
 
             <div className="search-box h-[24pt] m-2 mt-4 flex rounded-lg overflow-hidden">
                 
@@ -46,8 +46,6 @@ export default function PageLookingForServ(props){
                 <section className="text-left w-full" >
                     
                     <SectionTitle label={'POPULAR SERVICES'} />
-
-                   
 
                     <div className=" flex overflow-x-scroll gap-4 pb-4 rounded-lg ">
                         {

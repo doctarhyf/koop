@@ -1,5 +1,6 @@
 
-const mainDiapo = [
+
+export const mainDiapo = [
     {
         alt:'',
         img:'p4',
@@ -27,13 +28,11 @@ const mainDiapo = [
     }
 ]
 
-const diapoTopFeatures = [
-    {
-        link:'',
-        img:''
-    }
-]
-
-export {
-    mainDiapo,
+export const SERVICES_TYPE = {
+    PLOMBERIE:['Plomberie'],
+    ELECTRICIEN:['Electricien'],
+    ELECTRONITIEN:['Electonicien'],
+    MACON:['Maconnerie'],
+    FORAGE:['Forage'],
+    LOGISTIQUE:['Logistique'],
 }

@@ -27,11 +27,12 @@ function ItemTopMenu(props){
 export default function MenuTopBar(props){
 
     const [showMenu, setShowMenu] = useState(false);
-    const {  setSelectedPage } = props;
+    const {  setSelectedPage, title } = props;
 
     return (
         <div className="menu-top-bar flex justify-between p-2">
                 <button onClick={e => setSelectedPage('login')} ><img src={menu} /></button>
+                <h5 className="text-xl" >{ title || 'KOOP' }</h5>
                 <button><img onClick={e => setShowMenu(!showMenu)} className="rounded-full" width={32} height={32} src={'https://pbs.twimg.com/profile_images/664701790537973760/PF7GvcBA_400x400.jpg'} /></button>
                 <div className={`top-menu  overflow-hidden ${ !showMenu ? 'hidden' : '' } transition-2  absolute right-4 min-h-[120pt] bg-white min-w-[200pt] top-[46pt] shadow-xl rounded-[18pt]`}>
                     <ItemTopMenu icon={rhyf} title='My Account'  divide />

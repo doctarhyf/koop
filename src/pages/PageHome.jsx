@@ -17,7 +17,7 @@ export default function PageHome(props){
     return(
         <section className={` p-2 ${classes.clPage}`}>
            
-            <MenuTopBar setSelectedPage={setSelectedPage} />
+            <MenuTopBar setSelectedPage={setSelectedPage} title='HOME'/>
 
             <div className="billbord flex flex-col items-center">
 
