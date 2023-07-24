@@ -28,7 +28,7 @@ export default function PageHome(props){
             </div>
 
             <div className="flex flex-col gap-4 items-center  menu-cont bg-white rounded-[30pt] p-8 mt-8 mx-8">
-                <ButtonHomeMenu setSelectedPage={setSelectedPage} route='login' label='Provide a Service' icon={provserv} />
+                <ButtonHomeMenu setSelectedPage={setSelectedPage} route='provserv' label='Provide a Service' icon={provserv} />
                 <ButtonHomeMenu setSelectedPage={setSelectedPage} route='lookingforserv' label='Look for a Service' icon={lookserv}  />
                 <ButtonHomeMenu setSelectedPage={setSelectedPage} route='otherserv' label='Other Services' icon={otherserv} />
                 <p className="text-black text-center flex ">

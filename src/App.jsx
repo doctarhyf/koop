@@ -6,6 +6,7 @@ import PageLogin from './pages/PageLogin'
 import PageHome from './pages/PageHome'
 import PageLookingForServ from './pages/PageLookingForServ'
 import PageReqNewServ from './pages/PageReqNewServ'
+import PageProvServ from './pages/PageProvServ'
 
 function App() {
   
@@ -17,6 +18,7 @@ function App() {
       { 'home' === selectedPage && <PageHome setSelectedPage={setSelectedPage} /> }
       { 'lookingforserv' === selectedPage && <PageLookingForServ setSelectedPage={setSelectedPage} /> } 
       { 'reqserv' === selectedPage && <PageReqNewServ setSelectedPage={setSelectedPage} /> }
+      { 'provserv' === selectedPage && <PageProvServ setSelectedPage={setSelectedPage} /> } 
     </>
   )
 }
