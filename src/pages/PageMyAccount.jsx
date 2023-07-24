@@ -82,7 +82,7 @@ export default function PageMyAccount(props){
 
             <div className="body  flex flex-col">
 
-                <div className="header  flex  items-center justify-around">
+                <div className="header text-sm flex  items-center justify-around mx-6">
                     <div className="flex flex-col justify-center items-center">
                         <img className="rounded-full" src={rhyf} width={imgSize} height={imgSize} />
                         <div className="font-bold">MUTUNDA KOJI Franvale</div>
@@ -113,7 +113,7 @@ export default function PageMyAccount(props){
                     </div>
                 </div>
 
-                <div className="cont  bg-white rounded-t-[20pt] p-8 mt-8 mx-4 ">
+                <div className="cont  bg-white shadow-xl rounded-t-[20pt] p-8 mt-8 mx-4 ">
 
                     <section className="section-forms">
                         <SectionTitle label={'PERSONAL INFO'} />
