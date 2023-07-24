@@ -3,8 +3,9 @@ import React from "react";
 
 export default function ButtonHomeMenu(props){
     
-    const {label, icon, setSelectedPage, route} = props;
+    let {label, icon, setSelectedPage, route, onClick} = props;
     
+    if(onClick) setSelectedPage = onClick;
    
     
     return (

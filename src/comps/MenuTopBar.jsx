@@ -10,11 +10,15 @@ import shutdown from '../assets/icons/shutdown.png'
 
 function ItemTopMenu(props){
 
-    let { icon, title, badge, divide } = props;
+    let { icon, title, badge, divide, setSelectedPage, route } = props;
 
+    function onClick(e){
+        console.log(e, setSelectedPage, route)
+        setSelectedPage(route)
+    }
 
     return(
-        <button className={` hover:bg-sky-100/30  w-full ${ divide ? ' border-b border-b-slate-200  ' : '' }  text-black flex items-center gap-2 p-2`} >
+        <button onClick={onClick} className={` hover:bg-sky-100/30  w-full ${ divide ? ' border-b border-b-slate-200  ' : '' }  text-black flex items-center gap-2 p-2`} >
             <img src={icon} width={32} height={32} />
             <span>{ title }</span>
             <span className="flex-grow" ></span>
@@ -35,7 +39,7 @@ export default function MenuTopBar(props){
                 <h5 className="text-xl" >{ title || 'KOOP' }</h5>
                 <button><img onClick={e => setShowMenu(!showMenu)} className="rounded-full" width={32} height={32} src={'https://pbs.twimg.com/profile_images/664701790537973760/PF7GvcBA_400x400.jpg'} /></button>
                 <div className={`top-menu  overflow-hidden ${ !showMenu ? 'hidden' : '' } transition-2  absolute right-4 min-h-[120pt] bg-white min-w-[200pt] top-[46pt] shadow-xl rounded-[18pt]`}>
-                    <ItemTopMenu icon={rhyf} title='My Account'  divide />
+                    <ItemTopMenu icon={rhyf} title='My Account' route='myacc' setSelectedPage={setSelectedPage}  divide />
                     <ItemTopMenu icon={inbox} title='Inbox' badge={2}   />
                     <ItemTopMenu icon={reqserv} title='Requested Services' badge={7}   />
                     <ItemTopMenu icon={postedserv} title='Posted Services' badge={23} divide   />
