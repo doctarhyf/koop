@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import koop from '/koop.png'
 import { mainDiapo } from "../helpers/fakeData";
 import { clFormButton, clInputText, sizeFormBtnIcon, clPage } from "../helpers/class";
-import { FORMS } from "../helpers/flow";
+import { FORMS, ROUTES } from "../helpers/flow";
 import styles from '../styles/main.module.css'
 import icoUser from '../assets/icons/user.png'
 import DiapoItem from "../comps/DiapoItem";
@@ -48,7 +48,7 @@ export default function PageLogin(props){
     }
 
     function onDiapoItemClicked(d){
-        setSelectedPage('showserv')
+        setSelectedPage(ROUTES.SHOW_SHOP.name)
     }
 
     return(

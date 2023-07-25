@@ -9,7 +9,9 @@ import PageReqNewServ from './pages/PageReqNewServ'
 import PageProvServ from './pages/PageProvServ'
 import PageMyAccount from './pages/PageMyAccount'
 import PageMyPostedServ from './pages/PageMyPostedServ'
-import PageService from './pages/PageService'
+import PageShowShop from './pages/PageShowShop'
+import { ROUTES } from './helpers/flow'
+import PageOtherServices from './pages/PageOtherServices'
 
 function App() {
   
@@ -17,14 +19,16 @@ function App() {
 
   return (
     <>
-      { 'login' === selectedPage && <PageLogin setSelectedPage={setSelectedPage} /> }
-      { 'home' === selectedPage && <PageHome setSelectedPage={setSelectedPage} /> }
-      { 'lookingforserv' === selectedPage && <PageLookingForServ setSelectedPage={setSelectedPage} /> } 
-      { 'reqserv' === selectedPage && <PageReqNewServ setSelectedPage={setSelectedPage} /> }
-      { 'provserv' === selectedPage && <PageProvServ setSelectedPage={setSelectedPage} /> } 
-      { 'myacc' === selectedPage && <PageMyAccount setSelectedPage={setSelectedPage} /> }
-      { 'postedserv' === selectedPage && <PageMyPostedServ setSelectedPage={setSelectedPage} /> }
-      { 'showserv' === selectedPage && <PageService setSelectedPage={setSelectedPage} /> }
+      { ROUTES.LOGIN.name === selectedPage && <PageLogin setSelectedPage={setSelectedPage} /> }
+      { ROUTES.HOME.name === selectedPage && <PageHome setSelectedPage={setSelectedPage} /> }
+      { ROUTES.LOOKING_FOR_SERVICE.name === selectedPage && <PageLookingForServ setSelectedPage={setSelectedPage} /> } 
+      { ROUTES.REQUEST_SERVICE.name === selectedPage && <PageReqNewServ setSelectedPage={setSelectedPage} /> }
+      { ROUTES.PROVIDE_SERVICE.name === selectedPage && <PageProvServ setSelectedPage={setSelectedPage} /> } 
+      { ROUTES.MY_ACOUNT.name === selectedPage && <PageMyAccount setSelectedPage={setSelectedPage} /> }
+      { ROUTES.MY_POSTED_SERVICES.name === selectedPage && <PageMyPostedServ setSelectedPage={setSelectedPage} /> }
+      { ROUTES.SHOW_SHOP.name === selectedPage && <PageShowShop setSelectedPage={setSelectedPage} /> }
+      { ROUTES.OTHER_SERVICES.name === selectedPage && <PageOtherServices setSelectedPage={setSelectedPage} /> }
+    
     </>
   )
 }

@@ -7,6 +7,7 @@ import search from '../assets/icons/search.png'
 import reqserv from '../assets/icons/reqserv.png'
 import email from '../assets/icons/email.png'
 import phone from '../assets/icons/phone.png'
+import home from '../assets/icons/home.png'
 import '../App.css'
 import MenuTopBar from "../comps/MenuTopBar";
 import SectionTitle from '../comps/SectionTitle'
@@ -33,7 +34,7 @@ function ContactItem({icon, label, link}){
     )
 }
 
-export default function PageService(props){
+export default function PageShowShop(props){
 
     const { setSelectedPage } = props;
 
@@ -64,6 +65,7 @@ export default function PageService(props){
                     <div className="gap-4 flex flex-col mt-8">
                         <ContactItem icon={email} label={'maison@email.com'} link={''} />
                         <ContactItem icon={phone} label={'+243892125047'} link={''} />
+                        <ContactItem icon={home} label={'KINSHASA, NGALIEMA'} link={''} />
                     </div>
                 </section>
             </div>

@@ -6,6 +6,7 @@ import otherserv from '../assets/icons/otherserv.png'
 import '../App.css'
 import MenuTopBar from "../comps/MenuTopBar";
 import ButtonHomeMenu from "../comps/ButtonHomeMenu";
+import { ROUTES } from "../helpers/flow";
 
 
 export default function PageHome(props){
@@ -28,9 +29,9 @@ export default function PageHome(props){
             </div>
 
             <div className="flex flex-col gap-4 items-center  menu-cont bg-white rounded-[30pt] p-8 mt-8 mx-8">
-                <ButtonHomeMenu setSelectedPage={setSelectedPage} route='provserv' label='Provide a Service' icon={provserv} />
-                <ButtonHomeMenu setSelectedPage={setSelectedPage} route='lookingforserv' label='Look for a Service' icon={lookserv}  />
-                <ButtonHomeMenu setSelectedPage={setSelectedPage} route='otherserv' label='Other Services' icon={otherserv} />
+                <ButtonHomeMenu setSelectedPage={setSelectedPage} route={ROUTES.PROVIDE_SERVICE.name} label='Provide a Service' icon={provserv} />
+                <ButtonHomeMenu setSelectedPage={setSelectedPage} route={ROUTES.LOOKING_FOR_SERVICE.name} label='Look for a Service' icon={lookserv}  />
+                <ButtonHomeMenu setSelectedPage={setSelectedPage} route={ROUTES.OTHER_SERVICES.name} label='Other Services' icon={otherserv} />
                 <p className="text-black text-center flex ">
                 You can pick weather you are lookig for a service or you wanna provide a service
                 </p>

@@ -9,6 +9,7 @@ import '../App.css'
 import MenuTopBar from "../comps/MenuTopBar";
 import SectionTitle from '../comps/SectionTitle'
 import ButtonHomeMenu from "../comps/ButtonHomeMenu";
+import { ROUTES } from "../helpers/flow";
 
 export default function PageLookingForServ(props){
 
@@ -23,6 +24,7 @@ export default function PageLookingForServ(props){
 
     function onShowShopDetails(shop){
         console.log(shop)
+        setSelectedPage(ROUTES.SHOW_SHOP.name)
     }
 
     return(

@@ -152,6 +152,12 @@ export default function PageMyAccount(props){
                     </section>
 
                     <section className="section-forms">
+                        <SectionTitle label={'SHOP INFO'} />
+                        <input type="text" disabled placeholder="name" className={`${ classes.clInputText }`} />
+                        <input type="text" disabled placeholder="name" className={`${ classes.clInputText }`} />
+                     </section>
+
+                    <section className="section-forms">
                         <SectionTitle label={'SUBSCRIPTION'} />
                         
                         <SubscriptionCardCont />
@@ -165,14 +171,13 @@ export default function PageMyAccount(props){
                         <div className="flex justify-around" >
                         {
                             PaymentsMethods.map((pay, i) => 
-                                <button className="payment" key={i}><img alt={pay.name} src={[pay.logo]} /></button>
+                                <button className="scale-hover" key={i}><img alt={pay.name} src={[pay.logo]} /></button>
                             )
                         }
                         </div>
 
                         <ButtonHomeMenu  onClick={onSave}  label='Confirm' icon={save}  /> 
-                        
-                       
+                          
                     </section>
 
                 </div>
