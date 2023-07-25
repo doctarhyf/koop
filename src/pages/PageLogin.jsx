@@ -47,6 +47,10 @@ export default function PageLogin(props){
         console.log(tabname)
     }
 
+    function onDiapoItemClicked(d){
+        setSelectedPage('showserv')
+    }
+
     return(
         <section className={clPage}>
            
@@ -61,7 +65,7 @@ export default function PageLogin(props){
                         <div className="flex flex-row">
 
                         {
-                            mainDiapo.map((it, i) => <DiapoItem key={i}  data={it}   /> )
+                            mainDiapo.map((it, i) => <DiapoItem onDiapoItemClicked={onDiapoItemClicked} key={i}  data={it}   /> )
                         } 
                         
                         </div>

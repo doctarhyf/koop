@@ -9,6 +9,7 @@ import PageReqNewServ from './pages/PageReqNewServ'
 import PageProvServ from './pages/PageProvServ'
 import PageMyAccount from './pages/PageMyAccount'
 import PageMyPostedServ from './pages/PageMyPostedServ'
+import PageService from './pages/PageService'
 
 function App() {
   
@@ -23,6 +24,7 @@ function App() {
       { 'provserv' === selectedPage && <PageProvServ setSelectedPage={setSelectedPage} /> } 
       { 'myacc' === selectedPage && <PageMyAccount setSelectedPage={setSelectedPage} /> }
       { 'postedserv' === selectedPage && <PageMyPostedServ setSelectedPage={setSelectedPage} /> }
+      { 'showserv' === selectedPage && <PageService setSelectedPage={setSelectedPage} /> }
     </>
   )
 }
