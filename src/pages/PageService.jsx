@@ -5,6 +5,8 @@ import lookserv from '../assets/icons/lookserv.png'
 import otherserv from '../assets/icons/otherserv.png'
 import search from '../assets/icons/search.png'
 import reqserv from '../assets/icons/reqserv.png'
+import email from '../assets/icons/email.png'
+import phone from '../assets/icons/phone.png'
 import '../App.css'
 import MenuTopBar from "../comps/MenuTopBar";
 import SectionTitle from '../comps/SectionTitle'
@@ -22,9 +24,14 @@ function getRandomNumber() {
     return randomNumber;
   }
   
-  // Example usage
-  const randomNum = getRandomNumber();
-  console.log(randomNum);
+function ContactItem({icon, label, link}){
+    return (
+        <button className="flex gap-4" onClick={e => console.log(link)}>
+            <img src={icon} width={30} height={30} alt={label} />
+            <span className="underline text-sky-500 hover:text-sky-400">{label}</span>
+        </button>
+    )
+}
 
 export default function PageService(props){
 
@@ -54,9 +61,10 @@ export default function PageService(props){
 
                 <section>
                     <SectionTitle label='Contact' />
-                    <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                    </p>
+                    <div className="gap-4 flex flex-col mt-8">
+                        <ContactItem icon={email} label={'maison@email.com'} link={''} />
+                        <ContactItem icon={phone} label={'+243892125047'} link={''} />
+                    </div>
                 </section>
             </div>
 
