@@ -20,6 +20,7 @@ export default function PageLookingForServ(props){
 
     function onShowServiceDetails(service){
         console.log('onShowServiceDetails', service)
+        setSelectedPage(ROUTES.SHOW_SERVICE_DETAILS.name)
     }
 
     function onShowShopDetails(shop){
@@ -30,7 +31,7 @@ export default function PageLookingForServ(props){
     return(
         <section className={` p-2 ${classes.clPage}`}>
            
-            <MenuTopBar setSelectedPage={setSelectedPage} title='LOOKING ...' />
+            <MenuTopBar setSelectedPage={setSelectedPage} title='LOOKING FOR SERVICES' />
 
             <div className="search-box h-[24pt] m-2 mt-4 flex rounded-lg overflow-hidden">
                 

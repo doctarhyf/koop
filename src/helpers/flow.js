@@ -17,5 +17,6 @@ export const ROUTES = {
     MY_ACOUNT : { name:'myacc' },
     MY_POSTED_SERVICES : { name:'postedserv'},
     SHOW_SHOP : { name:'showshop' },
-    OTHER_SERVICES : { name: 'otherserv'}
+    OTHER_SERVICES : { name: 'otherserv'},
+    SHOW_SERVICE_DETAILS : { name:'showserv' }
 }

@@ -34,7 +34,7 @@ function ContactItem({icon, label, link}){
     )
 }
 
-export default function PageShowShop(props){
+export default function PageShopDetails(props){
 
     const { setSelectedPage } = props;
 
