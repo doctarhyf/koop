@@ -42,7 +42,7 @@ export default function MenuTopBar(props){
                     <ItemTopMenu icon={rhyf} title='My Account' route='myacc' setSelectedPage={setSelectedPage}  divide />
                     <ItemTopMenu icon={inbox} title='Inbox' badge={2}   />
                     <ItemTopMenu icon={reqserv} title='Requested Services' badge={7}   />
-                    <ItemTopMenu icon={postedserv} title='Posted Services' badge={23} divide   />
+                    <ItemTopMenu icon={postedserv} title='Posted Services' badge={23} divide  route='postedserv' setSelectedPage={setSelectedPage}  />
                     <button className="w-full" onClick={ e => setSelectedPage('login') } ><ItemTopMenu icon={shutdown} title='Signout'    /></button>
                 </div>
             </div>
