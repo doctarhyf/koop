@@ -26,16 +26,72 @@ const PaymentsMethods = [
     {name:'Vodacom M-Pesa', url:'', logo:mpesa}
 ]
 
-const subsData = [
-    {
-        title:'Monthly', price:'$2 / Month', desc:'Pour un abonnement mensuel', oldPrice:''
+
+
+function SubscriptionCardCont({cardsData}) {
+
+    const [subcriptions, setSubscriptions] = useState([{
+        title:'Monthly', price:'$2 / Month', desc:'Pour un abonnement mensuel', oldPrice:'', selected:false
     },
     {
-        title:'Yearly', price:'$20 / year', desc:'Pour un abonnement annuel vous economisez deux mois.', oldPrice:'$24 / Year'
-    }
-]
+        title:'Yearly', price:'$20 / year', desc:'Pour un abonnement annuel vous economisez deux mois.', oldPrice:'$24 / Year', selected:true
+    }]);
 
-function SubscriptionCard({data}) {
+    useEffect(() => {
+
+    }, [subcriptions])
+        
+    function onClick(e){
+        const el = e.currentTarget;
+        const idx = el.getAttribute('idx');
+        
+        
+
+        //console.log('old - subcriptions', subcriptions);
+
+        let subscriptionToUpdate = subcriptions[idx];
+        
+        subcriptions.map((it, i) => { 
+            subcriptions[i].selected = false;
+        });
+
+        subscriptionToUpdate.selected = true;
+        subcriptions[idx] = subscriptionToUpdate;
+        
+        console.log('upd - subcriptions', subcriptions);
+
+        setSubscriptions([...subcriptions])
+
+
+        
+    }
+
+    return (
+        <div>
+            {
+                subcriptions.map((sub, i) => 
+                
+                <div onClick={onClick} key={i} idx={i} className={`mb-4 bg-black/99 hover:bg-koop-def group ${ sub.selected ? 'border-koop-def border-2 bg-koop-d text-white' : 'border-2' } text-black border p-4 rounded-xl shadow-lg`} >
+                    <div className="flex justify-between">
+                        <div className="group-hover:text-white" > { sub.title}</div>
+                        <div className={`w-[10pt] h-[10pt] rounded-full ${ sub.selected ? 'border-koop-def border-4' : 'border-2' } `} ></div>
+                    </div>
+                    <div>
+                    <span className="text-green-500 group-hover:text-black"> { sub.price} </span>
+                    { sub.oldPrice && <span className="text-red-500 line-through">{ sub.oldPrice}</span> }
+                    </div>
+                    <div className={`text-sm ${ sub.selected ? 'text-white':'' } text-slate-400  group-hover:text-white`} >
+                        { sub.desc}
+                    </div>
+                </div>
+                
+                )
+            }
+        </div>
+    )
+}
+
+/* function SubscriptionCard({data}) {
 
     const { title, price, oldPrice, desc } = data;
     const [checked, setChecked] = useState(false);
@@ -47,22 +103,7 @@ function SubscriptionCard({data}) {
         console.log(v)
     }
 
-    return (
-        <div className={`mb-4 bg-slate-100 text-black border ${ checked ? 'border-green-500' : '' } p-4 rounded-xl shadow-lg`} >
-            <div className="flex justify-between">
-                <div>{title}</div>
-                <input type="radio" onChange={onChange}   name='sub'/>
-            </div>
-            <div>
-               <span className="text-green-500"> {price} </span>
-               { oldPrice && <span className="text-red-500 line-through">{oldPrice}</span> }
-            </div>
-            <div className="text-sm text-slate-400">
-                {desc}
-            </div>
-        </div>
-    )
-}
+} */
 
 export default function PageMyAccount(props){
     
@@ -126,9 +167,8 @@ export default function PageMyAccount(props){
 
                     <section className="section-forms">
                         <SectionTitle label={'SUBSCRIPTION'} />
-                        {
-                            subsData.map((sub, i) => <SubscriptionCard key={i} data={sub} />)
-                        }
+                        
+                        <SubscriptionCardCont />
                         
                        
                     </section>
