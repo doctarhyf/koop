@@ -1,2 +1,6 @@
-
+.payment:hover {
+    transform: scale(1.2);
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s;
+    
+}
 

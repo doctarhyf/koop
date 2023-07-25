@@ -91,20 +91,6 @@ function SubscriptionCardCont({cardsData}) {
     )
 }
 
-/* function SubscriptionCard({data}) {
-
-    const { title, price, oldPrice, desc } = data;
-    const [checked, setChecked] = useState(false);
-    
-    function onChange(e){
-        const v = e.target.value;
-        setChecked(v)
-
-        console.log(v)
-    }
-
-} */
-
 export default function PageMyAccount(props){
     
     const imgSize = 120;
@@ -179,7 +165,7 @@ export default function PageMyAccount(props){
                         <div className="flex justify-around" >
                         {
                             PaymentsMethods.map((pay, i) => 
-                                <button key={i}><img alt={pay.name} src={[pay.logo]} alt={i} /></button>
+                                <button className="payment" key={i}><img alt={pay.name} src={[pay.logo]} /></button>
                             )
                         }
                         </div>
