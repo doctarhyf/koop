@@ -12,6 +12,7 @@ import '../App.css'
 import MenuTopBar from "../comps/MenuTopBar";
 import SectionTitle from '../comps/SectionTitle'
 import ButtonHomeMenu from "../comps/ButtonHomeMenu";
+import ReviewItem from '../comps/ReviewItem';
 import { SERVICES_TYPE } from '../helpers/fakeData';
 import bin from '../assets/icons/bin.png';
 
@@ -67,6 +68,15 @@ export default function PageShopDetails(props){
                         <ContactItem icon={phone} label={'+243892125047'} link={''} />
                         <ContactItem icon={home} label={'KINSHASA, NGALIEMA'} link={''} />
                     </div>
+                </section>
+                
+                <section>
+                    <SectionTitle label='Reviews' />
+                    <ReviewItem />
+                    <ReviewItem />
+                    <ReviewItem />
+                    <ReviewItem />
+                    <ReviewItem />
                 </section>
             </div>
 

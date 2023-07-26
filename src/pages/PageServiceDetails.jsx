@@ -10,6 +10,7 @@ import MenuTopBar from "../comps/MenuTopBar";
 import SectionTitle from '../comps/SectionTitle'
 import ButtonHomeMenu from "../comps/ButtonHomeMenu";
 import { SERVICES_TYPE } from '../helpers/fakeData'
+import AudioPlayer from "../comps/AudioPlayer";
 
 
 export default function PageServiceDetails(props){
@@ -27,23 +28,28 @@ export default function PageServiceDetails(props){
                 
                 <div className="box-service-type w-full">
                     <SectionTitle label='SERVICE NAME' />
-                    
-                  
-
                     <p>Reparations des frigos</p>
-
                 </div>
 
+                <div className="box-service-type w-full">
+                    <SectionTitle label='DATE' />
+                    <p>{ new Date().toLocaleDateString() }</p>
+                </div>
 
                 <div className="box-service-type w-full flex flex-col">
                     <SectionTitle label='SERVICE DESCRIPTION' />
-                    
                     <textarea placeholder="Brief description about what you want ..."></textarea>
-
                 </div>
 
                 <div className="box-service-type w-full flex flex-col">
-                    <SectionTitle label='ADD PICTURES' />
+                    <SectionTitle label='BUDGET PROPOSED' />
+                    <p>120 $</p>
+                </div>
+
+                <AudioPlayer />
+
+                <div className="box-service-type w-full flex flex-col">
+                    <SectionTitle label='PICTURES' />
                     
                     <div className=" flex overflow-x-scroll gap-4 pb-4 rounded-lg ">
                         {
