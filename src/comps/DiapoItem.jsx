@@ -2,7 +2,7 @@ import React from "react";
 
 export default function DiapoItem(props){
     let { data, w, h, onDiapoItemClicked } = props;
-    const img = `/diapo/${data.img}.jpg`;
+    const img = `./diapo/${data.img}.jpg`;
     const defw = '240pt';
     const defh = '160pt';
     
