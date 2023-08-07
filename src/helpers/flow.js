@@ -20,3 +20,10 @@ export const ROUTES = {
     OTHER_SERVICES : { name: 'otherserv'},
     SHOW_SERVICE_DETAILS : { name:'showserv' }
 }
+
+export const SOCIAL_CONNECT = {
+    FACEBOOK : { name:'Facebook', link:'', icon:'facebook' },
+    GOOGLE : { name:'G-mail', link:'', icon:'google' },
+    APPLE : { name:'Apple', link:'', icon:'apple' },
+    INSTA : { name:'Instagram', link:'', icon:'insta' }
+}
