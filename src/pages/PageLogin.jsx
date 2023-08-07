@@ -73,7 +73,7 @@ export default function PageLogin(props){
 
             <main className="main-diapo pt-[220px] w-full mx-auto" >
 
-                <ul className='galery py-0 px-[14px] max-w-[1100px] mx-auto my-0 flex flex-wrap gap-[2vmin]' >
+                <ul className='galery mt-[100px] py-0 px-[14px] max-w-[1100px] mx-auto my-0 flex flex-wrap gap-[2vmin]' >
                    { posts && posts.map((it, i) => <li className=" grow-[1] list-none h-[250px] " ><img className=" w-[100%] h-[100%] object-cover " src={it.image} /></li> ) }
                 </ul>
 
