@@ -17,6 +17,7 @@ import * as FUNCS from "../helpers/funcs";
 import { SliderBox } from "react-native-image-slider-box";
 import { TABLE_NAMES, supabase } from "../utils/supabase";
 import { getItemByRowEqVal, getUser } from "../utils/db";
+import * as API from "../utils/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../App";
 //import { Permissions } from "expo-permissions";
@@ -58,9 +59,20 @@ export default function Home({ navigation }) {
     fetchImages();
   }, []);
 
-  const onRequestOtp = () => {
-    setloading(true);
-    //checkUserLogin();
+  const saveSession = async (userData) => {
+    setuser(userData);
+    await AsyncStorage.setItem("@KOOP:user", JSON.stringify(userData));
+  };
+
+  const onRequestOtp = async () => {
+    //setloading(true);
+
+    const { phone, otp: pin } = creds;
+    const r = await API.getUser(phone, pin);
+
+    alert(`getUser(${phone}, ${pin}) => ` + JSON.stringify(r));
+
+    return;
     getUser(
       creds.phone,
       creds.otp,
@@ -251,5 +263,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginVertical: 12,
     color: "white",
+    overflow: "hidden",
   },
 });
