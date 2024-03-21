@@ -5,10 +5,26 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.example.com",
+        "EXPO_PUBLIC_API_KEY": "your_api_key",
+        "EXPO_PUBLIC_UNSPLASH_ACCESS_KEY": "LATMg97iDeMOSqBgVRC2Lkd8XXiWUVaawpCceAely-k",
+        "EXPO_PUBLIC_UNSPLASH_SECRET_KEY": "q-QZJ8dtfsQyeabmc4v3sXcss5fWMkVoyyRu9r6vZUI",
+        "SUPABASE_URL": "https://akttdrggveyretcvkjmq.supabase.co",
+        "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrdHRkcmdndmV5cmV0Y3Zram1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzY0NDkxOTEsImV4cCI6MTk5MjAyNTE5MX0.TRlHZBaUdW_xbeGapzEJSgqMFiThymQqLsGGYEhRL5Q"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://api.example.com",
+        "EXPO_PUBLIC_API_KEY": "your_api_key",
+        "EXPO_PUBLIC_UNSPLASH_ACCESS_KEY": "LATMg97iDeMOSqBgVRC2Lkd8XXiWUVaawpCceAely-k",
+        "EXPO_PUBLIC_UNSPLASH_SECRET_KEY": "q-QZJ8dtfsQyeabmc4v3sXcss5fWMkVoyyRu9r6vZUI",
+        "SUPABASE_URL": "https://akttdrggveyretcvkjmq.supabase.co",
+        "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFrdHRkcmdndmV5cmV0Y3Zram1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzY0NDkxOTEsImV4cCI6MTk5MjAyNTE5MX0.TRlHZBaUdW_xbeGapzEJSgqMFiThymQqLsGGYEhRL5Q"
+      }
     },
     "production": {
       "env": {
