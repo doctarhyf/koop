@@ -131,10 +131,10 @@ export default function ServiceInfo({ navigation, route }) {
                   it === "likes" ? console.log("likes") : console.log("views")
                 }
               >
-                <View style={[styles.flexRow]}>
+                <View style={[styles.flexRow, styles.paddingMid]}>
                   <Icon
                     name={it === "likes" ? "heart" : "eye"}
-                    size={18}
+                    size={28}
                     style={{ color: KOOP_BLUE_DARK }}
                   />
                   <View style={[{ width: 5 }]}></View>

@@ -25,7 +25,7 @@ export default function Comments({ route, navigation }) {
       setloading(true);
       try {
         const response = await fetch(
-          `https://konext.vercel.app/api/comments?id=${item.id}`
+          `https://konext.vercel.app/api/items/comments?id=${item.id}`
         );
 
         if (!response.ok) {
