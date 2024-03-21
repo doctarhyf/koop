@@ -18,6 +18,26 @@ import { KOOP_BLUE, KOOP_BLUE_TRANSLUCIDE } from "../helpers/colors";
 import ModalMenu from "../components/ModalMenu";
 import { UserContext } from "../App";
 import usePicURL from "../hooks/usePicURL";
+import TextButton from "../components/TextButton";
+
+const InfoPane = ({ navigation, gotoMyAccount }) => {
+  return (
+    <View style={[st.infpane]}>
+      <View style={[st.store]}>
+        <Image
+          src={require("../assets/icons/store.png")}
+          style={[{ width: 30, height: 30, resizeMode: "contain" }]}
+        />
+      </View>
+      <View>
+        <Text>Finish setting up your profile and your shop</Text>
+        <TouchableOpacity onPress={gotoMyAccount}>
+          <Text style={[styles.textBlue, styles.paddingSmall]}>My Account</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+};
 
 const Home = ({ navigation }) => {
   const { user, setuser } = useContext(UserContext);
@@ -78,8 +98,13 @@ const Home = ({ navigation }) => {
     navigation.navigate(btn.route);
   }
 
+  const gotoMyAccount = () => {
+    navigation.navigate("MyAccount", user);
+  };
+
   return (
     <SafeAreaView style={[styles.bgBlue, styles.flex1]}>
+      <InfoPane navigation={navigation} gotoMyAccount={gotoMyAccount} />
       <Image
         style={styles.alignSelfCenter}
         source={require("../assets/koop.png")}
@@ -121,6 +146,17 @@ const Home = ({ navigation }) => {
 export default Home;
 
 const st = StyleSheet.create({
+  infpane: {
+    backgroundColor: "white",
+    flexDirection: "row",
+    padding: 12,
+  },
+  store: {
+    backgroundColor: "red",
+    marginEnd: 12,
+    width: 30,
+    height: 30,
+  },
   header: {
     backgroundColor: KOOP_BLUE,
     color: "white",

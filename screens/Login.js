@@ -9,6 +9,7 @@ import {
   TextInput,
   ActivityIndicator,
   Alert,
+  Platform,
 } from "react-native";
 import { KOOP_BLUE, WHITE } from "../helpers/colors";
 import { DIAPO_PICS, BIG_FONT_SIZE, IMG_SIZE } from "../helpers/flow";
@@ -68,12 +69,48 @@ export default function Home({ navigation }) {
     //setloading(true);
 
     const { phone, otp: pin } = creds;
-    const r = await API.login(phone, pin);
+    const userData = await API.login(phone, pin);
 
-    alert(`getUser(${phone}, ${pin}) => ` + JSON.stringify(r));
-    console.error("getUser => ", r);
-    return;
-    getUser(
+    /* alert("Res => " + JSON.stringify(userData));
+    return; */
+    if (userData.error) {
+      const { error } = userData;
+
+      if (error === "USER_NOT_FOUND") {
+        Alert.alert(
+          "User not found!",
+          `User with phone number ${creds.phone} not found, do you wanna create a new account?`,
+          [
+            {
+              text: "CREATE MY ACCOUNT",
+              onPress: () => {
+                navigation.replace("ProfileAndShopSetup", {
+                  phone: creds.phone,
+                });
+              },
+            },
+            {
+              text: "EXPLORE AS GUEST",
+              destructive: true,
+              onPress: () => {
+                navigation.push("Explore");
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      } else if (error === "WRONG_PIN") {
+        Alert.alert("Wrong PIN", "You have eneterred a wrong PIN!");
+      } else {
+        alert("Error login, try again later");
+      }
+    } else {
+      //user logged in
+      await saveSession(userData);
+      navigation.replace("Home");
+    }
+
+    /* getUser(
       creds.phone,
       creds.otp,
       async (user) => {
@@ -102,7 +139,7 @@ export default function Home({ navigation }) {
           Alert.alert("Error login", JSON.stringify(e));
         }
       }
-    );
+    ); */
   };
 
   const checkUserLogin = async () => {
