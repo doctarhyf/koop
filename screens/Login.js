@@ -24,7 +24,7 @@ import { UserContext } from "../App";
 export default function Home({ navigation }) {
   const [loading, setloading] = useState(false);
   const [images, setImages] = useState([]);
-  const [creds, setcreds] = useState({ phone: "0980967780", otp: "0000" });
+  const [creds, setcreds] = useState({ phone: "", otp: "" });
 
   const { user, setuser } = useContext(UserContext);
 
