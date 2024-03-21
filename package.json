@@ -29,7 +29,6 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.73.4",
-    "react-native-bottom-sheet": "^1.0.3",
     "react-native-datepicker": "^1.7.2",
     "react-native-fab": "^1.0.18",
     "react-native-fast-image": "^8.6.3",
