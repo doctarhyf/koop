@@ -68,10 +68,10 @@ export default function Home({ navigation }) {
     //setloading(true);
 
     const { phone, otp: pin } = creds;
-    const r = await API.getUser(phone, pin);
+    const r = await API.login(phone, pin);
 
     alert(`getUser(${phone}, ${pin}) => ` + JSON.stringify(r));
-
+    console.error("getUser => ", r);
     return;
     getUser(
       creds.phone,

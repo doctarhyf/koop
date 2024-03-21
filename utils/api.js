@@ -1,15 +1,11 @@
-const LOCAL_MODE = true;
+const API_ENDPOINT = "https://konext.vercel.app/api";
 
-const API_ENDPOINT = LOCAL_MODE
-  ? "http://localhost:3000/api"
-  : "https://konext.vercel.app/api";
-
-export const getUser = async (phone, pin) => {
+export const login = async (phone, pin) => {
   const API_LOGIN = `${API_ENDPOINT}/auth/login`;
-  const loginData = { phone, pin };
+  const loginData = { phone: phone, pin: pin };
 
   try {
-    const response = await fetch(`${API_LOGIN}/auth/login`, {
+    const response = await fetch(`${API_LOGIN}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
