@@ -25,14 +25,18 @@ const InfoPane = ({ navigation, gotoMyAccount }) => {
     <View style={[st.infpane]}>
       <View style={[st.store]}>
         <Image
-          src={require("../assets/icons/store.png")}
-          style={[{ width: 30, height: 30, resizeMode: "contain" }]}
+          source={require("../assets/icons/store.png")}
+          style={[{ width: 60, height: 60, resizeMode: "contain" }]}
         />
       </View>
       <View>
         <Text>Finish setting up your profile and your shop</Text>
         <TouchableOpacity onPress={gotoMyAccount}>
-          <Text style={[styles.textBlue, styles.paddingSmall]}>My Account</Text>
+          <Text
+            style={[styles.textBlue, styles.paddingSmall, styles.textCenter]}
+          >
+            My Account
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -148,14 +152,16 @@ export default Home;
 const st = StyleSheet.create({
   infpane: {
     backgroundColor: "white",
-    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 12,
   },
   store: {
-    backgroundColor: "red",
+    overflow: "hidden",
     marginEnd: 12,
-    width: 30,
-    height: 30,
+    width: 60,
+    height: 60,
+    margin: 12,
   },
   header: {
     backgroundColor: KOOP_BLUE,

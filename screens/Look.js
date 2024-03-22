@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
+  Image,
 } from "react-native";
 import styles from "../helpers/styles";
 import MenuButton from "../components/MenuButton";
@@ -30,9 +31,7 @@ const FeaturedItems = ({ navigation, loadingkoopitems, koopitems }) => {
     console.log(cur);
     navigation.navigate("ViewAll", "Featured Items");
   };
-  return loadingkoopitems ? (
-    <ActivityIndicator animating={loadingkoopitems} />
-  ) : (
+  return (
     <View>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
         <Text style={[styles.mbLarge, styles.mtLarge]}>{`POPULAR ITEMS`}</Text>
@@ -40,35 +39,45 @@ const FeaturedItems = ({ navigation, loadingkoopitems, koopitems }) => {
           <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView horizontal>
-        {koopitems &&
-          koopitems.map &&
-          koopitems.map((item, item_idx) => (
-            <TouchableOpacity key={item_idx} onPress={(e) => onViewItem(item)}>
-              <ImageBackground
-                style={[
-                  styles.bgBlue,
-                  styles.roundedSmall,
-                  styles.marginH,
-                  st.imgbg,
-                  styles.justifyEnd,
-                  styles.overflowHidden,
-                ]}
-                source={{
-                  uri: item.photos[0], //"https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg",
-                }}
-              >
-                <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
-                  <Text style={styles.textWhite}>{item.name}</Text>
-                  <Text style={[styles.textGreen]}>{item.shop_name}</Text>
-                  <Text style={[styles.textGray, { fontSize: 12 }]}>
-                    + 40 items
-                  </Text>
-                </View>
-              </ImageBackground>
-            </TouchableOpacity>
-          ))}
-      </ScrollView>
+
+      {loadingkoopitems ? (
+        <ActivityIndicator animating={loadingkoopitems} />
+      ) : (
+        <View>
+          <ScrollView horizontal>
+            {koopitems &&
+              koopitems.map &&
+              koopitems.map((item, item_idx) => (
+                <TouchableOpacity
+                  key={item_idx}
+                  onPress={(e) => onViewItem(item)}
+                >
+                  <ImageBackground
+                    style={[
+                      styles.bgBlue,
+                      styles.roundedSmall,
+                      styles.marginH,
+                      st.imgbg,
+                      styles.justifyEnd,
+                      styles.overflowHidden,
+                    ]}
+                    source={{
+                      uri: item.photos[0], //"https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg",
+                    }}
+                  >
+                    <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
+                      <Text style={styles.textWhite}>{item.name}</Text>
+                      <Text style={[styles.textGreen]}>{item.shop_name}</Text>
+                      <Text style={[styles.textGray, { fontSize: 12 }]}>
+                        + 40 items
+                      </Text>
+                    </View>
+                  </ImageBackground>
+                </TouchableOpacity>
+              ))}
+          </ScrollView>
+        </View>
+      )}
     </View>
   );
 };
@@ -84,45 +93,120 @@ const FeaturedShops = ({ navigation, loadingshops, shops }) => {
     navigation.navigate("ViewAll", "All Shops");
   };
 
-  return loadingshops ? (
-    <ActivityIndicator animating={loadingshops} />
-  ) : (
+  return (
     <View>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>{`POPULAR SHOPS`}</Text>
+        <Text style={[styles.mbLarge, styles.mtLarge]}>POPULAR SHOPS</Text>
         <TouchableOpacity onPress={(e) => onViewAll()}>
           <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView horizontal>
-        {shops &&
-          shops.map &&
-          shops.map((shop, shop_idx) => (
-            <TouchableOpacity key={shop_idx} onPress={(e) => onViewShop(shop)}>
-              <ImageBackground
+      {loadingshops ? (
+        <ActivityIndicator animating={loadingshops} />
+      ) : (
+        <View>
+          <ScrollView horizontal>
+            {shops &&
+              shops.map &&
+              shops.map((shop, shop_idx) => (
+                <TouchableOpacity
+                  key={shop_idx}
+                  onPress={(e) => onViewShop(shop)}
+                >
+                  <ImageBackground
+                    style={[
+                      styles.bgBlue,
+                      styles.roundedSmall,
+                      styles.marginH,
+                      { width: 200, height: 140 },
+                      styles.justifyEnd,
+                      styles.overflowHidden,
+                    ]}
+                    source={{
+                      uri: shop.shop_profile, //"https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg",
+                    }}
+                  >
+                    <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
+                      <Text style={styles.textWhite}>{shop.shop_name}</Text>
+                      {/*  <Text style={[styles.textGreen]}>{curShop.shop_name}</Text> */}
+                      <Text style={[styles.textGray, { fontSize: 12 }]}>
+                        + 40 items
+                      </Text>
+                    </View>
+                  </ImageBackground>
+                </TouchableOpacity>
+              ))}
+          </ScrollView>
+        </View>
+      )}
+    </View>
+  );
+};
+
+const Suggestions = ({ navigation }) => {
+  const SUGGESTS_COUNT = 5;
+  const [images, setimages] = useState([]);
+  const [loading, setloading] = useState(false);
+
+  useEffect(() => {
+    setloading(true);
+
+    const fetchImages = async () => {
+      const randomImages = await FUNCS.GetRandomImages(
+        SUGGESTS_COUNT,
+        IMG_SIZE.w,
+        IMG_SIZE.h
+      );
+
+      setloading(false);
+      setimages(
+        randomImages.map((img, i) => ({ url: img.urls?.regular, id: i }))
+      );
+    };
+
+    fetchImages();
+  }, []);
+
+  return (
+    <View>
+      <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
+        <Text style={[styles.mbLarge, styles.mtLarge]}>SUGGESTIONS</Text>
+        <TouchableOpacity onPress={(e) => onViewAll()}>
+          <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
+        </TouchableOpacity>
+      </View>
+      {loading ? (
+        <ActivityIndicator animating={loading} size={32} />
+      ) : (
+        <ScrollView>
+          {images.map((it, i) => (
+            <TouchableOpacity onPress={(e) => console.log(e)}>
+              <View
                 style={[
-                  styles.bgBlue,
-                  styles.roundedSmall,
-                  styles.marginH,
-                  { width: 200, height: 140 },
-                  styles.justifyEnd,
-                  styles.overflowHidden,
+                  { marginVertical: 12, borderColor: "#ddd", borderWidth: 1 },
                 ]}
-                source={{
-                  uri: shop.shop_profile, //"https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg",
-                }}
               >
-                <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
-                  <Text style={styles.textWhite}>{shop.shop_name}</Text>
-                  {/*  <Text style={[styles.textGreen]}>{curShop.shop_name}</Text> */}
-                  <Text style={[styles.textGray, { fontSize: 12 }]}>
-                    + 40 items
-                  </Text>
+                <View
+                  style={[
+                    { height: 200, backgroundColor: "red", overflow: "hidden" },
+                  ]}
+                >
+                  <Image
+                    style={[
+                      { resizeMode: "cover", width: "100%", height: 200 },
+                    ]}
+                    source={require("../assets/images/init.jpg")}
+                  />
                 </View>
-              </ImageBackground>
+                <View style={[{ padding: 12 }]}>
+                  <Text>Suggestion</Text>
+                  <Text style={[styles.textGray]}>{it.url}</Text>
+                </View>
+              </View>
             </TouchableOpacity>
           ))}
-      </ScrollView>
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -285,17 +369,7 @@ export default function Look({ navigation }) {
               navigation={navigation}
             />
 
-            {/*  <FeaturedItems
-              loadingkoopitems={loadingkoopitems}
-              koopitems={koopitems}
-              navigation={navigation}
-            /> */}
-            <Text>A LA RECHERCHE DE</Text>
-            {
-              //OFFRES DE SERVICES A LA RECHERCHE DE
-            }
-
-            {/* {data && <Text>data loaded {JSON.stringify(koopitems)}</Text>} */}
+            <Suggestions />
           </View>
         </View>
       </ScrollView>
