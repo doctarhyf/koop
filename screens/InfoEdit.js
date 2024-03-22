@@ -46,6 +46,30 @@ const VILLES = [
   "Autre",
 ];
 
+const categoriesEntreprises = [
+  "Commerce de détail",
+  "Alimentation et boissons",
+  "Hôtellerie",
+  "Technologie",
+  "Santé",
+  "Finance",
+  "Immobilier",
+  "Automobile",
+  "Éducation",
+  "Divertissement",
+  "Mode",
+  "Construction",
+  "Transport",
+  "Fabrication",
+  "Fitness et bien-être",
+  "Juridique",
+  "Médias et communications",
+  "Consultation",
+  "Tourisme",
+  "Commerce électronique",
+  "Autre",
+];
+
 export default function InfoEdit({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
 
@@ -56,6 +80,7 @@ export default function InfoEdit({ navigation, route }) {
   const curval = dataContent.value || "";
   const [newValue, setNewValue] = useState(curval);
   const [bday, setbday] = useState();
+  const [shoptags, setshoptags] = useState([]);
 
   const parseDate = (dateString) => {
     const [day, month, year] = dateString.split("/").map(Number);
@@ -147,22 +172,44 @@ export default function InfoEdit({ navigation, route }) {
     setbday(currentDate);
   };
 
+  const onCatSelect = (newcat) => {
+    const idx = newValue.indexOf(newcat);
+    const len = newcat.length;
+    if (idx === -1) {
+      const nv = newValue + ";" + newcat;
+      setNewValue(nv);
+    } else {
+      const nv = newValue.replace(newcat, "");
+      setNewValue(nv);
+    }
+  };
+
+  useEffect(() => {
+    const tags = [...new Set(newValue.split(";"))];
+    setshoptags(tags);
+  }, [newValue]);
+
   return (
     <View style={[styles.paddingMid]}>
-      {dataKey !== "dob" && (
-        <TextInput
-          keyboardType={dataKey === "email" ? "email-address" : "default"}
-          selectTextOnFocus={true}
-          multiline={dataKey === "shop_desc" ? true : false}
-          numberOfLines={dataKey === "shop_desc" ? 10 : 1}
-          value={newValue}
-          onChangeText={(txt) => setNewValue(txt)}
-          style={[styles.ti]}
-          placeholder={
-            dataKey === "shop_desc" ? "this is your shop description .." : ""
-          }
-        />
-      )}
+      {dataKey !== "dob" ||
+        (dataKey === "shop_tags" && (
+          <TextInput
+            keyboardType={dataKey === "email" ? "email-address" : "default"}
+            selectTextOnFocus={true}
+            multiline={true}
+            numberOfLines={10}
+            value={newValue}
+            onChangeText={(txt) => setNewValue(txt)}
+            style={[styles.ti]}
+            placeholder={
+              dataKey === "shop_desc"
+                ? "this is your shop description .."
+                : dataKey === "email"
+                ? "ex: drrhyf@gmail.com"
+                : ""
+            }
+          />
+        ))}
       {dataKey === "dob" && (
         <View>
           <Text style={[styles.marginVMin]}>Date of birth: {newValue}</Text>
@@ -193,6 +240,40 @@ export default function InfoEdit({ navigation, route }) {
             </TouchableOpacity>
           ))}
         </View>
+      )}
+      {dataKey === "shop_tags" && (
+        <View>
+          <Text style={[styles.ti]}>{shoptags.join(";")}</Text>
+          <View style={[st.villecont]}>
+            {categoriesEntreprises.map((cat, i) => (
+              <TouchableOpacity onPress={(e) => onCatSelect(cat)}>
+                <Text
+                  style={[
+                    st.ville,
+                    shoptags.includes(cat) ? st.selected : null,
+                  ]}
+                >
+                  {cat}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      )}
+      {dataKey === "shop_desc" && (
+        <Text style={[styles.textGray]}>
+          ex: Notre entreprise de construction, basée en République démocratique
+          du Congo, se distingue par son expertise dans la construction de
+          maisons résidentielles. Avec un engagement ferme envers la qualité et
+          la satisfaction client, nous réalisons des projets qui incarnent le
+          confort, la fonctionnalité et l'esthétique. Notre équipe expérimentée
+          allie solutions de design innovantes et normes de construction
+          rigoureuses pour chaque projet, répondant ainsi aux aspirations
+          uniques de nos clients. De la conception à la réalisation, nous nous
+          engageons à fournir des structures résidentielles exceptionnelles,
+          témoignant de notre engagement indéfectible envers l'excellence dans
+          le paysage de la construction en RDC.
+        </Text>
       )}
     </View>
   );

@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Modal,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 
 import styles from "../helpers/styles";
@@ -108,41 +109,47 @@ const Home = ({ navigation }) => {
 
   return (
     <SafeAreaView style={[styles.bgBlue, styles.flex1]}>
-      <InfoPane navigation={navigation} gotoMyAccount={gotoMyAccount} />
-      <Image
-        style={styles.alignSelfCenter}
-        source={require("../assets/koop.png")}
-      />
-      <Text style={[styles.textWhite, styles.fontBold, styles.alignSelfCenter]}>
-        {`Hello ${user.display_name}, what would you like to do?`}
-      </Text>
+      <ScrollView>
+        <View>
+          <InfoPane navigation={navigation} gotoMyAccount={gotoMyAccount} />
+          <Image
+            style={styles.alignSelfCenter}
+            source={require("../assets/koop.png")}
+          />
+          <Text
+            style={[styles.textWhite, styles.fontBold, styles.alignSelfCenter]}
+          >
+            {`Hello ${user.display_name}, what would you like to do?`}
+          </Text>
 
-      <View
-        style={[
-          styles.bgWhite,
-          styles.bgWhite,
-          styles.flex1,
-          styles.mtLarge,
-          styles.borderTopStartRadius,
-          styles.paddingLarge,
-          styles.borderTopRadiusLarge,
-        ]}
-      >
-        {BUTTONS.map((btn, i) => (
-          <MenuButton key={i} btn={btn} handleOnPress={handleOnPress} />
-        ))}
+          <View
+            style={[
+              styles.bgWhite,
+              styles.bgWhite,
+              styles.flex1,
+              styles.mtLarge,
+              styles.borderTopStartRadius,
+              styles.paddingLarge,
+              styles.borderTopRadiusLarge,
+            ]}
+          >
+            {BUTTONS.map((btn, i) => (
+              <MenuButton key={i} btn={btn} handleOnPress={handleOnPress} />
+            ))}
 
-        <Text style={[styles.textCenter, styles.mtLarge]}>
-          You can pick weather you are lookig for a service or you wanna provide
-          a service
-        </Text>
-      </View>
+            <Text style={[styles.textCenter, styles.mtLarge]}>
+              You can pick weather you are lookig for a service or you wanna
+              provide a service
+            </Text>
+          </View>
 
-      <ModalMenu
-        navigation={navigation}
-        isMenuVisible={isMenuVisible}
-        closeMenu={closeMenu}
-      />
+          <ModalMenu
+            navigation={navigation}
+            isMenuVisible={isMenuVisible}
+            closeMenu={closeMenu}
+          />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
