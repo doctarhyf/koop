@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  StyleSheet,
 } from "react-native";
 
 import { Button } from "react-native";
@@ -19,6 +20,31 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import DateTimePicker, {
   DateTimePickerAndroid,
 } from "@react-native-community/datetimepicker";
+import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
+
+const VILLES = [
+  "Kinshasa",
+  "Lubumbashi",
+  "Mbuji-Mayi",
+  "Kananga",
+  "Kisangani",
+  "Bukavu",
+  "Tshikapa",
+  "Kolwezi",
+  "Likasi",
+  "Goma",
+  "Bunia",
+  "Matadi",
+  "Uvira",
+  "Isiro",
+  "Boma",
+  "Beni",
+  "Butembo",
+  "Mbandaka",
+  "Kikwit",
+  "Bumba",
+  "Autre",
+];
 
 export default function InfoEdit({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
@@ -125,6 +151,7 @@ export default function InfoEdit({ navigation, route }) {
     <View style={[styles.paddingMid]}>
       {dataKey !== "dob" && (
         <TextInput
+          keyboardType={dataKey === "email" ? "email-address" : "default"}
           selectTextOnFocus={true}
           multiline={dataKey === "shop_desc" ? true : false}
           numberOfLines={dataKey === "shop_desc" ? 10 : 1}
@@ -156,6 +183,38 @@ export default function InfoEdit({ navigation, route }) {
           )}
         </View>
       )}
+      {dataKey === "ville" && (
+        <View style={[st.villecont]}>
+          {VILLES.map((v, i) => (
+            <TouchableOpacity onPress={(e) => setNewValue(v)}>
+              <Text style={[st.ville, newValue === v ? st.selected : null]}>
+                {v}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
     </View>
   );
 }
+
+const st = StyleSheet.create({
+  villecont: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+  },
+  ville: {
+    borderWidth: 1,
+    borderColor: "#ffffff00",
+    padding: 8,
+    margin: 4,
+    backgroundColor: "#ddd",
+    borderRadius: 16,
+    overflow: "hidden",
+  },
+  selected: {
+    borderColor: KOOP_BLUE,
+    borderWidth: 1,
+    color: KOOP_BLUE_DARK,
+  },
+});
