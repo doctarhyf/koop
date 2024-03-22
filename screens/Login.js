@@ -109,37 +109,6 @@ export default function Home({ navigation }) {
       await saveSession(userData);
       navigation.replace("Home");
     }
-
-    /* getUser(
-      creds.phone,
-      creds.otp,
-      async (user) => {
-        setuser(user);
-        await AsyncStorage.setItem("@KOOP:user", JSON.stringify(user));
-        navigation.replace("Home");
-      },
-      (e) => {
-        if (e.code === "USER_NOT_FOUND") {
-          Alert.alert(
-            "User not found!",
-            `User with phone number ${creds.phone} not found, do you wanna create a new account?`,
-            [
-              {
-                text: "CREATE MY ACCOUNT",
-                onPress: () => {
-                  navigation.replace("ProfileAndShopSetup", {
-                    phone: creds.phone,
-                  });
-                },
-              },
-            ],
-            { cancelable: false }
-          );
-        } else {
-          Alert.alert("Error login", JSON.stringify(e));
-        }
-      }
-    ); */
   };
 
   const checkUserLogin = async () => {
