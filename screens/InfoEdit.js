@@ -191,25 +191,42 @@ export default function InfoEdit({ navigation, route }) {
 
   return (
     <View style={[styles.paddingMid]}>
-      {dataKey !== "dob" ||
-        (dataKey === "shop_tags" && (
-          <TextInput
-            keyboardType={dataKey === "email" ? "email-address" : "default"}
-            selectTextOnFocus={true}
-            multiline={true}
-            numberOfLines={10}
-            value={newValue}
-            onChangeText={(txt) => setNewValue(txt)}
-            style={[styles.ti]}
-            placeholder={
-              dataKey === "shop_desc"
-                ? "this is your shop description .."
-                : dataKey === "email"
-                ? "ex: drrhyf@gmail.com"
-                : ""
-            }
-          />
-        ))}
+      <Text>{dataKey}</Text>
+      {dataKey !== "dob" && dataKey !== "shop_tags" && (
+        <TextInput
+          keyboardType={
+            dataKey === "email" || dataKey === "shop_email"
+              ? "email-address"
+              : dataKey === "shop_whatsapp"
+              ? "phone-pad"
+              : "default"
+          }
+          selectTextOnFocus={true}
+          multiline={true}
+          numberOfLines={10}
+          value={newValue}
+          onChangeText={(txt) => setNewValue(txt)}
+          style={[styles.ti]}
+          placeholder={
+            dataKey === "shop_desc"
+              ? "this is your shop description .."
+              : dataKey === "email" || dataKey === "shop_email"
+              ? "ex: drrhyf@gmail.com"
+              : dataKey === "shop_web"
+              ? "https://myshop.com"
+              : dataKey === "shop_add"
+              ? `ex: No 22
+Avenue de l'Enseignement, Quartier Kasa-Vubu
+Commune de Ngaliema
+Kinshasa
+Democratic Republic of the Congo`
+              : ""
+          }
+        />
+      )}
+
+      {dataKey === "shop_add" && <View style={[st.map]}></View>}
+
       {dataKey === "dob" && (
         <View>
           <Text style={[styles.marginVMin]}>Date of birth: {newValue}</Text>
@@ -280,6 +297,11 @@ export default function InfoEdit({ navigation, route }) {
 }
 
 const st = StyleSheet.create({
+  map: {
+    backgroundColor: KOOP_BLUE,
+    height: 260,
+    marginTop: 12,
+  },
   villecont: {
     flexWrap: "wrap",
     flexDirection: "row",

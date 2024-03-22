@@ -206,9 +206,11 @@ export default function MyAccount({ navigation }) {
 
             <View style={[styles.alignCenter]}>
               <Text style={[styles.textLarge, styles.textWhite]}>
-                {user.displayName}
+                {user.display_name}
               </Text>
-              <Text style={[styles.textBold]}>{user.phone}</Text>
+              <Text style={[styles.textBold, { fontSize: 18 }]}>
+                {user.phone}
+              </Text>
             </View>
 
             <ActivityIndicator animating={loading} color={"white"} />
@@ -307,6 +309,8 @@ const st = StyleSheet.create({
   },
   shopfronttitle: {
     fontSize: 20,
+    backgroundColor: "black",
+    padding: 12,
   },
   header: {
     backgroundColor: KOOP_BLUE,

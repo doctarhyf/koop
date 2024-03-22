@@ -81,7 +81,14 @@ export default TabPersonalInfo = ({ user, handleInfoPress, navigation }) => {
       {Object.entries(personalInfo).map((data, i) => (
         <View key={i}>
           <TouchableOpacity onPress={(e) => handleInfoPress(data)}>
-            <View style={[styles.flexRow, styles.justifyBetween, st.shopdt]}>
+            <View
+              style={[
+                styles.flexRow,
+                styles.justifyBetween,
+                styles.alignCenter,
+                st.shopdt,
+              ]}
+            >
               <View style={[{ width: 28 }]}>
                 <Icon
                   name={data[1].icon || FA_ICONS.def}
