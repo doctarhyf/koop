@@ -191,7 +191,7 @@ export default function InfoEdit({ navigation, route }) {
 
   return (
     <View style={[styles.paddingMid]}>
-      <Text>{dataKey}</Text>
+      {/*  <Text>{dataKey}</Text> */}
       {dataKey !== "dob" && dataKey !== "shop_tags" && (
         <TextInput
           keyboardType={
