@@ -23,27 +23,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserContext } from "../App";
 //import { Permissions } from "expo-permissions";
 
+const phoneNumberPattern = /^\d{10}$/;
 export default function Home({ navigation }) {
   const [loading, setloading] = useState(false);
   const [images, setImages] = useState([]);
   const [creds, setcreds] = useState({ phone: "oidssds", otp: "dfsdf" });
+  const [formaterror, setformaterror] = useState(null);
 
   const { user, setuser } = useContext(UserContext);
 
   useEffect(() => {
-    /* async function requestCameraPermission() {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA);
-      if (status !== "granted") {
-        Alert.alert(
-          "Permission Denied",
-          "Please enable camera access in your device settings to use this feature.",
-          [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-        );
-      }
+    if (phoneNumberPattern.test(creds.phone)) {
+      setformaterror(null);
+    } else {
+      setformaterror("Invalid phone number format");
     }
-
-    // Call this function whenever you need to request camera permission.
-    requestCameraPermission(); */
 
     const fetchImages = async () => {
       const randomImages = await FUNCS.GetRandomImages(
@@ -66,6 +60,10 @@ export default function Home({ navigation }) {
   };
 
   const onRequestOtp = async () => {
+    if (formaterror !== null) {
+      alert("Invalid phone number", "The phone number enterred is invalid!");
+      return;
+    }
     setloading(true);
 
     const { phone, otp: pin } = creds;
@@ -124,7 +122,17 @@ export default function Home({ navigation }) {
     }
   };
 
+  useEffect(() => {
+    if (phoneNumberPattern.test(creds.phone)) {
+      setformaterror(null);
+    } else {
+      setformaterror("Invalid phone number format");
+    }
+  }, [creds]);
+
   function onLoginValueChange(type, val) {
+    // Pattern for a 10-digit phone number
+
     setcreds((old) => ({ ...old, [type]: val }));
   }
 
@@ -159,6 +167,14 @@ export default function Home({ navigation }) {
                 value={creds.phone || ""}
                 onChangeText={(text) => onLoginValueChange("phone", text)}
               />
+              <Text
+                style={[
+                  formaterror === null ? { color: "white" } : styles.error,
+                ]}
+              >
+                Invalid phone number
+              </Text>
+
               <TextInput
                 style={[styles.txtInput, styles.mt]}
                 placeholder="OTP"
@@ -206,6 +222,10 @@ export default function Home({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  error: {
+    color: "red",
+    textAlign: "center",
+  },
   logo: {
     height: 100,
     marginTop: 20,
