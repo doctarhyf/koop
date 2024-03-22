@@ -66,7 +66,7 @@ export default function Home({ navigation }) {
   };
 
   const onRequestOtp = async () => {
-    //setloading(true);
+    setloading(true);
 
     const { phone, otp: pin } = creds;
     const userData = await API.login(phone, pin);
@@ -77,6 +77,7 @@ export default function Home({ navigation }) {
       const { error } = userData;
 
       if (error === "USER_NOT_FOUND") {
+        setloading(false);
         Alert.alert(
           "User not found!",
           `User with phone number ${creds.phone} not found, do you wanna create a new account?`,
@@ -100,12 +101,15 @@ export default function Home({ navigation }) {
           { cancelable: false }
         );
       } else if (error === "WRONG_PIN") {
+        setloading(false);
         Alert.alert("Wrong PIN", "You have eneterred a wrong PIN!");
       } else {
+        setloading(false);
         alert("Error login, try again later");
       }
     } else {
       //user logged in
+      setloading(false);
       await saveSession(userData);
       navigation.replace("Home");
     }
