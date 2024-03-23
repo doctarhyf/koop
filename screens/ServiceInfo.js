@@ -20,16 +20,28 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { getItem, insertItem } from "../utils/db";
 import { TABLE_NAMES } from "../utils/supabase";
 import { UserContext } from "../App";
+import { addViewsCount } from "../utils/api";
 
 export default function ServiceInfo({ navigation, route }) {
   const { user } = useContext(UserContext);
   const item = route.params;
-  const { views, likes, shop_name, shop_profile, shop_id } = item;
+  const { likes, shop_name, shop_profile, shop_id, id } = item;
   const [loading, setloading] = useState(false);
   const [comment, setcomment] = useState("");
   const [commentPosted, setCommentPosted] = useState(false);
+  const [views, setviews] = useState("");
 
   //alert(JSON.stringify(item.shop_id));
+
+  useEffect(() => {
+    async function addViews() {
+      const res = await addViewsCount(user.id, id);
+      // alert("res =>" + JSON.stringify(res));
+      if (res.views) setviews(res.views);
+    }
+
+    addViews();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
