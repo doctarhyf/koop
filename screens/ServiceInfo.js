@@ -20,7 +20,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { getItem, insertItem } from "../utils/db";
 import { TABLE_NAMES } from "../utils/supabase";
 import { UserContext } from "../App";
-import { addViewsCount } from "../utils/api";
+import { addViewsCount, likeItem } from "../utils/api";
 
 export default function ServiceInfo({ navigation, route }) {
   const { user } = useContext(UserContext);
@@ -30,6 +30,7 @@ export default function ServiceInfo({ navigation, route }) {
   const [comment, setcomment] = useState("");
   const [commentPosted, setCommentPosted] = useState(false);
   const [views, setviews] = useState("");
+  const [liked, setliked] = useState(false);
 
   //alert(JSON.stringify(item.shop_id));
 
@@ -93,6 +94,23 @@ export default function ServiceInfo({ navigation, route }) {
     }
   };
 
+  const onLikeItem = async () => {
+    return;
+    const user_id = user.id;
+    const item_id = id;
+    // alert(`user_id = ${user_id}, item_id = ${item_id}`);
+
+    const r = await likeItem(user_id, item_id);
+
+    if (r) {
+      setliked(true);
+    } else {
+      setliked(false);
+    }
+
+    // alert(JSON.stringify(r));
+  };
+
   return (
     <ScrollView>
       <View style={{ flex: 1 }}>
@@ -140,12 +158,14 @@ export default function ServiceInfo({ navigation, route }) {
               <TouchableOpacity
                 key={i}
                 onPress={(e) =>
-                  it === "likes" ? console.log("likes") : console.log("views")
+                  it === "likes" ? onLikeItem() : console.log("views")
                 }
               >
                 <View style={[styles.flexRow, styles.paddingMid]}>
                   <Icon
-                    name={it === "likes" ? "heart" : "eye"}
+                    name={
+                      it === "likes" ? (liked ? "heart" : "heart-o") : "eye"
+                    }
                     size={28}
                     style={{ color: KOOP_BLUE_DARK }}
                   />
