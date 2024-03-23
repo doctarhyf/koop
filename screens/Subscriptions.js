@@ -68,6 +68,7 @@ export default function Subscriptions() {
                     : { backgroundColor: "#eee" },
                   styles.marginTopSmall,
                   styles.paddingSmall,
+                  { borderRadius: 12, borderWidth: 1, borderColor: "#ddd" },
                   i === selectedSub ? styles.borderBlue : null,
                   i === selectedSub ? st.activeSub : null,
                 ]}
@@ -170,7 +171,7 @@ const st = StyleSheet.create({
     height: 8,
     borderRadius: 4,
   },
-  bgOn: { backgroundColor: "green" },
+  bgOn: { backgroundColor: KOOP_BLUE_DARK },
   bgOff: { backgroundColor: "#9996" },
   activeSub: {
     borderWidth: 2,

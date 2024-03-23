@@ -192,7 +192,7 @@ export default function InfoEdit({ navigation, route }) {
   return (
     <View style={[styles.paddingMid]}>
       {/*  <Text>{dataKey}</Text> */}
-      {dataKey !== "dob" && dataKey !== "shop_tags" && (
+      {dataKey !== "dob" && dataKey !== "shop_tags" && dataKey !== "ville" && (
         <TextInput
           keyboardType={
             dataKey === "email" || dataKey === "shop_email"
@@ -225,6 +225,7 @@ Democratic Republic of the Congo`
         />
       )}
 
+      {dataKey === "ville" && <Text style={[styles.ti]}>{newValue}</Text>}
       {dataKey === "shop_add" && <View style={[st.map]}></View>}
 
       {dataKey === "dob" && (
@@ -317,7 +318,9 @@ const st = StyleSheet.create({
   },
   selected: {
     borderColor: KOOP_BLUE,
+    backgroundColor: KOOP_BLUE,
+
     borderWidth: 1,
-    color: KOOP_BLUE_DARK,
+    color: "white",
   },
 });
