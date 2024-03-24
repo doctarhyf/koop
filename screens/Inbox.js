@@ -24,7 +24,7 @@ const MESSAGE_TYPE = {
   OUTBOX: "outbox",
 };
 
-const MessageItem = ({
+/* const MessageItem = ({
   userProfile,
   userName,
   messageContent,
@@ -41,7 +41,35 @@ const MessageItem = ({
       </View>
     </View>
   </TouchableOpacity>
-);
+); */
+
+const ContactItem = ({ contactProfile, contactName, lastMessage }) => {
+  return (
+    <View style={[st.contactContainer, styles.flex1]}>
+      <Image source={require("../assets/rhyf.png")} style={st.contactProfile} />
+      <View style={[{ flexGrow: 1 }]}>
+        <View
+          style={[
+            {
+              justifyContent: "space-between",
+              flexDirection: "row",
+              flexGrow: 1,
+              flex: 1,
+            },
+          ]}
+        >
+          <Text numberOfLines={1} style={[{ fontWeight: "bold" }]}>
+            Contact Name
+          </Text>
+          <Text numberOfLines={1} style={[styles.textGray]}>
+            Last date
+          </Text>
+        </View>
+        <Text style={[styles.textGray]}>Previw last message ...</Text>
+      </View>
+    </View>
+  );
+};
 
 export default function Inbox({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
@@ -60,6 +88,8 @@ export default function Inbox({ navigation, route }) {
       setinbox(messages.inbox);
       setoutbox(messages.outbox);
     }
+
+    alert(JSON.stringify(messages));
   }, [messages]);
 
   useLayoutEffect(() => {
@@ -79,112 +109,19 @@ export default function Inbox({ navigation, route }) {
     navigation.navigate("ViewMessage", messageItem);
   };
 
-  return loading ? (
-    <View style={[styles.paddingLarge]}>
-      <ActivityIndicator animating={loading} color={KOOP_BLUE} />
-    </View>
-  ) : (
+  return (
     <View>
-      <View style={[styles.flexRow, styles.justifyBetween, styles.bgWhite]}>
-        {[
-          {
-            label: "INBOX",
-            type: MESSAGE_TYPE.INBOX,
-          },
-          {
-            label: "OUTBOX",
-            type: MESSAGE_TYPE.OUTBOX,
-          },
-        ].map((it, i) => (
-          <TouchableOpacity key={i} onPress={(e) => settabtype(it.type)}>
-            <View
-              style={[
-                styles.flexRow,
-                styles.justifyCenter,
-                styles.alignCenter,
-                styles.paddingSmall,
-                tabtype === it.type ? st.on : st.off,
-              ]}
-            >
-              {i === 0 && (
-                <MaterialCommunityIcons
-                  name="email-receive"
-                  size={24}
-                  color={tabtype === it.type ? KOOP_BLUE : "#000"}
-                />
-              )}
-              <Text
-                style={[
-                  styles.paddingSmall,
-                  { color: tabtype === it.type ? KOOP_BLUE : "#000" },
-                ]}
-              >
-                {it.label}
-              </Text>
-              {i === 1 && (
-                <MaterialIcons
-                  name="outbox"
-                  size={24}
-                  color={tabtype === it.type ? KOOP_BLUE : "#000"}
-                />
-              )}
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {!messages && (
-        <Text style={[styles.textCenter, styles.paddingMid]}>{nomsg}</Text>
+      {inbox.length === 0 && (
+        <Text style={[styles.textCenter, styles.paddingLarge]}>
+          No messages
+        </Text>
       )}
-
-      {messages && (
-        <View>
-          {tabtype === MESSAGE_TYPE.INBOX ? (
-            inbox.length === 0 ? (
-              <Text style={[st.nomsg]}>No inbox messages</Text>
-            ) : (
-              <FlatList
-                data={inbox}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                  <MessageItem
-                    handleMessagePress={(e) => handleMessagePress(item)}
-                    userName={`From: ${item.from_user.display_name}`}
-                    userProfile={{ uri: item.from_user.profile }}
-                    messageContent={item.message}
-                    messageDate={item.created_at}
-                  />
-                )}
-              />
-            )
-          ) : null}
-
-          {
-            tabtype === MESSAGE_TYPE.OUTBOX ? (
-              outbox.length === 0 ? (
-                <Text style={[st.nomsg]}>No outbox messages</Text>
-              ) : (
-                //outbox.map((msg, i) => (
-
-                <FlatList
-                  data={outbox}
-                  keyExtractor={(item) => item.id.toString()}
-                  renderItem={({ item }) => (
-                    <MessageItem
-                      handleMessagePress={(e) => handleMessagePress(item)}
-                      userName={`to: ${item.to_user.display_name}`}
-                      userProfile={{ uri: item.to_user.profile }}
-                      messageContent={item.message}
-                      messageDate={item.created_at}
-                    />
-                  )}
-                />
-              )
-            ) : null
-
-            //))
-          }
-        </View>
+      {inbox.length > 0 && (
+        <FlatList
+          data={inbox}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <ContactItem />}
+        />
       )}
     </View>
   );
@@ -201,13 +138,13 @@ const st = StyleSheet.create({
     borderBottomColor: KOOP_BLUE,
     color: KOOP_BLUE,
   },
-  messageContainer: {
+  contactContainer: {
     flexDirection: "row",
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
   },
-  profileImage: {
+  contactProfile: {
     width: 50,
     height: 50,
     borderRadius: 25,

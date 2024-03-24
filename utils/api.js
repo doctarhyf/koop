@@ -93,3 +93,31 @@ export const likeItem = async (user_id, item_id) => {
     return { error: true, message: errorMessage };
   }
 };
+
+export const sendMessage = async (message) => {
+  try {
+    const response = await fetch(`${API_ENDPOINT}/messages/send`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message), //nouveau design
+    });
+
+    if (!response.ok) {
+      errorMessage = "Network response was not ok";
+      throw new Error(errorMessage);
+    }
+
+    message = await response.json();
+    console.log(message);
+    return message;
+  } catch (error) {
+    // Handle errors
+    errorMessage = `There was a problem with the fetch operation: ${JSON.stringify(
+      error
+    )}`;
+    console.error(errorMessage);
+    return { error: true, message: errorMessage };
+  }
+};

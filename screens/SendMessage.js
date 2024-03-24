@@ -45,7 +45,14 @@ export default function SendMessage({ route, navigation }) {
   const onSendMessage = async (e) => {
     setloading(true);
 
-    //alert(`Sending message from ${from_id} to ${to_id}, message : ${message}`);
+    const res = await API.sendMessage({
+      from_id: from_id,
+      to_id: to_id,
+      content: message,
+    });
+    alert(JSON.stringify(res));
+
+    /* //alert(`Sending message from ${from_id} to ${to_id}, message : ${message}`);
     //return;
     const res = await sendMessage(from_id, to_id, message);
     const [inbox, outbox] = res;
@@ -74,14 +81,9 @@ export default function SendMessage({ route, navigation }) {
       alert("Error sending message\n" + JSON.stringify(res));
     }
 
-    console.error("sendMsg => ", res);
-    //alert("res send msg => " + JSON.stringify(r));
+    console.error("sendMsg => ", res); */
 
     setloading(false);
-
-    /*  alert(
-      `from: ${user.display_name} - ${user.id}\nsend to : ${shop_name} - ${shop_id}\n${message}`
-    ); */
   };
 
   return (
