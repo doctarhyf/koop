@@ -73,22 +73,13 @@ const ContactItem = ({ contactProfile, contactName, lastMessage }) => {
 
 export default function Inbox({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
-  const [tabtype, settabtype] = useState(MESSAGE_TYPE.INBOX);
-  const api = `https://konext.vercel.app/api/messages?id=${user.id}`;
+
+  const api = `https://konext.vercel.app/api/messages?user_id=${user.id}&page=1&count=10`;
   const [loading, messages, error] = useFetch(api);
   const nomsg = "You have no messages for now";
-  const [inbox, setinbox] = useState([]);
-  const [outbox, setoutbox] = useState([]);
 
   //alert(api);
-
   useEffect(() => {
-    //alert(JSON.stringify(messages));
-    if (messages) {
-      setinbox(messages.inbox);
-      setoutbox(messages.outbox);
-    }
-
     alert(JSON.stringify(messages));
   }, [messages]);
 
@@ -111,14 +102,15 @@ export default function Inbox({ navigation, route }) {
 
   return (
     <View>
-      {inbox.length === 0 && (
+      {<ActivityIndicator animating={loading} color={KOOP_BLUE} />}
+      {((messages && messages.length === 0) || messages === undefined) && (
         <Text style={[styles.textCenter, styles.paddingLarge]}>
           No messages
         </Text>
       )}
-      {inbox.length > 0 && (
+      {messages && messages.length > 0 && (
         <FlatList
-          data={inbox}
+          data={messages}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => <ContactItem />}
         />
