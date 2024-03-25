@@ -162,6 +162,7 @@ export default function Home({ navigation }) {
 
             <View>
               <TextInput
+                keyboardType="phone-pad"
                 style={[styles.txtInput, styles.mt]}
                 placeholder="Phone ex: 0980967780"
                 value={creds.phone || ""}
@@ -176,6 +177,8 @@ export default function Home({ navigation }) {
               </Text>
 
               <TextInput
+                keyboardType="number-pad"
+                secureTextEntry
                 style={[styles.txtInput, styles.mt]}
                 placeholder="OTP"
                 value={creds.otp || ""}

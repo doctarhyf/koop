@@ -26,10 +26,10 @@ const MESSAGE_TYPE = {
 
 const ContactItem = ({ contact_data, handleContactPress }) => {
   const contact = contact_data.item[1][0];
-  const last_message = contact_data.item[1][1];
+  const last_message = contact_data.item[1][contact_data.item[1].length - 1];
   const { shop_name } = contact;
   const last_date = new Date(last_message.created_at).toISOString().split("T");
-  const last_message_data = `${last_date[0]}`;
+  const last_message_date = `${last_date[0]}`;
 
   return (
     <TouchableOpacity onPress={(e) => handleContactPress(contact_data)}>
@@ -50,7 +50,7 @@ const ContactItem = ({ contact_data, handleContactPress }) => {
               {shop_name}
             </Text>
             <Text numberOfLines={1} style={[styles.textGray]}>
-              {last_message_data}
+              {last_message_date}
             </Text>
           </View>
           <Text style={[styles.textGray]}>{last_message.content}</Text>
