@@ -14,8 +14,6 @@ export default function useFetch(apiURL, noCache = false) {
 
   useEffect(() => {
     const fetchData = async () => {
-      alert("loading ...");
-
       setloading(true);
       try {
         let cacheControl = undefined;

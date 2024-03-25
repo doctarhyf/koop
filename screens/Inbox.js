@@ -28,15 +28,18 @@ const MESSAGE_TYPE = {
 
 const ContactItem = ({ contact_data, handleContactPress }) => {
   const contact = contact_data.item[1][0];
+
+  if (contact === null) return null;
+
   const last_message = contact_data.item[1][contact_data.item[1].length - 1];
-  const { shop_name } = contact;
+  const { shop_name, profile } = contact;
   const last_date = new Date(last_message.created_at).toISOString().split("T");
   const last_message_date = `${last_date[0]}`;
 
   return (
     <TouchableOpacity onPress={(e) => handleContactPress(contact_data)}>
       <View style={[st.contactContainer, styles.flex1]}>
-        <Image source={{ uri: contact.profile }} style={st.contactProfile} />
+        <Image source={{ uri: profile }} style={st.contactProfile} />
         <View style={[{ flexGrow: 1 }]}>
           <View
             style={[

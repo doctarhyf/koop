@@ -121,20 +121,21 @@ export default function Shop({ route, navigation }) {
         </ImageBackground>
         <View style={styles.paddingMid}>
           <Text style={[styles.textBlue]}>About</Text>
-          <Text>
-            {shop_desc ||
-              `Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries.`}
-          </Text>
 
-          {/*  <Text style={[styles.textBlue, styles.marginTopLarge]}>Services</Text>
-          <Text>- Service 1</Text>
-          <Text>- Service 1</Text>
-          <Text>- Service 1</Text>
-          <Text>- Service 1</Text> */}
+          {shop_desc ? (
+            <View style={[st.tagscont]}>
+              {shop_desc.split(";").map((t, i) => (
+                <Text style={[st.tag]} key={i}>
+                  {t}
+                </Text>
+              ))}
+            </View>
+          ) : (
+            <Text style={[{ fontStyle: "italic", color: "#ddd" }]}>
+              About {shop_name}
+            </Text>
+          )}
+
           {shop_add && (
             <View>
               <Text style={[styles.textBlue, , styles.marginTopLarge]}>
@@ -177,5 +178,17 @@ const st = StyleSheet.create({
   ctico: {
     width: 30,
     height: 30,
+  },
+  tag: {
+    backgroundColor: "#ddd",
+    flexShrink: 1,
+    margin: 4,
+    padding: 4,
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  tagscont: {
+    flexWrap: "wrap",
+    flexDirection: "row",
   },
 });
