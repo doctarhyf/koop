@@ -8,9 +8,11 @@ import {
   KeyboardAvoidingView,
   TextInput,
   ScrollView,
+  Image,
+  ActivityIndicator,
 } from "react-native";
 import styles from "../helpers/styles";
-import { KOOP_GREEN } from "../helpers/colors";
+import { KOOP_BLUE, KOOP_GREEN } from "../helpers/colors";
 import * as API from "../utils/api";
 import { UserContext } from "../App";
 
@@ -20,6 +22,7 @@ export default function ViewMessage({ route, navigation }) {
   const contact = contact_data.item[1][0];
   let messages_data = contact_data.item[1];
   const [messages, setmessages] = useState(messages_data.slice(1));
+  const [loading, setloading] = useState(false);
 
   const [newMessage, setNewMessage] = useState("");
 
@@ -28,6 +31,20 @@ export default function ViewMessage({ route, navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: contact.shop_name + " " + contact.id,
+      headerRight: () => (
+        <TouchableOpacity onPress={(e) => console.log(e)}>
+          <Image
+            style={{
+              width: 30,
+              height: 30,
+              marginRight: 4,
+              borderRadius: 15,
+              overflow: "hidden",
+            }}
+            source={{ uri: contact.profile }}
+          />
+        </TouchableOpacity>
+      ),
     });
 
     //set_contact_data(route.params);
@@ -49,15 +66,7 @@ export default function ViewMessage({ route, navigation }) {
   };
 
   const onSendMessage = async () => {
-    //alert(JSON.stringify(route.params));
-
-    const msgObj = {
-      content: newMessage,
-      me: true,
-    };
-
-    const newMessages = [...messages, msgObj];
-    setmessages(newMessages);
+    setloading(true);
 
     const res = await API.sendMessage({
       from_id: user.id,
@@ -65,7 +74,18 @@ export default function ViewMessage({ route, navigation }) {
       content: newMessage,
     });
 
-    alert(JSON.stringify(res));
+    const newMessages = [
+      ...messages,
+      {
+        from_id: res.from_id,
+        to_id: res.to_id,
+        content: res.content,
+        me: true,
+      },
+    ];
+    setmessages(newMessages);
+
+    setloading(false);
   };
 
   return (
@@ -93,9 +113,13 @@ export default function ViewMessage({ route, navigation }) {
             onChangeText={(txt) => setNewMessage(txt)}
           />
 
-          <TouchableOpacity onPress={onSendMessage}>
-            <Text>SEND</Text>
-          </TouchableOpacity>
+          {loading ? (
+            <ActivityIndicator animating={loading} color={KOOP_BLUE} />
+          ) : (
+            <TouchableOpacity onPress={onSendMessage}>
+              <Text>SEND</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </ScrollView>

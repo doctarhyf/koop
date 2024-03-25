@@ -8,6 +8,7 @@ import {
   StyleSheet,
   FlatList,
   Image,
+  RefreshControl,
 } from "react-native";
 import { Text } from "react-native";
 import { Entypo } from "@expo/vector-icons";
@@ -18,6 +19,7 @@ import styles from "../helpers/styles";
 import useFetch from "../hooks/useFetch";
 import { UserContext } from "../App";
 import { FontAwesome } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MESSAGE_TYPE = {
   INBOX: "inbox",
@@ -63,27 +65,34 @@ const ContactItem = ({ contact_data, handleContactPress }) => {
 export default function Inbox({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
 
-  const api = `https://konext.vercel.app/api/messages?user_id=${user.id}&page=1&count=10`;
-  const [loading, rawmessages, error] = useFetch(api);
+  const api = `https://konext.vercel.app/api/messages?user_id=${user.id}&page=1&count=50`;
+  const [loadingRawMessages, rawmessages, error, reloadMessages] =
+    useFetch(api);
   const nomsg = "You have no messages for now";
   const [messages, setmessages] = useState([]);
+  const [loading, setloading] = useState(false);
 
   useEffect(() => {
     if (rawmessages) {
-      setmessages(Object.entries(rawmessages));
-      // console.error("msgz => \n", JSON.stringify(Object.entries(rawmessages)));
-    }
+      const parsedMessages = Object.entries(rawmessages);
+      setmessages(parsedMessages);
 
-    //alert(JSON.stringify(rawmessages));
+      setloading(false);
+    }
   }, [rawmessages]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () =>
-        loading ? (
-          <ActivityIndicator animating={loading} />
+        loadingRawMessages || loading ? (
+          <ActivityIndicator animating={loadingRawMessages} />
         ) : (
-          <TouchableOpacity onPress={(e) => console.log(e)}>
+          <TouchableOpacity
+            onPress={(e) => {
+              setloading(true);
+              reloadMessages();
+            }}
+          >
             <FontAwesome name="refresh" size={24} color="black" />
           </TouchableOpacity>
         ),
@@ -104,8 +113,8 @@ export default function Inbox({ navigation, route }) {
 
   return (
     <View>
-      {<ActivityIndicator animating={loading} color={KOOP_BLUE} />}
-      {!loading && messages.length === 0 && (
+      {<ActivityIndicator animating={loadingRawMessages} color={KOOP_BLUE} />}
+      {!loadingRawMessages && messages.length === 0 && (
         <Text style={[styles.paddingLarge, styles.textCenter]}>
           No Messages
         </Text>

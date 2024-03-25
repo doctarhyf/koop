@@ -91,7 +91,7 @@ const Home = ({ navigation }) => {
       headerRight: () => (
         <TouchableOpacity onPress={openMenu}>
           <Image
-            style={{ width: 30, height: 30, marginRight: 12 }}
+            style={{ width: 30, height: 30, marginRight: 4 }}
             source={require("../assets/icons/menu.png")}
           />
         </TouchableOpacity>

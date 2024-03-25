@@ -2,13 +2,20 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
 import { loadAllItems, loadAllItemsWhereRowEqVal } from "../utils/db";
 
-export default function useFetch(apiURL, noCache = false, rdkey = 0) {
+export default function useFetch(apiURL, noCache = false) {
   const [loading, setloading] = useState(false);
   const [data, setdata] = useState(null);
   const [error, seterror] = useState(null);
+  const [rdk, setrdk] = useState(Math.random());
+
+  function reload() {
+    setrdk(Math.random());
+  }
 
   useEffect(() => {
     const fetchData = async () => {
+      alert("loading ...");
+
       setloading(true);
       try {
         let cacheControl = undefined;
@@ -35,7 +42,7 @@ export default function useFetch(apiURL, noCache = false, rdkey = 0) {
     };
 
     fetchData();
-  }, [apiURL, rdkey]);
+  }, [apiURL, rdk]);
 
-  return [loading, data, error];
+  return [loading, data, error, reload];
 }
