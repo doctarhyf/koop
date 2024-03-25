@@ -95,6 +95,11 @@ export const likeItem = async (user_id, item_id) => {
 };
 
 export const sendMessage = async (message) => {
+  /*message object 
+from_id ,
+to_id ,
+content */
+
   try {
     const response = await fetch(`${API_ENDPOINT}/messages/send`, {
       method: "POST",

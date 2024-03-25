@@ -24,50 +24,39 @@ const MESSAGE_TYPE = {
   OUTBOX: "outbox",
 };
 
-/* const MessageItem = ({
-  userProfile,
-  userName,
-  messageContent,
-  messageDate,
-  handleMessagePress,
-}) => (
-  <TouchableOpacity onPress={handleMessagePress}>
-    <View style={[st.messageContainer]}>
-      <Image source={userProfile} style={st.profileImage} />
-      <View style={st.messageContentContainer}>
-        <Text style={st.messageDate}>{userName}</Text>
-        <Text style={st.messageContent}>{messageContent}</Text>
-        <Text style={st.messageDate}>{messageDate}</Text>
-      </View>
-    </View>
-  </TouchableOpacity>
-); */
+const ContactItem = ({ contact_data, handleContactPress }) => {
+  const contact = contact_data.item[1][0];
+  const last_message = contact_data.item[1][1];
+  const { shop_name } = contact;
+  const last_date = new Date(last_message.created_at).toISOString().split("T");
+  const last_message_data = `${last_date[0]}`;
 
-const ContactItem = ({ contactProfile, contactName, lastMessage }) => {
   return (
-    <View style={[st.contactContainer, styles.flex1]}>
-      <Image source={require("../assets/rhyf.png")} style={st.contactProfile} />
-      <View style={[{ flexGrow: 1 }]}>
-        <View
-          style={[
-            {
-              justifyContent: "space-between",
-              flexDirection: "row",
-              flexGrow: 1,
-              flex: 1,
-            },
-          ]}
-        >
-          <Text numberOfLines={1} style={[{ fontWeight: "bold" }]}>
-            Contact Name
-          </Text>
-          <Text numberOfLines={1} style={[styles.textGray]}>
-            Last date
-          </Text>
+    <TouchableOpacity onPress={(e) => handleContactPress(contact_data)}>
+      <View style={[st.contactContainer, styles.flex1]}>
+        <Image source={{ uri: contact.profile }} style={st.contactProfile} />
+        <View style={[{ flexGrow: 1 }]}>
+          <View
+            style={[
+              {
+                justifyContent: "space-between",
+                flexDirection: "row",
+                flexGrow: 1,
+                flex: 1,
+              },
+            ]}
+          >
+            <Text numberOfLines={1} style={[{ fontWeight: "bold" }]}>
+              {shop_name}
+            </Text>
+            <Text numberOfLines={1} style={[styles.textGray]}>
+              {last_message_data}
+            </Text>
+          </View>
+          <Text style={[styles.textGray]}>{last_message.content}</Text>
         </View>
-        <Text style={[styles.textGray]}>Previw last message ...</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -75,13 +64,18 @@ export default function Inbox({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
 
   const api = `https://konext.vercel.app/api/messages?user_id=${user.id}&page=1&count=10`;
-  const [loading, messages, error] = useFetch(api);
+  const [loading, rawmessages, error] = useFetch(api);
   const nomsg = "You have no messages for now";
+  const [messages, setmessages] = useState([]);
 
-  //alert(api);
   useEffect(() => {
-    alert(JSON.stringify(messages));
-  }, [messages]);
+    if (rawmessages) {
+      setmessages(Object.entries(rawmessages));
+      // console.error("msgz => \n", JSON.stringify(Object.entries(rawmessages)));
+    }
+
+    //alert(JSON.stringify(rawmessages));
+  }, [rawmessages]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -96,23 +90,31 @@ export default function Inbox({ navigation, route }) {
     });
   }, [navigation]);
 
-  const handleMessagePress = (messageItem) => {
-    navigation.navigate("ViewMessage", messageItem);
+  const handleContactPress = (message_data) => {
+    //alert(JSON.stringify(message_data));
+
+    navigation.navigate("ViewMessage", message_data);
   };
+
+  const onRenderContact = (item) => (
+    <ContactItem contact_data={item} handleContactPress={handleContactPress} />
+  );
+
+  const onExtractContactKey = (item) => item[0];
 
   return (
     <View>
       {<ActivityIndicator animating={loading} color={KOOP_BLUE} />}
-      {((messages && messages.length === 0) || messages === undefined) && (
-        <Text style={[styles.textCenter, styles.paddingLarge]}>
-          No messages
+      {!loading && messages.length === 0 && (
+        <Text style={[styles.paddingLarge, styles.textCenter]}>
+          No Messages
         </Text>
       )}
       {messages && messages.length > 0 && (
         <FlatList
           data={messages}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <ContactItem />}
+          keyExtractor={onExtractContactKey}
+          renderItem={onRenderContact}
         />
       )}
     </View>

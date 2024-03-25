@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import * as API from "../utils/api";
 import styles from "../helpers/styles";
 import { UserContext } from "../App";
 import { FontAwesome } from "@expo/vector-icons";
@@ -51,6 +52,8 @@ export default function SendMessage({ route, navigation }) {
       content: message,
     });
     alert(JSON.stringify(res));
+
+    navigation.goBack();
 
     /* //alert(`Sending message from ${from_id} to ${to_id}, message : ${message}`);
     //return;

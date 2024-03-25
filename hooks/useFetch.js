@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabase";
 import { loadAllItems, loadAllItemsWhereRowEqVal } from "../utils/db";
 
-export default function useFetch(apiURL, noCache = false) {
+export default function useFetch(apiURL, noCache = false, rdkey = 0) {
   const [loading, setloading] = useState(false);
   const [data, setdata] = useState(null);
   const [error, seterror] = useState(null);
@@ -35,7 +35,7 @@ export default function useFetch(apiURL, noCache = false) {
     };
 
     fetchData();
-  }, [apiURL]);
+  }, [apiURL, rdkey]);
 
   return [loading, data, error];
 }
