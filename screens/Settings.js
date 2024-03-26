@@ -30,7 +30,7 @@ const DATA = [
       {
         text: "Change PIN",
         icon: <Entypo name="lock" size={ICON_SIZE} color="black" />,
-        route: "pin_change",
+        route: "change_pin",
       },
       {
         text: "Face ID",
@@ -96,6 +96,8 @@ export default Settings = ({ navigation, route }) => {
     if (route === "about") navigation.navigate("About");
 
     if (route === "contact_us") navigation.navigate("ContactUs");
+
+    if (route === "change_pin") navigation.navigate("ChangePIN", user);
 
     if (route === "share_app") {
       shareLink();

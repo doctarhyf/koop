@@ -38,6 +38,7 @@ import ViewMessage from "./screens/ViewMessage";
 import Explore from "./screens/Explore";
 import About from "./screens/About";
 import ContactUs from "./screens/ContactUs";
+import ChangePIN from "./screens/ChangePIN";
 
 const SCREENS = [
   { name: "Login", comp: Login, options: { headerShown: false } },
@@ -76,6 +77,7 @@ const SCREENS = [
   { name: "Explore", comp: Explore },
   { name: "About", comp: About },
   { name: "ContactUs", comp: ContactUs },
+  { name: "ChangePIN", comp: ChangePIN },
 ];
 
 const Stack = createNativeStackNavigator();
