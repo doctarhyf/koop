@@ -116,14 +116,28 @@ export default Settings = ({ navigation, route }) => {
         {DATA.map((section, isec) => (
           <View>
             <Text style={[st.sec_title]}>{section.title}</Text>
-            {section.data.map((it, i) => (
-              <TouchableOpacity key={i} onPress={(e) => onSettingsPress(it)}>
-                <View style={[st.it_cont]}>
-                  <View style={[st.it_icon]}>{it.icon}</View>
-                  <Text>{it.text}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+            {section.data.map((it, i) =>
+              it.os ? (
+                Platform.OS === it.os ? (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={(e) => onSettingsPress(it)}
+                  >
+                    <View style={[st.it_cont]}>
+                      <View style={[st.it_icon]}>{it.icon}</View>
+                      <Text>{it.text}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ) : null
+              ) : (
+                <TouchableOpacity key={i} onPress={(e) => onSettingsPress(it)}>
+                  <View style={[st.it_cont]}>
+                    <View style={[st.it_icon]}>{it.icon}</View>
+                    <Text>{it.text}</Text>
+                  </View>
+                </TouchableOpacity>
+              )
+            )}
           </View>
         ))}
       </ScrollView>
