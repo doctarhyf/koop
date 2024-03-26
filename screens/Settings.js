@@ -10,6 +10,8 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Share,
+  Platform,
 } from "react-native";
 import { UserContext } from "../App";
 import { KOOP_BLUE } from "../helpers/colors";
@@ -27,10 +29,13 @@ const DATA = [
       {
         text: "Change PIN",
         icon: <Entypo name="lock" size={ICON_SIZE} color="black" />,
+        route: "pin_change",
       },
       {
         text: "Face ID",
         icon: <FontAwesome6 name="face-grin-wide" size={24} color="black" />,
+        route: "face_id",
+        os: "ios",
       },
     ],
   },
@@ -40,24 +45,55 @@ const DATA = [
       {
         text: "Share the app",
         icon: <Octicons name="share" size={24} color="black" />,
+        route: "share_app",
       },
       {
         text: "Contact us",
         icon: <FontAwesome6 name="smile-wink" size={24} color="black" />,
+        route: "contact_us",
       },
       {
         text: "About",
         icon: <Entypo name="info-with-circle" size={24} color="black" />,
+        route: "about",
       },
     ],
   },
 ];
 
-export default Settings = () => {
+export default Settings = ({ navigation, route }) => {
   const { user, setuser } = useContext(UserContext);
 
-  const onSettingsPress = (set) => {
-    alert(JSON.stringify(set));
+  const shareLink = async () => {
+    try {
+      const applink = "https://konext.app/";
+      const result = await Share.share({
+        message: `Salut ! 👋 Je voulais te faire découvrir cette superbe application que j'utilise en ce moment. Elle s'appelle KOOP, et elle m'a été incroyablement utile pour trouver des clients et des articles rares. Tu peux la télécharger gratuitement sur l'App Store/Google Play : ${applink}. N'hésite pas à l'essayer et à me faire part de ton avis ! 😊 #KOOP #KOOP2024.`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const onSettingsPress = (settings) => {
+    const { route } = settings;
+
+    if (route === "about") navigation.navigate("About");
+
+    if (route === "contact_us") navigation.navigate("ContactUs");
+
+    if (route === "share_app") {
+      shareLink();
+    }
   };
 
   return (

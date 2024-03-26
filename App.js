@@ -36,6 +36,8 @@ import ViewAll from "./screens/ViewAll";
 import SendMessage from "./screens/SendMessage";
 import ViewMessage from "./screens/ViewMessage";
 import Explore from "./screens/Explore";
+import About from "./screens/About";
+import ContactUs from "./screens/ContactUs";
 
 const SCREENS = [
   { name: "Login", comp: Login, options: { headerShown: false } },
@@ -72,6 +74,8 @@ const SCREENS = [
   { name: "Comments", comp: Comments },
   { name: "ViewMessage", comp: ViewMessage },
   { name: "Explore", comp: Explore },
+  { name: "About", comp: About },
+  { name: "ContactUs", comp: ContactUs },
 ];
 
 const Stack = createNativeStackNavigator();
