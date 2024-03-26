@@ -97,7 +97,8 @@ export default Settings = ({ navigation, route }) => {
 
     if (route === "contact_us") navigation.navigate("ContactUs");
 
-    if (route === "change_pin") navigation.navigate("ChangePIN", user);
+    if (route === "change_pin")
+      navigation.navigate("ChangePIN", { user: user, setuser: setuser });
 
     if (route === "share_app") {
       shareLink();

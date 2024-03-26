@@ -1,5 +1,5 @@
 import { View, Text, TextInput, ActivityIndicator } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "../helpers/styles";
 import SimpleTextButton from "../components/SimpleTextButton";
 import { UserContext } from "../App";
@@ -14,7 +14,7 @@ const PIN_ERROR = {
 };
 
 export default function ChangePIN({ navigation, route }) {
-  const user = route.params;
+  const { user, setuser } = useContext(UserContext);
   const [loading, setloading] = useState(false);
   const [currentpin, setcurrentpin] = useState("");
   const [newpin, setnewpin] = useState("");
@@ -70,7 +70,7 @@ export default function ChangePIN({ navigation, route }) {
       setloading(true);
       const res = await updatePersShopInfo(user, "pin", newpin);
       if (res && res[0] && res[0].id) {
-        await saveSession(userData);
+        await saveSession(res[0]);
         alert("PIN updated!");
         navigation.goBack();
       }
