@@ -61,11 +61,22 @@ const ContactItem = ({ contact_data, handleContactPress }) => {
             <Text numberOfLines={1} style={[{ fontWeight: "bold" }]}>
               {shop_name}
             </Text>
-            <Text numberOfLines={1} style={[styles.textGray]}>
+            <Text
+              numberOfLines={2}
+              style={[
+                styles.textGray,
+                {
+                  flexGrow: 1,
+                  textAlign: "right",
+                },
+              ]}
+            >
               {last_message_date}
             </Text>
           </View>
-          <Text style={[styles.textGray]}>{last_message.content}</Text>
+          <Text numberOfLines={2} style={[styles.textGray]}>
+            {last_message.content}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -162,6 +173,7 @@ const st = StyleSheet.create({
     flexDirection: "row",
     padding: 10,
     borderBottomWidth: 1,
+
     borderBottomColor: "#ccc",
   },
   contactProfile: {
