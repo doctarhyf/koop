@@ -1,4 +1,10 @@
-import React, { useLayoutEffect, useEffect, useState, useContext } from "react";
+import React, {
+  useLayoutEffect,
+  useCallback,
+  useEffect,
+  useState,
+  useContext,
+} from "react";
 import {
   View,
   TextView,
@@ -10,6 +16,7 @@ import {
   Image,
   RefreshControl,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { Text } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { KOOP_BLUE } from "../helpers/colors";
@@ -75,13 +82,21 @@ export default function Inbox({ navigation, route }) {
   const [messages, setmessages] = useState([]);
   const [loading, setloading] = useState(false);
 
+  useFocusEffect(
+    useCallback(() => {
+      reloadMessages();
+    }, [])
+  );
+
   useEffect(() => {
+    setloading(true);
     if (rawmessages) {
       const parsedMessages = Object.entries(rawmessages);
       setmessages(parsedMessages);
 
       setloading(false);
     }
+    setloading(false);
   }, [rawmessages]);
 
   useLayoutEffect(() => {
