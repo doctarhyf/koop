@@ -29,12 +29,7 @@ const DATA = [
       },
       {
         text: "Face ID",
-        icon: (
-          <Image
-            source={require("../assets/icons/faceid.svg")}
-            style={{ width: 24 }}
-          />
-        ),
+        icon: <FontAwesome6 name="face-grin-wide" size={24} color="black" />,
       },
     ],
   },
@@ -57,38 +52,30 @@ const DATA = [
   },
 ];
 
-const SettingsSection = (sectionData) => {
-  const { title, data } = sectionData;
-
-  return <Text>{JSON.stringify(sectionData.sectionData.sectionData)}</Text>;
-
-  /* return true ? (
-    <Text>{JSON.stringify(sectionData)}</Text>
-  ) : (
-    <View>
-      <Text style={[st.sec_title]}>{title}</Text>
-      {data.map((it, i) => (
-        <View key={i} style={[st.it_cont]}>
-          {it.icon}
-          <Text style={[st.it_text]}>{it.text}</Text>
-        </View>
-      ))}
-    </View>
-  ); */
-};
-
 export default Settings = () => {
   const { user, setuser } = useContext(UserContext);
 
   return (
-    <SafeAreaView style={st.container}>
-      <ImageBackground style={[st.head]}>
-        <Text>{user.display_name}</Text>
-        <Text>{user.phone}</Text>
+    <SafeAreaView style={[st.container, { flex: 1 }]}>
+      <ImageBackground
+        style={[st.head]}
+        source={require("../assets/icons/settings_2.png")}
+      >
+        <Text style={[{ fontSize: 14 }]}>{user.display_name}</Text>
+        <Text style={[{ fontSize: 18, fontWeight: "bold" }]}>{user.phone}</Text>
       </ImageBackground>
-      <ScrollView>
-        {DATA.map((sec, i) => (
-          <SettingsSection key={i} sectionData={sec} />
+
+      <ScrollView style={[{ padding: 12 }]}>
+        {DATA.map((section, isec) => (
+          <View>
+            <Text style={[st.sec_title]}>{section.title}</Text>
+            {section.data.map((it, i) => (
+              <View style={[st.it_cont]}>
+                <View style={[st.it_icon]}>{it.icon}</View>
+                <Text>{it.text}</Text>
+              </View>
+            ))}
+          </View>
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -96,8 +83,28 @@ export default Settings = () => {
 };
 
 const st = StyleSheet.create({
-  sec_title: {},
-  it_icon: { width: ICON_SIZE, height: ICON_SIZE },
-  it_cont: {},
-  it_text: {},
+  container: {
+    padding: 8,
+  },
+  head: {
+    height: 180,
+    padding: 8,
+    resizeMode: "center",
+  },
+  sec_title: { color: "#666", fontWeight: "bold" },
+  it_icon: {
+    width: ICON_SIZE,
+    height: ICON_SIZE,
+    marginRight: 12,
+  },
+  it_cont: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignContent: "center",
+    padding: 16,
+    borderBottomColor: "#ddd",
+    borderBottomWidth: 1,
+    marginBottom: 8,
+  },
+  it_text: { marginLeft: 12 },
 });
