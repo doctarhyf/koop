@@ -26,7 +26,13 @@ export default function ContactUs({ navigation, route }) {
       user_id: user.id,
     });
 
-    alert(JSON.stringify(sent));
+    console.error("Message sent => ", sent);
+    if (sent && sent.length === 1 && sent[0].id) {
+      // alert(JSON.stringify(sent));
+      alert("Message sent, thank you!");
+      navigation.goBack();
+    }
+
     setloading(false);
   };
 
