@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../helpers/styles";
 import SimpleTextButton from "../components/SimpleTextButton";
 import { UserContext } from "../App";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KOOP_BLUE } from "../helpers/colors";
 import { updatePersShopInfo } from "../utils/db";
 
@@ -56,6 +56,11 @@ export default function ChangePIN({ navigation, route }) {
     setnoerrors(errors[0] === null && errors[1] === null && errors[2] === null);
   }, [currentpin, newpin, renewpin]);
 
+  const saveSession = async (userData) => {
+    setuser(userData);
+    await AsyncStorage.setItem("@KOOP:user", JSON.stringify(userData));
+  };
+
   const handlePress = async () => {
     if (
       (errors[0] === null && errors[1] === null && errors[2] === null) === false
@@ -65,6 +70,7 @@ export default function ChangePIN({ navigation, route }) {
       setloading(true);
       const res = await updatePersShopInfo(user, "pin", newpin);
       if (res && res[0] && res[0].id) {
+        await saveSession(userData);
         alert("PIN updated!");
         navigation.goBack();
       }
