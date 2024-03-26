@@ -18,6 +18,7 @@ import { KOOP_BLUE } from "../helpers/colors";
 import { Entypo } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { IMG_SIZE } from "../helpers/flow";
 
 const ICON_SIZE = 24;
@@ -46,6 +47,11 @@ const DATA = [
         text: "Share the app",
         icon: <Octicons name="share" size={24} color="black" />,
         route: "share_app",
+      },
+      {
+        text: "Terms & Conditions",
+        icon: <FontAwesome5 name="file-contract" size={24} color="black" />,
+        route: "terms_and_cond",
       },
       {
         text: "Contact us",
