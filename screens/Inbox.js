@@ -93,7 +93,6 @@ export default function Inbox({ navigation, route }) {
     if (rawmessages) {
       const parsedMessages = Object.entries(rawmessages);
       setmessages(parsedMessages);
-
       setloading(false);
     }
     setloading(false);

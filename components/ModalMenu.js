@@ -32,7 +32,7 @@ const MAIN_MENU_ROUTES = {
   1: "Inbox",
   2: "MyServices",
   //3: "Subscriptions",
-  4: "Settings",
+  3: "Settings",
   5: "Test",
 };
 
