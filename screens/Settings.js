@@ -9,6 +9,7 @@ import {
   ImageBackground,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { UserContext } from "../App";
 import { KOOP_BLUE } from "../helpers/colors";
@@ -55,6 +56,10 @@ const DATA = [
 export default Settings = () => {
   const { user, setuser } = useContext(UserContext);
 
+  const onSettingsPress = (set) => {
+    alert(JSON.stringify(set));
+  };
+
   return (
     <SafeAreaView style={[st.container, { flex: 1 }]}>
       <ImageBackground
@@ -70,10 +75,12 @@ export default Settings = () => {
           <View>
             <Text style={[st.sec_title]}>{section.title}</Text>
             {section.data.map((it, i) => (
-              <View style={[st.it_cont]}>
-                <View style={[st.it_icon]}>{it.icon}</View>
-                <Text>{it.text}</Text>
-              </View>
+              <TouchableOpacity key={i} onPress={(e) => onSettingsPress(it)}>
+                <View style={[st.it_cont]}>
+                  <View style={[st.it_icon]}>{it.icon}</View>
+                  <Text>{it.text}</Text>
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
         ))}
@@ -100,7 +107,8 @@ const st = StyleSheet.create({
   it_cont: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    alignContent: "center",
+
+    alignItems: "center",
     padding: 16,
     borderBottomColor: "#ddd",
     borderBottomWidth: 1,

@@ -24,7 +24,7 @@ const MAIN_MENU_ITEMS = [
   { icon: require("../assets/icons/chat.png"), label: "Inbox" },
   { icon: require("../assets/icons/post.png"), label: "My Services" },
   { icon: require("../assets/icons/settings.png"), label: "Settings" },
-  { icon: require("../assets/icons/lab.png"), label: "Test" },
+  //{ icon: require("../assets/icons/lab.png"), label: "Test" },
 ];
 
 const MAIN_MENU_ROUTES = {
@@ -33,7 +33,7 @@ const MAIN_MENU_ROUTES = {
   2: "MyServices",
   //3: "Subscriptions",
   3: "Settings",
-  5: "Test",
+  // 5: "Test",
 };
 
 export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {

@@ -39,7 +39,7 @@ export default TabPersonalInfo = ({ user, handleInfoPress, navigation }) => {
       editable: true,
       label: "Display Name",
     },
-    phone: {
+    /*  phone: {
       value: phone,
       icon: "phone",
       placeholder: "Phone Number",
@@ -52,7 +52,7 @@ export default TabPersonalInfo = ({ user, handleInfoPress, navigation }) => {
       placeholder: "PIN",
       editable: true,
       label: "PIN",
-    },
+    }, */
     dob: {
       value: dob,
       icon: "calendar",
