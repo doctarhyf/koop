@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ActivityIndicator } from "react-native";
+import { View, Text, TextInput, ActivityIndicator, Image } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import styles from "../helpers/styles";
 import SimpleTextButton from "../components/SimpleTextButton";
@@ -80,13 +80,28 @@ export default function ChangePIN({ navigation, route }) {
 
   return (
     <View style={[styles.paddingMid]}>
+      <View
+        style={[
+          {
+            justifyContent: "center",
+            alignItems: "center",
+            marginVertical: 12,
+          },
+        ]}
+      >
+        <Image
+          source={require("../assets/icons/binarycode.png")}
+          style={[{ width: 80, height: 80 }]}
+        />
+      </View>
       <Text>Current PIN </Text>
+      <Text style={[styles.textGray]}>insert your current pin first</Text>
       <TextInput
         secureTextEntry
         keyboardType="phone-pad"
         value={currentpin}
         onChangeText={setcurrentpin}
-        style={[styles.ti]}
+        style={[styles.ti, styles.paddingSmall]}
       />
       <Text>New PIN</Text>
       <TextInput
@@ -94,7 +109,7 @@ export default function ChangePIN({ navigation, route }) {
         onChangeText={setnewpin}
         secureTextEntry
         keyboardType="phone-pad"
-        style={[styles.ti]}
+        style={[styles.ti, styles.paddingSmall]}
       />
       <Text>Re-New PIN</Text>
       <TextInput
@@ -102,7 +117,7 @@ export default function ChangePIN({ navigation, route }) {
         onChangeText={setrenewpin}
         secureTextEntry
         keyboardType="phone-pad"
-        style={[styles.ti]}
+        style={[styles.ti, styles.paddingSmall]}
       />
 
       {loading ? (

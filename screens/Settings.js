@@ -117,7 +117,7 @@ export default Settings = ({ navigation, route }) => {
 
       <ScrollView style={[{ padding: 12 }]}>
         {DATA.map((section, isec) => (
-          <View>
+          <View key={isec}>
             <Text style={[st.sec_title]}>{section.title}</Text>
             {section.data.map((it, i) =>
               it.os ? (
