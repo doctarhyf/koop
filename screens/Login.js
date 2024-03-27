@@ -29,6 +29,7 @@ export default function Home({ navigation }) {
   const [images, setImages] = useState([]);
   const [creds, setcreds] = useState({ phone: "oidssds", otp: "dfsdf" });
   const [formaterror, setformaterror] = useState(null);
+  const [logginSuccess, setLogginSuccess] = useState(false);
 
   const { user, setuser } = useContext(UserContext);
 
@@ -46,7 +47,6 @@ export default function Home({ navigation }) {
         IMG_SIZE.h
       );
 
-      // console.log("rd img => ", randomImages[0]);
       setImages(randomImages.map((img, i) => img.urls.regular));
       checkUserLogin();
     };
@@ -69,8 +69,6 @@ export default function Home({ navigation }) {
     const { phone, otp: pin } = creds;
     const userData = await API.login(phone, pin);
 
-    /* alert("Res => " + JSON.stringify(userData));
-    return; */
     if (userData.error) {
       const { error } = userData;
 
@@ -108,6 +106,7 @@ export default function Home({ navigation }) {
     } else {
       //user logged in
       setloading(false);
+      setLogginSuccess(true);
       await saveSession(userData);
       navigation.replace("Home");
     }
@@ -117,6 +116,7 @@ export default function Home({ navigation }) {
     const user = await AsyncStorage.getItem("@KOOP:user");
     if (user) {
       console.log("found user => ", user);
+      setLogginSuccess(true);
       setuser(JSON.parse(user));
       navigation.navigate("Home", user);
     }
@@ -219,12 +219,28 @@ export default function Home({ navigation }) {
             <ActivityIndicator color={WHITE} animating={loading} />
           </View>
         )}
+
+        {logginSuccess && (
+          <View style={[styles.logginsuccess]}>
+            <Image
+              source={require("../assets/icons/check.png")}
+              style={[{ width: 40, height: 40 }]}
+            />
+            <Text>Loggin success</Text>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  logginsuccess: {
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 20,
+    margin: 18,
+  },
   error: {
     color: "red",
     textAlign: "center",
