@@ -42,7 +42,7 @@ const SCREENS = [
   { name: "Login", comp: Login, options: { headerShown: false } },
   { name: "PhotoViewer", comp: PhotoViewer },
   { name: "Initializing", comp: Initializing },
-  { name: "TOS", comp: TOS },
+  { name: "TOS", comp: TOS, options: { title: "Terms and Conditions" } },
   { name: "Subscriptions", comp: Subscriptions },
   {
     name: "Home",

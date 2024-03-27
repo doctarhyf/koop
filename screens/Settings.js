@@ -100,6 +100,9 @@ export default Settings = ({ navigation, route }) => {
     if (route === "change_pin")
       navigation.navigate("ChangePIN", { user: user, setuser: setuser });
 
+    if (route === "terms_and_cond")
+      navigation.navigate("TOS", { user: user, setuser: setuser });
+
     if (route === "share_app") {
       shareLink();
     }
