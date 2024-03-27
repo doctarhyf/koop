@@ -180,7 +180,7 @@ const Suggestions = ({ navigation }) => {
       ) : (
         <ScrollView>
           {images.map((it, i) => (
-            <TouchableOpacity onPress={(e) => console.log(e)}>
+            <TouchableOpacity key={i} onPress={(e) => console.log(e)}>
               <View
                 style={[
                   { marginVertical: 12, borderColor: "#ddd", borderWidth: 1 },

@@ -1,9 +1,7 @@
 // In App.js in a new project
 
 import React, { useContext, useState, useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome"; // You may need to install a library for icons
-
+import "./ignoreWarning";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./screens/Login";
