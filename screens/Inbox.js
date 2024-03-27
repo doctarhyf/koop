@@ -113,7 +113,10 @@ export default function Inbox({ navigation, route }) {
     navigation.setOptions({
       headerRight: () =>
         loadingRawMessages || loading ? (
-          <ActivityIndicator animating={loadingRawMessages} />
+          <ActivityIndicator
+            animating={loadingRawMessages}
+            style={[styles.paddingLarge]}
+          />
         ) : (
           <TouchableOpacity
             onPress={(e) => {

@@ -80,7 +80,7 @@ export default function ChangePIN({ navigation, route }) {
 
   return (
     <View style={[styles.paddingMid]}>
-      <Text>Current PIN : {user.pin}</Text>
+      <Text>Current PIN </Text>
       <TextInput
         secureTextEntry
         keyboardType="phone-pad"

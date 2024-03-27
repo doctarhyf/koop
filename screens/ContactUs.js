@@ -41,17 +41,22 @@ export default function ContactUs({ navigation, route }) {
       <Text>
         From: {user.display_name} - {user.phone}
       </Text>
-      <TextInput placeholder="Sujet: " style={[styles.ti]} />
+      <TextInput placeholder="Sujet: " style={[styles.ti, styles.paddingMid]} />
       <TextInput
         placeholder="Message ..."
-        style={[styles.ti]}
+        style={[styles.ti, styles.paddingMid]}
         numberOfLines={6}
+        multiline={true}
         value={message}
         onChangeText={setmessage}
       />
 
       {loading ? (
-        <ActivityIndicator animation={loading} color={KOOP_BLUE} />
+        <ActivityIndicator
+          animation={loading}
+          color={KOOP_BLUE}
+          style={[styles.paddingLarge]}
+        />
       ) : (
         <TouchableOpacity onPress={contactUs}>
           <Text style={[styles.textBlue, styles.textCenter]}>SEND MESSAGE</Text>
