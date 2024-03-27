@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 import TextButton from "../components/TextButton";
 import styles from "../helpers/styles";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import {
-  height,
-  width,
-} from "deprecated-react-native-prop-types/DeprecatedImagePropType";
+import UserContext from "../context/UserContext";
 
 const ImageViewer = (img) => {
   const ph = require("../assets/images/gps.jpg");
@@ -20,6 +17,7 @@ const ImageViewer = (img) => {
 
 export default function Test() {
   const [image, setimage] = useState("");
+  const { user, setuser } = useContext(UserContext);
 
   const loadGalleryImage = async (e) => {
     const result = await ImagePicker.launchImageLibraryAsync({

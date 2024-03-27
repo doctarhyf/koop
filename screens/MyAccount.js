@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useLayoutEffect } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   Image,
@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
   ImageBackground,
 } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+
 import styles from "../helpers/styles";
 import {
   KOOP_BLUE,
@@ -20,15 +20,9 @@ import {
   KOOP_BLUE_TRANSLUCIDE,
   KOOP_GREEN,
 } from "../helpers/colors";
-import MenuButton from "../components/MenuButton";
-import { UserContext } from "../App";
-import { UPDATE_SUCCESS, updateUserData } from "../utils/db";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import Icon from "react-native-vector-icons/FontAwesome";
-import usePicURL from "../hooks/usePicURL";
-import TextButton from "../components/TextButton";
-import { FontAwesome } from "@expo/vector-icons";
-import { editable } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
+
+import UserContext from "../context/UserContext";
+import { updateUserData } from "../utils/db";
 import ProfileUploader from "../components/ProfileUploader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TabPersonalInfo from "../components/TabPersonalInfo";

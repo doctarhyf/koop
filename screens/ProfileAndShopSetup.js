@@ -15,7 +15,7 @@ import {
   Switch,
 } from "react-native";
 
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import { AntDesign } from "@expo/vector-icons";
 import styles from "../helpers/styles";
 

@@ -13,7 +13,7 @@ import {
 import { Button } from "react-native";
 import TextButton from "../components/TextButton";
 import styles from "../helpers/styles";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import { updatePersShopInfo } from "../utils/db";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -251,7 +251,7 @@ Democratic Republic of the Congo`
       {dataKey === "ville" && (
         <View style={[st.villecont]}>
           {VILLES.map((v, i) => (
-            <TouchableOpacity onPress={(e) => setNewValue(v)}>
+            <TouchableOpacity key={i} onPress={(e) => setNewValue(v)}>
               <Text style={[st.ville, newValue === v ? st.selected : null]}>
                 {v}
               </Text>

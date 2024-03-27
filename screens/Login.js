@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -20,8 +20,8 @@ import { TABLE_NAMES, supabase } from "../utils/supabase";
 import { getItemByRowEqVal, getUser } from "../utils/db";
 import * as API from "../utils/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { UserContext } from "../App";
-//import { Permissions } from "expo-permissions";
+
+import UserContext from "../context/UserContext";
 
 const phoneNumberPattern = /^\d{10}$/;
 export default function Home({ navigation }) {

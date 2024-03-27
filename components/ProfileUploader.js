@@ -9,7 +9,7 @@ import { deleteOldProfile, getPublicUrl, uploadPic } from "../utils/db";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 import { KOOP_BUCKET_NAME, supabase } from "../utils/supabase";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 
 const MEDIA_TYPE_CAMERA = 0;
 

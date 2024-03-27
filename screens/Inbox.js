@@ -24,7 +24,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import styles from "../helpers/styles";
 import useFetch from "../hooks/useFetch";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

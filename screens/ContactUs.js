@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import React, { useContext, useState } from "react";
 import styles from "../helpers/styles";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import TextButton from "../components/TextButton";
 
 import { KOOP_BLUE } from "../helpers/colors";

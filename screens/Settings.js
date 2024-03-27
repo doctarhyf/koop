@@ -13,7 +13,7 @@ import {
   Share,
   Platform,
 } from "react-native";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import { KOOP_BLUE } from "../helpers/colors";
 import { Entypo } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";

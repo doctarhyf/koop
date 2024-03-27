@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import * as API from "../utils/api";
 import styles from "../helpers/styles";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import { FontAwesome } from "@expo/vector-icons";
 import { KOOP_BLUE } from "../helpers/colors";
 import { insertItem, sendMessage } from "../utils/db";

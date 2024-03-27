@@ -1,6 +1,6 @@
 // In App.js in a new project
 
-import React, { useContext, useState, useEffect, createContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome"; // You may need to install a library for icons
 
@@ -81,7 +81,6 @@ const SCREENS = [
 ];
 
 const Stack = createNativeStackNavigator();
-export const UserContext = createContext();
 
 function App() {
   const [user, setuser] = useState(null);

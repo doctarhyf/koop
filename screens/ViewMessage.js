@@ -14,7 +14,7 @@ import {
 import styles from "../helpers/styles";
 import { KOOP_BLUE, KOOP_GREEN } from "../helpers/colors";
 import * as API from "../utils/api";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 
 export default function ViewMessage({ route, navigation }) {
   const { user, setuser } = useContext(UserContext);

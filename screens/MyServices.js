@@ -13,7 +13,7 @@ import styles from "../helpers/styles";
 import React, { useEffect, useState, useContext, useLayoutEffect } from "react";
 import useItemsLoader from "../hooks/useItemsLoader";
 import { TABLE_NAMES } from "../utils/supabase";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import TextButton from "../components/TextButton";
 import { AntDesign } from "@expo/vector-icons";
 import { removeService } from "../utils/db";

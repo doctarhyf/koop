@@ -39,7 +39,7 @@ import { AntDesign } from "@expo/vector-icons";
 import * as SB from "../utils/db";
 import { TABLE_NAMES, supabase } from "../utils/supabase";
 import { decode } from "base64-arraybuffer";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import { RadioButton } from "../components/RadioButton";
 import { Permissions } from "expo";
 import * as FileSystem from "expo-file-system";

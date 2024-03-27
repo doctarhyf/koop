@@ -19,7 +19,7 @@ const IMG_SIZE = 260;
 import Icon from "react-native-vector-icons/FontAwesome";
 import { getItem, insertItem } from "../utils/db";
 import { TABLE_NAMES } from "../utils/supabase";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import { addViewsCount, likeItem } from "../utils/api";
 
 export default function ServiceInfo({ navigation, route }) {

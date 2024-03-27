@@ -17,7 +17,7 @@ import MenuButton from "../components/MenuButton";
 import { BUTTONS } from "../helpers/flow";
 import { KOOP_BLUE, KOOP_BLUE_TRANSLUCIDE } from "../helpers/colors";
 import ModalMenu from "../components/ModalMenu";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import usePicURL from "../hooks/usePicURL";
 import TextButton from "../components/TextButton";
 

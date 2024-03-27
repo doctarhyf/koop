@@ -2,7 +2,7 @@ import { View, Text, TextInput, ActivityIndicator } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import styles from "../helpers/styles";
 import SimpleTextButton from "../components/SimpleTextButton";
-import { UserContext } from "../App";
+import UserContext from "../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KOOP_BLUE } from "../helpers/colors";
 import { updatePersShopInfo } from "../utils/db";
