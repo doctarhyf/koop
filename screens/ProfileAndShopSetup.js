@@ -12,6 +12,7 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   Vibration,
+  Switch,
 } from "react-native";
 
 import { UserContext } from "../App";
@@ -22,6 +23,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
 import TextButton from "../components/TextButton";
+import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 
 const MEDIA_TYPE_CAMERA = 0;
 export default function ProfileAndShopSetup({ navigation, route }) {
@@ -29,6 +31,8 @@ export default function ProfileAndShopSetup({ navigation, route }) {
   const [userName, setUserName] = useState("DOCTA RHYF");
   const [businessName, setBusinessName] = useState("DOCTA RHYF's BUSINESS");
   const [profilePic, setProfilePic] = useState(null);
+  const [promoCode, setPromoCode] = useState("");
+  const [hasPromoCode, setHasPromoCode] = useState(false);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [error, seterror] = useState(false);
   const { phone } = route.params;
@@ -105,6 +109,15 @@ export default function ProfileAndShopSetup({ navigation, route }) {
       return;
     }
 
+    if (hasPromoCode && promoCode.trim() === "") {
+      Vibration.vibrate(250);
+      Alert.alert(
+        "Promo code empty",
+        "If you have a promo code, type it please!"
+      );
+      return;
+    }
+
     if (userName === "" || businessName === "") {
       seterror(true);
 
@@ -120,6 +133,8 @@ export default function ProfileAndShopSetup({ navigation, route }) {
       businessName: businessName,
       profilePic: profilePic,
     };
+
+    if (hasPromoCode) profdata.invited_with_promo = promoCode;
 
     navigation.replace("Initializing", profdata);
   };
@@ -195,6 +210,46 @@ export default function ProfileAndShopSetup({ navigation, route }) {
             />
           </View>
           <Text style={[st.selfStart]}>Ceci est le nom de votre Maison </Text>
+          <View style={[{ height: 20 }]} />
+
+          <View
+            style={[
+              {
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+                alignItems: "center",
+              },
+            ]}
+          >
+            <Text>I have a promo code</Text>
+            <Switch
+              trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
+              thumbColor={hasPromoCode ? KOOP_BLUE : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={(e) => setHasPromoCode((prev) => !prev)}
+              value={hasPromoCode}
+            />
+          </View>
+          {hasPromoCode && (
+            <View>
+              <View style={[styles.flexRow, styles.alignCenter]}>
+                <MaterialCommunityIcons name="lock" size={24} color="black" />
+                <View style={[{ width: 10 }]} />
+                <TextInput
+                  value={promoCode}
+                  onChangeText={(txt) => setPromoCode(txt)}
+                  style={[st.ti, { borderBottomColor: error ? "red" : "grey" }]}
+                  placeholderTextColor={error ? "red" : "grey"}
+                  placeholder={"ex:STARPRO"}
+                />
+              </View>
+              <Text style={[st.selfStart]}>
+                Si vous ete invite avec un code promo, veuillez l'inserer SVP{" "}
+              </Text>
+            </View>
+          )}
+
           {error && (
             <Text style={[st.error]}>
               Profile name and businessName cant be empty
