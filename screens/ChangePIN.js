@@ -26,7 +26,7 @@ export default function ChangePIN({ navigation, route }) {
     if (currentpin !== user.pin) {
       seterrors((old) => ({
         ...old,
-        [PIN_ERROR.CUR_PIN_ERROR]: "Wrong current pin inserted",
+        [PIN_ERROR.CUR_PIN_ERROR]: "Insert correct current PIN",
       }));
     } else {
       seterrors((old) => ({ ...old, [PIN_ERROR.CUR_PIN_ERROR]: null }));
