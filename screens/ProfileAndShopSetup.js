@@ -28,8 +28,8 @@ import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 const MEDIA_TYPE_CAMERA = 0;
 export default function ProfileAndShopSetup({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
-  const [userName, setUserName] = useState("DOCTA RHYF");
-  const [businessName, setBusinessName] = useState("DOCTA RHYF's BUSINESS");
+  const [userName, setUserName] = useState("");
+  const [businessName, setBusinessName] = useState("");
   const [profilePic, setProfilePic] = useState(null);
   const [promoCode, setPromoCode] = useState("");
   const [hasPromoCode, setHasPromoCode] = useState(false);
