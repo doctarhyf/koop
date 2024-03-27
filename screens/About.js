@@ -5,18 +5,37 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  Pressable,
+  Alert,
 } from "react-native";
 import React from "react";
 import { KOOP_BLUE } from "../helpers/colors";
+import Constants from "expo-constants";
 
 export default function About() {
+  const { version, name } = Constants.expoConfig;
+  const appName = name.toUpperCase();
+
+  const showAbout = () => {
+    const cont = `Code & Design by
+    Franvale MK A.K.A @doctarhyf
+    E-mail: drrhyf@gmail.com
+    微信:drrhyf
+    GitHub:
+    https://github.com/doctarhyf
+    -- 👽😜 --`;
+    Alert.alert("About", cont);
+  };
+
   return (
     <View style={[st.cont]}>
-      <Image source={require("../assets/koop.png")} style={[st.img]} />
+      <Pressable onLongPress={showAbout}>
+        <Image source={require("../assets/koop.png")} style={[st.img]} />
+      </Pressable>
       <View style={[{ padding: 8 }]}>
-        <Text style={[st.app_name]}>KOOP</Text>
-        <Text>Version: 1.0.1.07.1827</Text>
-        <Text>Copyright @ 2024 KOOP Inc.</Text>
+        <Text style={[st.app_name]}>{appName}</Text>
+        <Text>Version: {version}</Text>
+        <Text>Copyright © 2024 KOOP Inc.</Text>
       </View>
     </View>
   );
