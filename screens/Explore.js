@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, Image, StyleSheet, Dimensions } from "react-native";
+import { View, FlatList, StyleSheet, Dimensions } from "react-native";
 import * as FUNCS from "../helpers/funcs";
 import { DIAPO_PICS, BIG_FONT_SIZE, IMG_SIZE } from "../helpers/flow";
+import { Image } from "expo-image";
 
 const Explore = () => {
   const [data, setdata] = useState([]);
@@ -23,7 +24,12 @@ const Explore = () => {
   }, []);
 
   const renderItem = ({ item }) => (
-    <Image source={{ uri: item.image }} style={styles.image} />
+    <Image
+      source={item.image}
+      contentFit="cover"
+      transition={1500}
+      style={styles.image}
+    />
   );
 
   return (

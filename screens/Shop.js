@@ -3,11 +3,11 @@ import {
   Text,
   ImageBackground,
   StyleSheet,
-  Image,
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
+import { Image } from "expo-image";
 import MenuButton from "../components/MenuButton";
 import styles from "../helpers/styles";
 import { useLayoutEffect, useState } from "react";

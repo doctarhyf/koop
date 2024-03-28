@@ -4,7 +4,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   StyleSheet,
   Pressable,
 } from "react-native";
@@ -14,6 +13,7 @@ import {
   KOOP_BLUE_DARK,
   KOOP_BLUE_TRANSLUCIDE,
 } from "../helpers/colors";
+import { Image } from "expo-image";
 import UserContext from "../context/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -77,7 +77,8 @@ export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {
           <Image
             source={require("../assets/koop.png")}
             style={{ height: 120 }}
-            resizeMode="contain"
+            transition={1000}
+            contentFit="contain"
           />
         </Pressable>
 

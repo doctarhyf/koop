@@ -8,8 +8,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
-  Image,
 } from "react-native";
+import { Image } from "expo-image";
 import styles from "../helpers/styles";
 import MenuButton from "../components/MenuButton";
 import { useEffect, useState, useLayoutEffect } from "react";
@@ -196,6 +196,7 @@ const Suggestions = ({ navigation }) => {
                       { resizeMode: "cover", width: "100%", height: 200 },
                     ]}
                     source={require("../assets/images/init.jpg")}
+                    transition={1000}
                   />
                 </View>
                 <View style={[{ padding: 12 }]}>

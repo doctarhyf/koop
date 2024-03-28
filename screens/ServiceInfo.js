@@ -4,13 +4,13 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  Image,
   ActivityIndicator,
   TouchableOpacity,
   TextInput,
   Pressable,
   Alert,
 } from "react-native";
+import { Image } from "expo-image";
 import { KOOP_BLUE, KOOP_BLUE_DARK, KOOP_BLUE_LIGHT } from "../helpers/colors";
 import * as FUNCS from "../helpers/funcs";
 import styles from "../helpers/styles";
@@ -188,6 +188,7 @@ export default function ServiceInfo({ navigation, route }) {
               ]}
             >
               <Image
+                transition={1000}
                 source={{ uri: user.profile }}
                 style={[
                   {

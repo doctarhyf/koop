@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   ScrollView,
   TouchableOpacity,
   TextInput,
@@ -11,6 +10,8 @@ import {
   Alert,
   Platform,
 } from "react-native";
+import { Image } from "expo-image";
+import { blurhash } from "../utils/const";
 import { KOOP_BLUE, WHITE } from "../helpers/colors";
 import { DIAPO_PICS, BIG_FONT_SIZE, IMG_SIZE } from "../helpers/flow";
 
@@ -141,8 +142,11 @@ export default function Home({ navigation }) {
       <View style={[styles.container]}>
         <View>
           <Image
+            transition={1500}
+            contentFit="cover"
             source={require("../assets/koop.png")}
             style={[styles.alignSelfCenter, styles.logo]}
+            placeholder={blurhash}
           />
           <Text style={[styles.tc, styles.pt, { marginBottom: 10 }]}>
             + 1 millions de services et des professionels au bout de vos doigts

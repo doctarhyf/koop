@@ -4,14 +4,13 @@ import {
   Text,
   SafeAreaView,
   StatusBar,
-  Image,
   TouchableOpacity,
   StyleSheet,
   Modal,
   ActivityIndicator,
   ScrollView,
 } from "react-native";
-
+import { Image } from "expo-image";
 import styles from "../helpers/styles";
 import MenuButton from "../components/MenuButton";
 import { BUTTONS } from "../helpers/flow";
@@ -28,6 +27,7 @@ const InfoPane = ({ navigation, gotoMyAccount }) => {
         <Image
           source={require("../assets/icons/store.png")}
           style={[{ width: 60, height: 60, resizeMode: "contain" }]}
+          transition={1000}
         />
       </View>
       <View>
@@ -72,12 +72,10 @@ const Home = ({ navigation }) => {
             onPress={(e) => navigation.navigate("MyAccount", user)}
           >
             <Image
-              source={{
-                uri: user.profile,
-              }}
+              source={user.profile}
+              transition={1000}
               style={[
                 {
-                  backgroundColor: "red",
                   width: 30,
                   height: 30,
                   borderRadius: 15,
@@ -93,6 +91,7 @@ const Home = ({ navigation }) => {
           <Image
             style={{ width: 30, height: 30, marginRight: 4 }}
             source={require("../assets/icons/menu.png")}
+            transition={1000}
           />
         </TouchableOpacity>
       ),
@@ -115,6 +114,7 @@ const Home = ({ navigation }) => {
           <Image
             style={styles.alignSelfCenter}
             source={require("../assets/koop.png")}
+            transition={1000}
           />
           <Text
             style={[styles.textWhite, styles.fontBold, styles.alignSelfCenter]}

@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import {
   View,
-  Image,
   Text,
   StyleSheet,
   ScrollView,
@@ -20,7 +19,7 @@ import {
   KOOP_BLUE_TRANSLUCIDE,
   KOOP_GREEN,
 } from "../helpers/colors";
-
+import { Image } from "expo-image";
 import UserContext from "../context/UserContext";
 import { updateUserData } from "../utils/db";
 import ProfileUploader from "../components/ProfileUploader";
@@ -78,7 +77,11 @@ const HeaderShopInfo = ({ user, setuser, handleBGUpdatePress }) => {
 
   return (
     <View style={[st.shopfront]}>
-      <Image source={{ uri: user.shop_profile || bg }} style={[st.fsbg]} />
+      <Image
+        source={user.shop_profile || bg}
+        style={[st.fsbg]}
+        transition={1000}
+      />
       <View style={[{ padding: 10 }, styles.justifyCenter, styles.alignCenter]}>
         <Text style={[st.shopfronttitle, styles.textWhite, styles.textCenter]}>
           {user.shop_name.toUpperCase() || "MY SHOP"}

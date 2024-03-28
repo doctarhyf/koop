@@ -1,6 +1,6 @@
-import { TouchableOpacity, View, Image, Text } from "react-native";
+import { TouchableOpacity, View, Text } from "react-native";
 import styles from "../helpers/styles";
-
+import { Image } from "expo-image";
 export default MenuButton = ({ handleOnPress, btn, textSmall }) => {
   /* example
   btn = {
@@ -21,7 +21,7 @@ export default MenuButton = ({ handleOnPress, btn, textSmall }) => {
           styles.borderBlue,
         ]}
       >
-        <Image style={styles.btnIcon} source={btn.icon} />
+        <Image style={styles.btnIcon} source={btn.icon} transition={1000} />
         <Text style={styles.textBlueDark}>{btn.label}</Text>
       </View>
     </TouchableOpacity>
