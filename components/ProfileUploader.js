@@ -42,11 +42,13 @@ export default function ProfileUploader({
 
     if (mediaType === MEDIA_TYPE_CAMERA) {
       result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         quality: 1,
       });
     } else {
       result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         quality: 1,
       });
