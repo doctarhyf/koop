@@ -3,11 +3,11 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Image,
   StyleSheet,
   Pressable,
   Alert,
 } from "react-native";
+import { Image } from "expo-image";
 import React from "react";
 import { KOOP_BLUE } from "../helpers/colors";
 import Constants from "expo-constants";
