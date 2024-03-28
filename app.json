@@ -11,9 +11,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#7BC6F0"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.doctarhyf.koop"
     },
     "android": {
       "adaptiveIcon": {
