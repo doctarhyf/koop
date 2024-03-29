@@ -36,7 +36,7 @@ function Initializing({ navigation, route }) {
   const [loading, setloading] = useState(true);
 
   const profileData = route.params;
-  const { phone, profile, shop_profile } = profileData;
+  const { phone, profile, shop_profile, display_name, shop_name } = profileData;
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -48,6 +48,7 @@ function Initializing({ navigation, route }) {
       let newUserData = { ...profileData };
 
       const curTime = new Date().getTime();
+
       const profile_server_path = `user_${phone}/profile_${curTime}.jpg`;
       const profile_public_url = await SBFileUpload(
         profile,
@@ -66,28 +67,6 @@ function Initializing({ navigation, route }) {
 
       alert(JSON.stringify(newUserData));
 
-      return;
-
-      const uri = profile;
-      const base64 = await FileSystem.readAsStringAsync(uri, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-      const filePath = `user_${phone}/profile_${new Date().getTime()}.jpg`;
-      const contentType = "image/jpg";
-
-      const { data, error } = await supabase.storage
-        .from("koop")
-        .upload(filePath, decode(base64), { contentType });
-
-      console.log("Profile pic uploaded! data => ", data);
-      if (data !== null && data.fullPath) {
-        const publicURL = await getPublicUrl(
-          data.fullPath.replace("koop/", "")
-        );
-        console.error("real path => ", publicURL);
-        newUserData.profile = publicURL;
-      }
-
       let insertedUsedData = await insertItem(
         TABLE_NAMES.KOOP_USERS,
         newUserData
@@ -102,7 +81,7 @@ function Initializing({ navigation, route }) {
 
         Alert.alert(
           "New account created",
-          `Hello ${userName}, you new account and your shop ${businessName} have been created successfully!`,
+          `Hello ${display_name}, you new account and your shop ${shop_name} have been created successfully!`,
           [
             {
               text: "START",

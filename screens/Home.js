@@ -117,7 +117,12 @@ const Home = ({ navigation }) => {
             transition={1000}
           />
           <Text
-            style={[styles.textWhite, styles.fontBold, styles.alignSelfCenter]}
+            style={[
+              styles.textWhite,
+              styles.fontBold,
+              styles.alignSelfCenter,
+              { marginVertical: 32 },
+            ]}
           >
             {`Hello ${user.display_name}, what would you like to do?`}
           </Text>
