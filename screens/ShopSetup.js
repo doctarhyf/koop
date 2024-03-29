@@ -48,6 +48,7 @@ function ShopSetup({ navigation, route }) {
   const [has_shop, set_has_shop] = useState(true);
   let params = route.params;
   const [profileData, setProfileData] = useState({ ...params });
+  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -76,13 +77,93 @@ function ShopSetup({ navigation, route }) {
   };
 
   const handleAddImage = (e) => {
-    //setBottomSheetVisible(true);
+    setBottomSheetVisible(true);
+  };
+
+  const closeBottomSheet = () => {
+    setBottomSheetVisible(false);
+  };
+
+  const onChooseMedia = (mediaType) => {
+    pickImageAsync(mediaType);
+  };
+
+  const pickImageAsync = async (mediaType) => {
+    closeBottomSheet();
+    let result;
+
+    if (mediaType === MEDIA_TYPE_CAMERA) {
+      result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        quality: 1,
+      });
+    } else {
+      result = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        quality: 1,
+      });
+    }
+
+    if (!result.canceled) {
+      const { uri } = result.assets[0];
+
+      console.error("new profile pic => ", uri);
+
+      onUpdateProfileData("shop_profile", uri);
+    }
+  };
+
+  const notDefinedOrEmpty = (val) => {
+    if (val === undefined) return true;
+    return val.trim() === "";
+  };
+
+  const ERROS = {
+    SHOP_PROFILE: {
+      label: "No profle picture",
+      message: "Please upload a profile picture for your shop",
+    },
+    SHOP_ADDRESS: {
+      label: "No shop address",
+      message: "Please provide your shop physical address",
+    },
+    SHOP_DESCRIPTION: {
+      label: "No shop description",
+      message: "Please provide your shop description",
+    },
+    SHOP_TAGS: {
+      label: "Choose your activities categories",
+      message: "Please choose your shop categories",
+    },
   };
 
   const onNext = () => {
     const { shop_profile, shop_add, shop_desc, shop_tags } = profileData;
 
-    alert(JSON.stringify(profileData));
+    if (notDefinedOrEmpty(shop_profile)) {
+      Alert.alert(ERROS.SHOP_PROFILE.label, ERROS.SHOP_PROFILE.message);
+      return;
+    }
+
+    if (notDefinedOrEmpty(shop_desc)) {
+      Alert.alert(ERROS.SHOP_DESCRIPTION.label, ERROS.SHOP_DESCRIPTION.message);
+      return;
+    }
+
+    if (notDefinedOrEmpty(shop_tags)) {
+      Alert.alert(ERROS.SHOP_TAGS.label, ERROS.SHOP_TAGS.message);
+      return;
+    }
+
+    const finalProfData = { ...profileData };
+
+    if (!has_shop) {
+      delete finalProfData.shop_profile;
+      delete finalProfData.shop_add;
+      delete finalProfData.shop_tags;
+    }
+
+    alert("initializing ... \n" + JSON.stringify(finalProfData));
   };
 
   const onUpdateProfileData = (type, val) => {
@@ -252,7 +333,7 @@ function ShopSetup({ navigation, route }) {
         <TextButton label={"NEXT"} handlePress={onNext} />
         <View style={[{ height: 20 }]} />
 
-        {/* <Modal
+        <Modal
           animationType="slide"
           transparent={true}
           visible={bottomSheetVisible}
@@ -279,7 +360,7 @@ function ShopSetup({ navigation, route }) {
               ))}
             </View>
           </View>
-        </Modal> */}
+        </Modal>
       </View>
     </ScrollView>
   );

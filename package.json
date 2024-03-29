@@ -22,7 +22,9 @@
     "base64-arraybuffer": "^1.0.2",
     "deprecated-react-native-prop-types": "^5.0.0",
     "expo": "~50.0.11",
+    "expo-camera": "~14.1.1",
     "expo-file-system": "~16.0.8",
+    "expo-image": "~1.10.6",
     "expo-image-picker": "~14.7.1",
     "expo-linear-gradient": "~12.7.2",
     "expo-progress": "^0.0.2",
@@ -47,9 +49,7 @@
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "~0.19.6",
     "react-native-webview": "^13.8.2",
-    "tailwind-rn": "^4.2.0",
-    "expo-image": "~1.10.6",
-    "expo-camera": "~14.1.1"
+    "tailwind-rn": "^4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

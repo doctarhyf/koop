@@ -103,12 +103,13 @@ function InfoEdit({ navigation, route }) {
   const saveItem = async (e) => {
     setloading(true);
     if (isFirstSetup) {
-      // alert(newValue);
-
       await AsyncStorage.removeItem("tmp");
       if (newValue.trim().length > 0) {
         const data = { key: dataKey, val: newValue };
-        await AsyncStorage.setItem("tmp", JSON.stringify(data));
+        await AsyncStorage.setItem(
+          "tmp",
+          JSON.stringify(data).replace(";;", ";")
+        );
       }
       navigation.goBack();
       setloading(false);
