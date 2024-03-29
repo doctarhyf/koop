@@ -141,16 +141,19 @@ function ShopSetup({ navigation, route }) {
     const { shop_profile, shop_add, shop_desc, shop_tags } = profileData;
 
     if (notDefinedOrEmpty(shop_profile)) {
+      Vibration.vibrate(250);
       Alert.alert(ERROS.SHOP_PROFILE.label, ERROS.SHOP_PROFILE.message);
       return;
     }
 
     if (notDefinedOrEmpty(shop_desc)) {
+      Vibration.vibrate(250);
       Alert.alert(ERROS.SHOP_DESCRIPTION.label, ERROS.SHOP_DESCRIPTION.message);
       return;
     }
 
     if (notDefinedOrEmpty(shop_tags)) {
+      Vibration.vibrate(250);
       Alert.alert(ERROS.SHOP_TAGS.label, ERROS.SHOP_TAGS.message);
       return;
     }
