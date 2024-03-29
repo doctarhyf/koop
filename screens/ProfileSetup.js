@@ -30,9 +30,9 @@ const MEDIA_TYPE_CAMERA = 0;
 
 function ProfileSetup({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
-  const [userName, setUserName] = useState("DOCTA");
-  const [businessName, setBusinessName] = useState("DOCTA BUSINESS");
-  const [profile, setProfile] = useState(null);
+  const [display_name, set_display_name] = useState("DOCTA");
+  const [shop_name, set_shop_name] = useState("DOCTA BUSINESS");
+  const [profile, set_profile] = useState(null);
   const [promoCode, setPromoCode] = useState("");
   const [hasPromoCode, setHasPromoCode] = useState(false);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
@@ -91,7 +91,7 @@ function ProfileSetup({ navigation, route }) {
 
       console.error("new profile pic => ", uri);
 
-      setProfile(uri);
+      set_profile(uri);
     }
   };
 
@@ -114,7 +114,7 @@ function ProfileSetup({ navigation, route }) {
       return;
     }
 
-    if (userName === "" || businessName === "") {
+    if (display_name === "" || shop_name === "") {
       seterror(true);
 
       setTimeout(() => {
@@ -125,12 +125,13 @@ function ProfileSetup({ navigation, route }) {
 
     const profileData = {
       phone: phone,
-      userName: userName,
-      businessName: businessName,
+      display_name: display_name,
+      shop_name: shop_name,
       profile: profile,
     };
 
-    if (hasPromoCode) profileData.invited_with_promo = promoCode;
+    if (hasPromoCode && promoCode.trim().length > 0)
+      profileData.invited_with_promo = promoCode;
 
     navigation.replace(ShopSetup.ROUTE, profileData);
   };
@@ -183,8 +184,8 @@ function ProfileSetup({ navigation, route }) {
             <AntDesign name="user" size={24} color="gray" />
             <View style={[{ width: 10 }]} />
             <TextInput
-              value={userName}
-              onChangeText={(txt) => setUserName(txt)}
+              value={display_name}
+              onChangeText={(txt) => set_display_name(txt)}
               style={[
                 st.ti,
                 { borderBottomColor: error ? "red" : "grey" },
@@ -206,8 +207,8 @@ function ProfileSetup({ navigation, route }) {
             />
             <View style={[{ width: 10 }]} />
             <TextInput
-              value={businessName}
-              onChangeText={(txt) => setBusinessName(txt)}
+              value={shop_name}
+              onChangeText={(txt) => set_shop_name(txt)}
               style={[
                 st.ti,
                 { borderBottomColor: error ? "red" : "grey" },
@@ -215,8 +216,8 @@ function ProfileSetup({ navigation, route }) {
               ]}
               placeholderTextColor={error ? "red" : "grey"}
               placeholder={
-                userName && userName.length > 1
-                  ? `ex: ${userName.toUpperCase()} BUSINESS `
+                display_name && display_name.length > 1
+                  ? `ex: ${display_name.toUpperCase()} BUSINESS `
                   : "business name"
               }
             />

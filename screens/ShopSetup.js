@@ -13,10 +13,13 @@ import {
   KeyboardAvoidingView,
   Vibration,
   Switch,
+  StatusBar,
 } from "react-native";
 
+import { Foundation } from "@expo/vector-icons";
 import UserContext from "../context/UserContext";
 import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import styles from "../helpers/styles";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -24,12 +27,18 @@ import * as ImagePicker from "expo-image-picker";
 
 import TextButton from "../components/TextButton";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const MEDIA_TYPE_CAMERA = 0;
 
+const ShopTagsSelector = () => {
+  return <Text>Shop tags selector</Text>;
+};
+
 function ShopSetup({ navigation, route }) {
+  const [showShopTagsSelctor, setShowShopTagsSelctor] = useState(false);
   const [error, seterror] = useState(false);
-  const [hasShop, setHasShop] = useState(true);
+  const [has_shop, set_has_shop] = useState(true);
   let params = route.params;
   const [profileData, setProfileData] = useState({ ...params });
 
@@ -39,7 +48,7 @@ function ShopSetup({ navigation, route }) {
       () => true
     );
 
-    alert(JSON.stringify(params));
+    //alert(JSON.stringify(params));
 
     //navigation.replace(Initializing.ROUTE, profdata);
   }, []);
@@ -48,7 +57,13 @@ function ShopSetup({ navigation, route }) {
     //setBottomSheetVisible(true);
   };
 
-  const onNext = () => {};
+  const onNext = () => {
+    alert(JSON.stringify(profileData));
+  };
+
+  const onUpdateProfileData = (type, val) => {
+    setProfileData((prev) => ({ ...prev, [type]: val }));
+  };
 
   return (
     <ScrollView>
@@ -60,7 +75,7 @@ function ShopSetup({ navigation, route }) {
           styles.paddingMid,
         ]}
       >
-        <View style={[{ marginBottom: 60 }]}>
+        <View>
           <Text style={[st.title]}>Creation du profile de votre business</Text>
           <Text>
             Permettre a vos clients d'en savoir plus sur vos services et
@@ -81,17 +96,20 @@ function ShopSetup({ navigation, route }) {
           <Text>I dont have a shop</Text>
           <Switch
             trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
-            thumbColor={hasShop ? KOOP_BLUE : "#f4f3f4"}
+            thumbColor={has_shop ? KOOP_BLUE : "#f4f3f4"}
             ios_backgroundColor="#3e3e3e"
-            onValueChange={(e) => setHasShop((prev) => !prev)}
-            value={hasShop}
+            onValueChange={(e) => set_has_shop((prev) => !prev)}
+            value={has_shop}
           />
         </View>
 
-        {hasShop && (
+        {has_shop && (
           <View>
-            <View style={[styles.flex1, styles.marginMin, styles.alignCenter]}>
-              <TouchableOpacity onPress={handleAddImage}>
+            <View style={[styles.marginMin, styles.alignCenter]}>
+              <TouchableOpacity
+                onPress={handleAddImage}
+                style={{ width: "100%" }}
+              >
                 <ImageBackground
                   style={[st.profile]}
                   source={{ uri: profileData.shop_profile }}
@@ -102,13 +120,32 @@ function ShopSetup({ navigation, route }) {
 
               <View style={[{ height: 20 }]} />
               <View style={[styles.flexRow, styles.alignCenter]}>
-                <AntDesign name="user" size={24} color="gray" />
+                <Entypo name="location" size={24} color="black" />
                 <View style={[{ width: 10 }]} />
                 <TextInput
                   multiline={true}
                   numberOfLines={6}
-                  value={profileData.desc}
-                  onChangeText={(txt) => onUpdateProfileData("desc", txt)}
+                  value={profileData.shop_add}
+                  onChangeText={(txt) => onUpdateProfileData("shop_add", txt)}
+                  style={[
+                    st.ti,
+                    { borderBottomColor: error ? "red" : "grey" },
+                    styles.paddingSmall,
+                  ]}
+                  placeholderTextColor={error ? "red" : "grey"}
+                  placeholder={"Shop physicall address"}
+                />
+              </View>
+
+              <View style={[{ height: 20 }]} />
+              <View style={[styles.flexRow, styles.alignCenter]}>
+                <Foundation name="torso-business" size={24} color="black" />
+                <View style={[{ width: 10 }]} />
+                <TextInput
+                  multiline={true}
+                  numberOfLines={6}
+                  value={profileData.shop_desc}
+                  onChangeText={(txt) => onUpdateProfileData("shop_desc", txt)}
                   style={[
                     st.ti,
                     { borderBottomColor: error ? "red" : "grey" },
@@ -122,6 +159,7 @@ function ShopSetup({ navigation, route }) {
                 Ceci est un message de bienvenue de que vos clients verons sur
                 la page de profile de votre maison
               </Text>
+
               <View style={[{ height: 20 }]} />
               <View style={[styles.flexRow, styles.alignCenter]}>
                 <MaterialCommunityIcons
@@ -131,46 +169,41 @@ function ShopSetup({ navigation, route }) {
                 />
                 <View style={[{ width: 10 }]} />
 
-                <TouchableOpacity onPress={(e) => console.log(e)}>
+                <TouchableOpacity
+                  style={[
+                    st.ti,
+                    {
+                      borderBottomColor: error ? "red" : "grey",
+                      borderBottomColor: "#00000000",
+                    },
+                    styles.paddingSmall,
+                  ]}
+                  onPress={(e) => setShowShopTagsSelctor}
+                >
                   <Text
                     style={[
                       st.ti,
                       { borderBottomColor: error ? "red" : "grey" },
-                      styles.paddingSmall,
                     ]}
                   >
-                    Categories
+                    {profileData.shop_tags || "Categories"}
                   </Text>
                 </TouchableOpacity>
 
-                {/* <TextInput
-              value={businessName}
-              onChangeText={(txt) => setBusinessName(txt)}
-              style={[
-                st.ti,
-                { borderBottomColor: error ? "red" : "grey" },
-                styles.paddingSmall,
-              ]}
-              placeholderTextColor={error ? "red" : "grey"}
-              placeholder={
-                userName && userName.length > 1
-                  ? `ex: ${userName.toUpperCase()} BUSINESS `
-                  : "business name"
-              }
-            /> */}
+                {showShopTagsSelctor && <ShopTagsSelector />}
               </View>
               <Text style={[st.selfStart]}>
                 Selectionnez les differentes categories dans les quelles vous
-                oeuvrez{" "}
+                oeuvre
               </Text>
               <View style={[{ height: 20 }]} />
 
               {/* 
-          {error && (
-            <Text style={[st.error]}>
-              Profile name and businessName cant be empty
-            </Text>
-          )} */}
+              {error && (
+                <Text style={[st.error]}>
+                  Profile name and businessName cant be empty
+                </Text>
+              )} */}
             </View>
 
             <TextButton label={"NEXT"} handlePress={onNext} />
@@ -229,9 +262,9 @@ const st = StyleSheet.create({
   },
   profile: {
     backgroundColor: "#ddd",
+    height: 180,
     width: "100%",
-    height: 120,
-
+    borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 24,
