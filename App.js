@@ -28,7 +28,7 @@ import Test from "./screens/Test";
 import TOS from "./screens/TOS";
 import PhotoViewer from "./screens/PhotoViewer";
 import Initializing from "./screens/Initializing";
-import ProfileAndShopSetup from "./screens/ProfileAndShopSetup";
+import ProfileSetup from "./screens/ProfileSetup";
 import Comments from "./screens/Comments";
 import ViewAll from "./screens/ViewAll";
 import SendMessage from "./screens/SendMessage";
@@ -37,11 +37,12 @@ import Explore from "./screens/Explore";
 import About from "./screens/About";
 import ContactUs from "./screens/ContactUs";
 import ChangePIN from "./screens/ChangePIN";
+import ShopSetup from "./screens/ShopSetup";
 
 const SCREENS = [
   { name: "Login", comp: Login, options: { headerShown: false } },
   { name: "PhotoViewer", comp: PhotoViewer },
-  { name: "Initializing", comp: Initializing },
+  { name: Initializing.ROUTE, comp: Initializing },
   { name: "TOS", comp: TOS, options: { title: "Terms and Conditions" } },
   { name: "Subscriptions", comp: Subscriptions },
   {
@@ -69,13 +70,14 @@ const SCREENS = [
   { name: "ServiceInfo", comp: ServiceInfo },
   { name: "Search", comp: Search },
   { name: "Test", comp: Test },
-  { name: "ProfileAndShopSetup", comp: ProfileAndShopSetup },
+  { name: ProfileSetup.ROUTE, comp: ProfileSetup },
   { name: "Comments", comp: Comments },
   { name: "ViewMessage", comp: ViewMessage },
   { name: "Explore", comp: Explore },
   { name: "About", comp: About },
   { name: "ContactUs", comp: ContactUs },
   { name: "ChangePIN", comp: ChangePIN },
+  { name: ShopSetup.ROUTE, comp: ShopSetup },
 ];
 
 const Stack = createNativeStackNavigator();

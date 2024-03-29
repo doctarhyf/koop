@@ -23,15 +23,19 @@ import UserContext from "../context/UserContext";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 import { getPublicUrl } from "../utils/db";
+import useFileUpload from "../hooks/useFileUpload";
 
 const SPLASH = require("../assets/images/splash.jpg");
 const KOOP = require("../assets/koop.png");
 const LOGO_WIDTH = 120;
 const LOGO_HEIGHT = 80;
 
-export default function Initializing({ navigation, route }) {
+function Initializing({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
   const [loading, setloading] = useState(true);
+  const [setLocalURI, uploading, fullPath, error, uploadFile] =
+    useFileUpload(null);
+  const profdata = route.params;
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -40,41 +44,57 @@ export default function Initializing({ navigation, route }) {
     );
 
     const createAccounts = async () => {
-      const { businessName, profilePic, userName, phone } = route.params;
+      const { businessName, profile, userName, phone, shop_profile } = profdata;
 
-      let newUserData = {
+      let newUserData = { ...profdata }; /* {
         phone: phone,
         display_name: userName,
         shop_name: businessName,
-      };
+      }; */
 
-      if (profilePic && profilePic.length > 0) {
-        const uri = profilePic;
-        const base64 = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-        const filePath = `user_${phone}/profile_${new Date().getTime()}.jpg`;
-        const contentType = "image/jpg";
-
-        const { data, error } = await supabase.storage
-          .from("koop")
-          .upload(filePath, decode(base64), { contentType });
-
-        console.log("Profile pic uploaded! data => ", data);
-        if (data !== null && data.fullPath) {
-          const publicURL = await getPublicUrl(
-            data.fullPath.replace("koop/", "")
-          );
-          console.error("real path => ", publicURL);
-          newUserData.profile = publicURL;
-        }
+      if (!(shop_profile && shop_profile.length > 0)) {
+        alert("User must set shop profile pic");
+        return;
       }
 
-      let res = await insertItem(TABLE_NAMES.KOOP_USERS, newUserData);
+      await uploadFile(shop_profile);
 
-      if (res && res.length === 1) {
-        setuser(res[0]);
-        await AsyncStorage.setItem("@KOOP:user", JSON.stringify(res[0]));
+      if (!(profile && profile.length > 0)) {
+        alert("User must set profile pic");
+        return;
+      }
+
+      const uri = profile;
+      const base64 = await FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      const filePath = `user_${phone}/profile_${new Date().getTime()}.jpg`;
+      const contentType = "image/jpg";
+
+      const { data, error } = await supabase.storage
+        .from("koop")
+        .upload(filePath, decode(base64), { contentType });
+
+      console.log("Profile pic uploaded! data => ", data);
+      if (data !== null && data.fullPath) {
+        const publicURL = await getPublicUrl(
+          data.fullPath.replace("koop/", "")
+        );
+        console.error("real path => ", publicURL);
+        newUserData.profile = publicURL;
+      }
+
+      let insertedUsedData = await insertItem(
+        TABLE_NAMES.KOOP_USERS,
+        newUserData
+      );
+
+      if (insertedUsedData && insertedUsedData.length === 1) {
+        setuser(insertedUsedData[0]);
+        await AsyncStorage.setItem(
+          "@KOOP:user",
+          JSON.stringify(insertedUsedData[0])
+        );
 
         Alert.alert(
           "New account created",
@@ -91,7 +111,9 @@ export default function Initializing({ navigation, route }) {
       } else {
         Alert.alert(
           "Error adding user",
-          `Error: ${JSON.stringify(error)}\nRes: ${JSON.stringify(res)}`,
+          `Error: ${JSON.stringify(error)}\nRes: ${JSON.stringify(
+            insertedUsedData
+          )}`,
           [
             {
               text: "RETRY",
@@ -101,7 +123,7 @@ export default function Initializing({ navigation, route }) {
             },
           ]
         );
-        console.error("Error adding user : \n", res, error);
+        console.error("Error adding user : \n", insertedUsedData, error);
       }
     };
 
@@ -141,6 +163,10 @@ export default function Initializing({ navigation, route }) {
     </View>
   );
 }
+
+Initializing.ROUTE = "Initializing";
+
+export default Initializing;
 
 const st = StyleSheet.create({
   koopcont: {

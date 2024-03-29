@@ -23,12 +23,13 @@ import * as API from "../utils/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import UserContext from "../context/UserContext";
+import ProfileSetup from "./ProfileSetup";
 
 const phoneNumberPattern = /^\d{10}$/;
 export default function Home({ navigation }) {
   const [loading, setloading] = useState(false);
   const [images, setImages] = useState([]);
-  const [creds, setcreds] = useState({ phone: "oidssds", otp: "dfsdf" });
+  const [creds, setcreds] = useState({ phone: "0893092849", otp: "0000" });
   const [formaterror, setformaterror] = useState(null);
   const [logginSuccess, setLogginSuccess] = useState(false);
 
@@ -82,7 +83,7 @@ export default function Home({ navigation }) {
             {
               text: "CREATE MY ACCOUNT",
               onPress: () => {
-                navigation.replace("ProfileAndShopSetup", {
+                navigation.replace(ProfileSetup.ROUTE, {
                   phone: creds.phone,
                 });
               },

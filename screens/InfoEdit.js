@@ -100,6 +100,10 @@ export default function InfoEdit({ navigation, route }) {
   }, [navigation, loading, newValue]);
 
   const saveItem = async (e) => {
+    alert("saveItem()" + JSON.stringify(params));
+
+    return;
+
     setloading(true);
 
     const res = await updatePersShopInfo(user, dataKey, newValue);
@@ -111,7 +115,6 @@ export default function InfoEdit({ navigation, route }) {
       setuser(newuserdata);
       navigation.goBack();
     }
-    // alert(JSON.stringify(res));
 
     setloading(false);
   };

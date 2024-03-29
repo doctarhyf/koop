@@ -24,13 +24,15 @@ import * as ImagePicker from "expo-image-picker";
 
 import TextButton from "../components/TextButton";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
+import ShopSetup from "./ShopSetup";
 
 const MEDIA_TYPE_CAMERA = 0;
-export default function ProfileAndShopSetup({ navigation, route }) {
+
+function ProfileSetup({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
-  const [userName, setUserName] = useState("");
-  const [businessName, setBusinessName] = useState("");
-  const [profilePic, setProfilePic] = useState(null);
+  const [userName, setUserName] = useState("DOCTA");
+  const [businessName, setBusinessName] = useState("DOCTA BUSINESS");
+  const [profile, setProfile] = useState(null);
   const [promoCode, setPromoCode] = useState("");
   const [hasPromoCode, setHasPromoCode] = useState(false);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
@@ -48,12 +50,6 @@ export default function ProfileAndShopSetup({ navigation, route }) {
       "hardwareBackPress",
       handleBackPress
     );
-
-    //after setup and login
-    /*   setTimeout(() => {
-      setuser({ displayName: "doctarhyf" });
-      navigation.navigate("Initializing");
-    }, 2000); */
 
     return () => backHandler.remove();
   }, []);
@@ -95,12 +91,12 @@ export default function ProfileAndShopSetup({ navigation, route }) {
 
       console.error("new profile pic => ", uri);
 
-      setProfilePic(uri);
+      setProfile(uri);
     }
   };
 
   const onNext = (e) => {
-    if (profilePic === null) {
+    if (profile === null) {
       Vibration.vibrate(250);
       Alert.alert(
         "Profile picture needed!",
@@ -127,16 +123,16 @@ export default function ProfileAndShopSetup({ navigation, route }) {
       return;
     }
 
-    const profdata = {
+    const profileData = {
       phone: phone,
       userName: userName,
       businessName: businessName,
-      profilePic: profilePic,
+      profile: profile,
     };
 
-    if (hasPromoCode) profdata.invited_with_promo = promoCode;
+    if (hasPromoCode) profileData.invited_with_promo = promoCode;
 
-    navigation.replace("Initializing", profdata);
+    navigation.replace(ShopSetup.ROUTE, profileData);
   };
 
   return (
@@ -163,7 +159,7 @@ export default function ProfileAndShopSetup({ navigation, route }) {
           <TouchableOpacity onPress={handleAddImage}>
             <ImageBackground
               style={[st.profile]}
-              source={{ uri: profilePic || null }}
+              source={{ uri: profile || null }}
             >
               <AntDesign name="camera" size={24} color="gray" />
             </ImageBackground>
@@ -172,7 +168,15 @@ export default function ProfileAndShopSetup({ navigation, route }) {
           <View style={[styles.flexRow, styles.alignCenter]}>
             <AntDesign name="phone" size={24} color="gray" />
             <View style={[{ width: 10 }]} />
-            <Text style={[st.ti, { borderBottomColor: "grey" }]}>{phone}</Text>
+            <Text
+              style={[
+                st.ti,
+                { borderBottomColor: "grey" },
+                styles.paddingSmall,
+              ]}
+            >
+              {phone}
+            </Text>
           </View>
           <View style={[{ height: 20 }]} />
           <View style={[styles.flexRow, styles.alignCenter]}>
@@ -181,7 +185,11 @@ export default function ProfileAndShopSetup({ navigation, route }) {
             <TextInput
               value={userName}
               onChangeText={(txt) => setUserName(txt)}
-              style={[st.ti, { borderBottomColor: error ? "red" : "grey" }]}
+              style={[
+                st.ti,
+                { borderBottomColor: error ? "red" : "grey" },
+                styles.paddingSmall,
+              ]}
               placeholderTextColor={error ? "red" : "grey"}
               placeholder={"profile"}
             />
@@ -200,7 +208,11 @@ export default function ProfileAndShopSetup({ navigation, route }) {
             <TextInput
               value={businessName}
               onChangeText={(txt) => setBusinessName(txt)}
-              style={[st.ti, { borderBottomColor: error ? "red" : "grey" }]}
+              style={[
+                st.ti,
+                { borderBottomColor: error ? "red" : "grey" },
+                styles.paddingSmall,
+              ]}
               placeholderTextColor={error ? "red" : "grey"}
               placeholder={
                 userName && userName.length > 1
@@ -290,6 +302,10 @@ export default function ProfileAndShopSetup({ navigation, route }) {
     </ScrollView>
   );
 }
+
+ProfileSetup.ROUTE = "ProfileSetup";
+
+export default ProfileSetup;
 
 const st = StyleSheet.create({
   error: {
