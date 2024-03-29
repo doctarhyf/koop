@@ -70,13 +70,14 @@ const categoriesEntreprises = [
   "Autre",
 ];
 
-export default function InfoEdit({ navigation, route }) {
+function InfoEdit({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
 
   const [loading, setloading] = useState(false);
   const { params } = route;
   const dataKey = params[0];
   const dataContent = params[1];
+  const isFirstSetup = params[2];
   const curval = dataContent.value || "";
   const [newValue, setNewValue] = useState(curval);
   const [bday, setbday] = useState();
@@ -100,11 +101,19 @@ export default function InfoEdit({ navigation, route }) {
   }, [navigation, loading, newValue]);
 
   const saveItem = async (e) => {
-    alert("saveItem()" + JSON.stringify(params));
-
-    return;
-
     setloading(true);
+    if (isFirstSetup) {
+      // alert(newValue);
+
+      await AsyncStorage.removeItem("tmp");
+      if (newValue.trim().length > 0) {
+        const data = { key: dataKey, val: newValue };
+        await AsyncStorage.setItem("tmp", JSON.stringify(data));
+      }
+      navigation.goBack();
+      setloading(false);
+      return;
+    }
 
     const res = await updatePersShopInfo(user, dataKey, newValue);
 
@@ -299,6 +308,10 @@ Democratic Republic of the Congo`
     </View>
   );
 }
+
+InfoEdit.ROUTE = "InfoEdit";
+
+export default InfoEdit;
 
 const st = StyleSheet.create({
   map: {

@@ -1,4 +1,10 @@
-import React, { useEffect, useContext, useLayoutEffect, useState } from "react";
+import React, {
+  useEffect,
+  useCallback,
+  useContext,
+  useLayoutEffect,
+  useState,
+} from "react";
 import {
   Text,
   BackHandler,
@@ -21,13 +27,15 @@ import UserContext from "../context/UserContext";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import styles from "../helpers/styles";
-
+import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
 import TextButton from "../components/TextButton";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
+import InfoEdit from "./InfoEdit";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -36,7 +44,6 @@ const ShopTagsSelector = () => {
 };
 
 function ShopSetup({ navigation, route }) {
-  const [showShopTagsSelctor, setShowShopTagsSelctor] = useState(false);
   const [error, seterror] = useState(false);
   const [has_shop, set_has_shop] = useState(true);
   let params = route.params;
@@ -47,22 +54,51 @@ function ShopSetup({ navigation, route }) {
       "hardwareBackPress",
       () => true
     );
-
-    //alert(JSON.stringify(params));
-
-    //navigation.replace(Initializing.ROUTE, profdata);
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadTMP();
+    }, [])
+  );
+
+  const loadTMP = async () => {
+    const dataStr = await AsyncStorage.getItem("tmp");
+
+    const data = JSON.parse(dataStr);
+
+    if (data !== null) {
+      const key = data.key;
+      const val = data.val;
+
+      setProfileData((prev) => ({ ...prev, [key]: val }));
+    }
+  };
 
   const handleAddImage = (e) => {
     //setBottomSheetVisible(true);
   };
 
   const onNext = () => {
+    const { shop_profile, shop_add, shop_desc, shop_tags } = profileData;
+
     alert(JSON.stringify(profileData));
   };
 
   const onUpdateProfileData = (type, val) => {
     setProfileData((prev) => ({ ...prev, [type]: val }));
+  };
+
+  const setShowShopTagsSelctor = () => {
+    const cur_shop_tags = {
+      value: profileData.shop_tags,
+      icon: "tags",
+      placeholder: "Shop Tags",
+      editable: true,
+      label: "Shop Tags",
+    };
+
+    navigation.navigate(InfoEdit.ROUTE, ["shop_tags", cur_shop_tags, true]);
   };
 
   return (
@@ -108,7 +144,7 @@ function ShopSetup({ navigation, route }) {
             <View style={[styles.marginMin, styles.alignCenter]}>
               <TouchableOpacity
                 onPress={handleAddImage}
-                style={{ width: "100%" }}
+                style={{ width: "90%", marginHorizontal: 40 }}
               >
                 <ImageBackground
                   style={[st.profile]}
@@ -124,13 +160,14 @@ function ShopSetup({ navigation, route }) {
                 <View style={[{ width: 10 }]} />
                 <TextInput
                   multiline={true}
-                  numberOfLines={6}
+                  // numberOfLines={6}
                   value={profileData.shop_add}
                   onChangeText={(txt) => onUpdateProfileData("shop_add", txt)}
                   style={[
                     st.ti,
+                    st.paddingSmall,
                     { borderBottomColor: error ? "red" : "grey" },
-                    styles.paddingSmall,
+                    ,
                   ]}
                   placeholderTextColor={error ? "red" : "grey"}
                   placeholder={"Shop physicall address"}
@@ -143,7 +180,7 @@ function ShopSetup({ navigation, route }) {
                 <View style={[{ width: 10 }]} />
                 <TextInput
                   multiline={true}
-                  numberOfLines={6}
+                  //numberOfLines={6}
                   value={profileData.shop_desc}
                   onChangeText={(txt) => onUpdateProfileData("shop_desc", txt)}
                   style={[
@@ -161,7 +198,7 @@ function ShopSetup({ navigation, route }) {
               </Text>
 
               <View style={[{ height: 20 }]} />
-              <View style={[styles.flexRow, styles.alignCenter]}>
+              <View style={[styles.flexRow, { marginHorizontal: 32 }]}>
                 <MaterialCommunityIcons
                   name="google-my-business"
                   size={24}
@@ -169,28 +206,33 @@ function ShopSetup({ navigation, route }) {
                 />
                 <View style={[{ width: 10 }]} />
 
-                <TouchableOpacity
+                <View
                   style={[
-                    st.ti,
                     {
                       borderBottomColor: error ? "red" : "grey",
                       borderBottomColor: "#00000000",
                     },
-                    styles.paddingSmall,
                   ]}
-                  onPress={(e) => setShowShopTagsSelctor}
                 >
-                  <Text
-                    style={[
-                      st.ti,
-                      { borderBottomColor: error ? "red" : "grey" },
-                    ]}
-                  >
-                    {profileData.shop_tags || "Categories"}
-                  </Text>
-                </TouchableOpacity>
-
-                {showShopTagsSelctor && <ShopTagsSelector />}
+                  <TouchableOpacity onPress={(e) => setShowShopTagsSelctor()}>
+                    <View style={[{ marginVertical: 8, color: KOOP_BLUE }]}>
+                      <Text>Add categories</Text>
+                    </View>
+                  </TouchableOpacity>
+                  {profileData.shop_tags &&
+                    profileData.shop_tags.length > 0 && (
+                      <View style={[st.tagCont]}>
+                        {profileData.shop_tags
+                          .split(";")
+                          .slice(1)
+                          .map((it, i) => (
+                            <Text key={i} style={[st.tag, { fontSize: 10 }]}>
+                              {it}
+                            </Text>
+                          ))}
+                      </View>
+                    )}
+                </View>
               </View>
               <Text style={[st.selfStart]}>
                 Selectionnez les differentes categories dans les quelles vous
@@ -205,10 +247,11 @@ function ShopSetup({ navigation, route }) {
                 </Text>
               )} */}
             </View>
-
-            <TextButton label={"NEXT"} handlePress={onNext} />
           </View>
         )}
+
+        <TextButton label={"NEXT"} handlePress={onNext} />
+
         {/* <Modal
           animationType="slide"
           transparent={true}
@@ -247,6 +290,24 @@ ShopSetup.ROUTE = "ShopSetup";
 export default ShopSetup;
 
 const st = StyleSheet.create({
+  tagCont: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  tag: {
+    padding: 8,
+    margin: 4,
+
+    borderRadius: 16,
+    overflow: "hidden",
+    flexShrink: 1,
+
+    borderColor: KOOP_BLUE,
+    backgroundColor: KOOP_BLUE,
+
+    borderWidth: 1,
+    color: "white",
+  },
   error: {
     backgroundColor: "red",
     color: "white",
