@@ -65,7 +65,7 @@ function Initializing({ navigation, route }) {
 
       newUserData.shop_profile = shop_profile_public_url;
 
-      alert(JSON.stringify(newUserData));
+      //alert(JSON.stringify(newUserData));
 
       let insertedUsedData = await insertItem(
         TABLE_NAMES.KOOP_USERS,
