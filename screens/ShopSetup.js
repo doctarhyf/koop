@@ -129,7 +129,7 @@ function ShopSetup({ navigation, route }) {
             },
           ]}
         >
-          <Text>I dont have a shop</Text>
+          <Text>I have a shop</Text>
           <Switch
             trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
             thumbColor={has_shop ? KOOP_BLUE : "#f4f3f4"}
@@ -160,12 +160,11 @@ function ShopSetup({ navigation, route }) {
                 <View style={[{ width: 10 }]} />
                 <TextInput
                   multiline={true}
-                  // numberOfLines={6}
                   value={profileData.shop_add}
                   onChangeText={(txt) => onUpdateProfileData("shop_add", txt)}
                   style={[
                     st.ti,
-                    st.paddingSmall,
+                    styles.paddingSmall,
                     { borderBottomColor: error ? "red" : "grey" },
                     ,
                   ]}
@@ -180,7 +179,6 @@ function ShopSetup({ navigation, route }) {
                 <View style={[{ width: 10 }]} />
                 <TextInput
                   multiline={true}
-                  //numberOfLines={6}
                   value={profileData.shop_desc}
                   onChangeText={(txt) => onUpdateProfileData("shop_desc", txt)}
                   style={[
@@ -198,7 +196,14 @@ function ShopSetup({ navigation, route }) {
               </Text>
 
               <View style={[{ height: 20 }]} />
-              <View style={[styles.flexRow, { marginHorizontal: 32 }]}>
+
+              <View
+                style={[
+                  styles.flexRow,
+                  styles.alignCenter,
+                  { marginHorizontal: 12, width: "90%" },
+                ]}
+              >
                 <MaterialCommunityIcons
                   name="google-my-business"
                   size={24}
@@ -206,38 +211,32 @@ function ShopSetup({ navigation, route }) {
                 />
                 <View style={[{ width: 10 }]} />
 
-                <View
-                  style={[
-                    {
-                      borderBottomColor: error ? "red" : "grey",
-                      borderBottomColor: "#00000000",
-                    },
-                  ]}
-                >
-                  <TouchableOpacity onPress={(e) => setShowShopTagsSelctor()}>
-                    <View style={[{ marginVertical: 8, color: KOOP_BLUE }]}>
-                      <Text>Add categories</Text>
-                    </View>
-                  </TouchableOpacity>
-                  {profileData.shop_tags &&
-                    profileData.shop_tags.length > 0 && (
-                      <View style={[st.tagCont]}>
-                        {profileData.shop_tags
-                          .split(";")
-                          .slice(1)
-                          .map((it, i) => (
-                            <Text key={i} style={[st.tag, { fontSize: 10 }]}>
-                              {it}
-                            </Text>
-                          ))}
-                      </View>
-                    )}
-                </View>
+                <TouchableOpacity onPress={(e) => setShowShopTagsSelctor()}>
+                  <Text style={[styles.paddingSmall]}>Add categories</Text>
+                </TouchableOpacity>
               </View>
+
               <Text style={[st.selfStart]}>
                 Selectionnez les differentes categories dans les quelles vous
                 oeuvre
               </Text>
+
+              {profileData.shop_tags && profileData.shop_tags.length > 0 && (
+                <View style={[st.tagCont]}>
+                  {profileData.shop_tags
+                    .split(";")
+                    .slice(1)
+                    .map(
+                      (it, i) =>
+                        it !== "" && (
+                          <Text key={i} style={[st.tag, { fontSize: 10 }]}>
+                            {it}
+                          </Text>
+                        )
+                    )}
+                </View>
+              )}
+
               <View style={[{ height: 20 }]} />
 
               {/* 
@@ -251,6 +250,7 @@ function ShopSetup({ navigation, route }) {
         )}
 
         <TextButton label={"NEXT"} handlePress={onNext} />
+        <View style={[{ height: 20 }]} />
 
         {/* <Modal
           animationType="slide"

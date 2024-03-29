@@ -273,7 +273,7 @@ Democratic Republic of the Congo`
       )}
       {dataKey === "shop_tags" && (
         <View>
-          <Text style={[styles.ti]}>{shoptags.join(";")}</Text>
+          {/* <Text style={[styles.ti]}>{shoptags.join(";")}</Text> */}
           <View style={[st.villecont]}>
             {categoriesEntreprises.map((cat, i) => (
               <TouchableOpacity onPress={(e) => onCatSelect(cat)}>
