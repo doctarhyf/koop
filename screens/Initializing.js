@@ -24,6 +24,7 @@ import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 import { getPublicUrl } from "../utils/db";
 import useFileUpload from "../hooks/useFileUpload";
+import { SBFileUpload } from "../helpers/funcs";
 
 const SPLASH = require("../assets/images/splash.jpg");
 const KOOP = require("../assets/koop.png");
@@ -33,9 +34,9 @@ const LOGO_HEIGHT = 80;
 function Initializing({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
   const [loading, setloading] = useState(true);
-  const [setLocalURI, uploading, fullPath, error, uploadFile] =
-    useFileUpload(null);
-  const profdata = route.params;
+
+  const profileData = route.params;
+  const { phone, profile, shop_profile } = profileData;
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -44,25 +45,28 @@ function Initializing({ navigation, route }) {
     );
 
     const createAccounts = async () => {
-      const { businessName, profile, userName, phone, shop_profile } = profdata;
+      let newUserData = { ...profileData };
 
-      let newUserData = { ...profdata }; /* {
-        phone: phone,
-        display_name: userName,
-        shop_name: businessName,
-      }; */
+      const curTime = new Date().getTime();
+      const profile_server_path = `user_${phone}/profile_${curTime}.jpg`;
+      const profile_public_url = await SBFileUpload(
+        profile,
+        profile_server_path
+      );
 
-      if (!(shop_profile && shop_profile.length > 0)) {
-        alert("User must set shop profile pic");
-        return;
-      }
+      newUserData.profile = profile_public_url;
 
-      await uploadFile(shop_profile);
+      const shop_profile_server_path = `user_${phone}/shop_profile_${curTime}.jpg`;
+      const shop_profile_public_url = await SBFileUpload(
+        shop_profile,
+        shop_profile_server_path
+      );
 
-      if (!(profile && profile.length > 0)) {
-        alert("User must set profile pic");
-        return;
-      }
+      newUserData.shop_profile = shop_profile_public_url;
+
+      alert(JSON.stringify(newUserData));
+
+      return;
 
       const uri = profile;
       const base64 = await FileSystem.readAsStringAsync(uri, {

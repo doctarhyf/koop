@@ -43,6 +43,7 @@ export default function Home({ navigation }) {
     }
 
     const fetchImages = async () => {
+      await AsyncStorage.removeItem("tmp");
       const randomImages = await FUNCS.GetRandomImages(
         5,
         IMG_SIZE.w,

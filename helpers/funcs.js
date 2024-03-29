@@ -1,4 +1,7 @@
 import * as FileSystem from "expo-file-system";
+import { getPublicUrl } from "../utils/db";
+import { supabase } from "../utils/supabase";
+import { decode } from "base64-arraybuffer";
 
 export const GetRandomImages = async (count, width, height) => {
   const accessKey = process.env.EXPO_PUBLIC_UNSPLASH_ACCESS_KEY; // Replace with your Unsplash access key
@@ -101,4 +104,34 @@ export function GetMMSS(secs) {
   const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
   return `${minutes}:${formattedSeconds}`;
+}
+
+export async function SBFileUpload(
+  localUri,
+  serverpath,
+  mimeType = "image/jpg"
+) {
+  const uri = localUri;
+  const filePath = serverpath; // const filePath = `user_${phone}/profile_${new Date().getTime()}.jpg`;
+  const contentType = mimeType; // const contentType = "image/jpg";
+
+  const base64 = await FileSystem.readAsStringAsync(uri, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+  //const filePath = `user_${phone}/profile_${new Date().getTime()}.jpg`;
+  // const contentType = "image/jpg";
+
+  const { data, error } = await supabase.storage
+    .from("koop")
+    .upload(filePath, decode(base64), { contentType });
+
+  console.log("Profile pic uploaded! data => ", data);
+  if (data !== null && data.fullPath) {
+    const publicURL = await getPublicUrl(data.fullPath.replace("koop/", ""));
+    //console.error("real path => ", publicURL);
+    //newUserData.profile = publicURL;
+    return publicURL;
+  }
+
+  return null;
 }

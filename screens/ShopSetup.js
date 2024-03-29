@@ -36,6 +36,7 @@ import TextButton from "../components/TextButton";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import InfoEdit from "./InfoEdit";
+import Initializing from "./Initializing";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -55,6 +56,8 @@ function ShopSetup({ navigation, route }) {
       "hardwareBackPress",
       () => true
     );
+
+    return () => backHandler.remove();
   }, []);
 
   useFocusEffect(
@@ -132,7 +135,7 @@ function ShopSetup({ navigation, route }) {
       message: "Please provide your shop description",
     },
     SHOP_TAGS: {
-      label: "Choose your activities categories",
+      label: "Add activities categories",
       message: "Please choose your shop categories",
     },
   };
@@ -166,7 +169,8 @@ function ShopSetup({ navigation, route }) {
       delete finalProfData.shop_tags;
     }
 
-    alert("initializing ... \n" + JSON.stringify(finalProfData));
+    // alert("initializing ... \n" + JSON.stringify(finalProfData));
+    navigation.navigate(Initializing.ROUTE, finalProfData);
   };
 
   const onUpdateProfileData = (type, val) => {
@@ -227,7 +231,7 @@ function ShopSetup({ navigation, route }) {
 
         {has_shop && (
           <View>
-            <View style={[styles.marginMin, styles.alignCenter]}>
+            <View style={[styles.alignCenter]}>
               <TouchableOpacity
                 onPress={handleAddImage}
                 style={{ width: "96%" }}
@@ -293,12 +297,14 @@ function ShopSetup({ navigation, route }) {
                 <MaterialCommunityIcons
                   name="google-my-business"
                   size={24}
-                  color="black"
+                  color={KOOP_BLUE}
                 />
                 <View style={[{ width: 10 }]} />
 
                 <TouchableOpacity onPress={(e) => setShowShopTagsSelctor()}>
-                  <Text style={[styles.paddingSmall]}>Add categories</Text>
+                  <Text style={[styles.paddingSmall, styles.textBlue]}>
+                    + Add categories
+                  </Text>
                 </TouchableOpacity>
               </View>
 
@@ -336,7 +342,7 @@ function ShopSetup({ navigation, route }) {
         )}
 
         {!has_shop && (
-          <Text style={[styles.paddingLarge, { marginVertical: 24 }]}>
+          <Text style={[{ marginVertical: 24 }]}>
             Pas de business pour le moment? vous pouvez vous enregistrer en
             temps que client, vous gardez toujours la possibilite de creer un
             shop plutard

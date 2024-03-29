@@ -14,7 +14,7 @@ const useFileUpload = (
   const [error, seterror] = useState(null);
   const [localURI, setLocalURI] = useState(null);
 
-  const uploadFile = async (uri) => {
+  /* const uploadFile = async (uri, onFinish) => {
     console.error(`Uploading file : ${uri}`);
 
     setuploading(true);
@@ -40,10 +40,10 @@ const useFileUpload = (
       console.error(`Upload error ... ${error}`);
     }
   };
-
+ */
   useEffect(() => {
     if (localURI && localURI.length > 0) {
-      /* const uploadFile = async (uri) => {
+      const uploadFile = async (uri) => {
         const base64 = await FileSystem.readAsStringAsync(uri, {
           encoding: FileSystem.EncodingType.Base64,
         });
@@ -65,7 +65,7 @@ const useFileUpload = (
           setuploading(false);
           console.error(`Upload error ... ${error}`);
         }
-      }; */
+      };
 
       uploadFile(localURI, remotePath, mimeType, bucketName);
     } else {
@@ -79,7 +79,7 @@ const useFileUpload = (
     };
   }, [localURI]);
 
-  return [setLocalURI, uploading, fullPath, error, uploadFile];
+  return [setLocalURI, uploading, fullPath, error];
 };
 
 export default useFileUpload;
