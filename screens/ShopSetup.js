@@ -205,12 +205,14 @@ function ShopSetup({ navigation, route }) {
             {
               flexDirection: "row",
               justifyContent: "space-between",
-              width: "100%",
+              width: "80%",
               alignItems: "center",
             },
           ]}
         >
-          <Text>I have a shop</Text>
+          <Text style={[{ marginVertical: 12, fontWeight: "bold" }]}>
+            I have a shop
+          </Text>
           <Switch
             trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
             thumbColor={has_shop ? KOOP_BLUE : "#f4f3f4"}
@@ -225,7 +227,7 @@ function ShopSetup({ navigation, route }) {
             <View style={[styles.marginMin, styles.alignCenter]}>
               <TouchableOpacity
                 onPress={handleAddImage}
-                style={{ width: "90%", marginHorizontal: 40 }}
+                style={{ width: "96%" }}
               >
                 <ImageBackground
                   style={[st.profile]}
@@ -299,7 +301,7 @@ function ShopSetup({ navigation, route }) {
 
               <Text style={[st.selfStart]}>
                 Selectionnez les differentes categories dans les quelles vous
-                oeuvre
+                oeuvrez
               </Text>
 
               {profileData.shop_tags && profileData.shop_tags.length > 0 && (
@@ -328,6 +330,14 @@ function ShopSetup({ navigation, route }) {
               )} */}
             </View>
           </View>
+        )}
+
+        {!has_shop && (
+          <Text style={[styles.paddingLarge, { marginVertical: 24 }]}>
+            Pas de business pour le moment? vous pouvez vous enregistrer en
+            temps que client, vous gardez toujours la possibilite de creer un
+            shop plutard
+          </Text>
         )}
 
         <TextButton label={"NEXT"} handlePress={onNext} />

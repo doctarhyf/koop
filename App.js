@@ -77,7 +77,7 @@ const SCREENS = [
   { name: "About", comp: About },
   { name: "ContactUs", comp: ContactUs },
   { name: "ChangePIN", comp: ChangePIN },
-  { name: ShopSetup.ROUTE, comp: ShopSetup },
+  { name: ShopSetup.ROUTE, comp: ShopSetup, options: { title: "Shop setup" } },
 ];
 
 const Stack = createNativeStackNavigator();
