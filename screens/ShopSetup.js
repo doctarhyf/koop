@@ -158,7 +158,7 @@ function ShopSetup({ navigation, route }) {
       return;
     }
 
-    const finalProfData = { ...profileData };
+    const finalProfData = { ...profileData, has_shop: has_shop };
 
     if (!has_shop) {
       delete finalProfData.shop_profile;
