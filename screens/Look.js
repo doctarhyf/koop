@@ -23,32 +23,34 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 const image = { uri: "https://legacy.reactjs.org/logo-og.png" };
 
-const SpecialRequest = () => {
+const SpecialRequest = ({ onSpecialReqItemPress }) => {
   return (
     <View>
       <Text style={[{ marginBottom: 8 }]}>DEMANDE SPECIALES</Text>
       {[...Array(5)].map((it, i) => (
-        <View
-          style={[
-            styles.flexRow,
+        <TouchableOpacity onPress={onSpecialReqItemPress}>
+          <View
+            style={[
+              styles.flexRow,
 
-            styles.alignCenter,
-            {
-              gap: 8,
-              padding: 8,
-              borderColor: "#ddd",
-              marginBottom: 8,
-              borderWidth: 1,
-              borderRadius: 8,
-            },
-          ]}
-        >
-          <FontAwesome5 name="bolt" size={24} color="green" />
-          <View>
-            <Text style={[{ fontWeight: "bold" }]}>Rechere d'un macon</Text>
-            <Text>Nous sommes a la rechere d'un macon</Text>
+              styles.alignCenter,
+              {
+                gap: 8,
+                padding: 8,
+                borderColor: "#ddd",
+                marginBottom: 8,
+                borderWidth: 1,
+                borderRadius: 8,
+              },
+            ]}
+          >
+            <FontAwesome5 name="bolt" size={24} color="green" />
+            <View>
+              <Text style={[{ fontWeight: "bold" }]}>Rechere d'un macon</Text>
+              <Text>Nous sommes a la rechere d'un macon</Text>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   );
@@ -284,18 +286,6 @@ export default function Look({ navigation }) {
     setdata((old) => ({ ...old, SERVICES: koopitems }));
   }, [koopitems]);
 
-  /*   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TextButton
-          iconName="bolt"
-          label={"OFFRE"}
-          handlePress={onReqService}
-        />
-      ),
-    });
-  }, [navigation, data, images]); */
-
   const onRefresh = () => {
     setRefreshing(true);
     // fetchData();
@@ -358,6 +348,10 @@ export default function Look({ navigation }) {
     navigation.navigate("Popular");
   };
 
+  const onSpecialReqItemPress = (item) => {
+    alert(item);
+  };
+
   return (
     <View style={[styles.flex1, styles.bgBlue]}>
       <ScrollView
@@ -407,7 +401,7 @@ export default function Look({ navigation }) {
               </Text>
             </View>
 
-            <SpecialRequest />
+            <SpecialRequest onSpecialReqItemPress={onSpecialReqItemPress} />
 
             <FeaturedItems
               loadingkoopitems={loadingkoopitems}
