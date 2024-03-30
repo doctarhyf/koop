@@ -107,7 +107,7 @@ export default function ViewMessage({ route, navigation }) {
 
         <View style={[styles.flexRow, styles.paddingMid]}>
           <TextInput
-            style={[styles.ti, { padding: 8, flexGrow: 1 }]}
+            style={[styles.txtInput]}
             placeholder="Type your message ..."
             value={newMessage}
             onChangeText={(txt) => setNewMessage(txt)}

@@ -29,7 +29,7 @@ const phoneNumberPattern = /^\d{10}$/;
 export default function Home({ navigation }) {
   const [loading, setloading] = useState(false);
   const [images, setImages] = useState([]);
-  const [creds, setcreds] = useState({ phone: "0893092849", otp: "0000" });
+  const [creds, setcreds] = useState({ phone: "", otp: "" });
   const [formaterror, setformaterror] = useState(null);
   const [logginSuccess, setLogginSuccess] = useState(false);
 
@@ -226,7 +226,7 @@ export default function Home({ navigation }) {
           </View>
         )}
 
-        {logginSuccess && (
+        {/*   {logginSuccess && (
           <View style={[styles.logginsuccess]}>
             <Image
               source={require("../assets/icons/check.png")}
@@ -234,7 +234,7 @@ export default function Home({ navigation }) {
             />
             <Text>Loggin success</Text>
           </View>
-        )}
+        )} */}
       </View>
     </ScrollView>
   );
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     fontSize: BIG_FONT_SIZE,
   },
   txtInput: {
-    padding: 8,
+    padding: 12,
     margin: 8,
     borderColor: "lightgrey",
     borderWidth: 1,

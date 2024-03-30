@@ -11,6 +11,13 @@ const styles = StyleSheet.create({
   flex1: {
     flex: 1,
   },
+  txtInput: {
+    padding: 12,
+    margin: 8,
+    borderColor: "lightgrey",
+    borderWidth: 1,
+    borderRadius: 12,
+  },
   ti: {
     borderBottomColor: "lightgrey",
     borderBottomWidth: 1,

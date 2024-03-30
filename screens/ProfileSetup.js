@@ -30,8 +30,8 @@ const MEDIA_TYPE_CAMERA = 0;
 
 function ProfileSetup({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
-  const [display_name, set_display_name] = useState("DOCTA");
-  const [shop_name, set_shop_name] = useState("DOCTA BUSINESS");
+  const [display_name, set_display_name] = useState("");
+  const [shop_name, set_shop_name] = useState("");
   const [profile, set_profile] = useState(null);
   const [promoCode, setPromoCode] = useState("");
   const [hasPromoCode, setHasPromoCode] = useState(false);
@@ -235,7 +235,9 @@ function ProfileSetup({ navigation, route }) {
               },
             ]}
           >
-            <Text>I have a promo code</Text>
+            <Text style={[{ fontWeight: "bold", marginVertical: 12 }]}>
+              I have a promo code
+            </Text>
             <Switch
               trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
               thumbColor={hasPromoCode ? KOOP_BLUE : "#f4f3f4"}
@@ -245,14 +247,21 @@ function ProfileSetup({ navigation, route }) {
             />
           </View>
           {hasPromoCode && (
-            <View>
+            <View style={[{ marginHorizontal: 14 }]}>
               <View style={[styles.flexRow, styles.alignCenter]}>
                 <MaterialCommunityIcons name="lock" size={24} color="black" />
                 <View style={[{ width: 10 }]} />
                 <TextInput
                   value={promoCode}
                   onChangeText={(txt) => setPromoCode(txt)}
-                  style={[st.ti, { borderBottomColor: error ? "red" : "grey" }]}
+                  style={[
+                    st.ti,
+                    {
+                      padding: 12,
+                      width: "80%",
+                      borderBottomColor: error ? "red" : "grey",
+                    },
+                  ]}
                   placeholderTextColor={error ? "red" : "grey"}
                   placeholder={"ex:STARPRO"}
                 />
