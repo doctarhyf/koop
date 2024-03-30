@@ -73,7 +73,7 @@ export default function Request({ navigation }) {
           styles.marginVMin,
         ]}
       >
-        Pour lancer une offre de service, soyez claire et precis par rapport a
+        Pour lancer une demande speciale, soyez claire et precis par rapport a
         ce que vous offrez comme services ou produits, la meilleure qualite de
         vos photos a un impact sur votre clientele
       </Text>
@@ -158,34 +158,6 @@ export default function Request({ navigation }) {
           </Text>
 
           <View style={[styles.marginVLarge]}>
-            {/* <ScrollView horizontal>
-              {MEDIA_ITEMS.map((it, i) => (
-                <TouchableOpacity key={i} onPress={handleAddMedia}>
-                  <View
-                    style={[
-                      styles.bgBlue,
-                      styles.roundedMd,
-                      styles.overflowHidden,
-                      styles.marginH,
-                      styles.flex1,
-                      styles.imgDiapo,
-                      styles.justifyCenter,
-                    ]}
-                  >
-                    <Image
-                      style={[
-                        styles.imgDiapo,
-                        { height: 30, resizeMode: "contain" },
-                      ]}
-                      source={it.icon}
-                    />
-                    <Text style={[styles.textWhite, styles.textCenter]}>
-                      {it.label}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </ScrollView> */}
             <ImageAdder onImageAdded={onImageAdded} />
           </View>
 
@@ -208,7 +180,7 @@ export default function Request({ navigation }) {
           <View style={[styles.marginHLarg, styles.marginBottomLarge]}>
             <MenuButton
               btn={{
-                label: "POST SERVICE",
+                label: "LANCER LA DEMANDE",
                 route: "Provide",
                 icon: require("../assets/icons/post.png"),
               }}

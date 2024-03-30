@@ -19,8 +19,40 @@ import TextButton from "../components/TextButton";
 import useItemsLoader from "../hooks/useItemsLoader";
 import { TABLE_NAMES } from "../utils/supabase";
 import useFetch from "../hooks/useFetch";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 const image = { uri: "https://legacy.reactjs.org/logo-og.png" };
+
+const SpecialRequest = () => {
+  return (
+    <View>
+      <Text style={[{ marginBottom: 8 }]}>DEMANDE SPECIALES</Text>
+      {[...Array(5)].map((it, i) => (
+        <View
+          style={[
+            styles.flexRow,
+
+            styles.alignCenter,
+            {
+              gap: 8,
+              padding: 8,
+              borderColor: "#ddd",
+              marginBottom: 8,
+              borderWidth: 1,
+              borderRadius: 8,
+            },
+          ]}
+        >
+          <FontAwesome5 name="bolt" size={24} color="green" />
+          <View>
+            <Text style={[{ fontWeight: "bold" }]}>Rechere d'un macon</Text>
+            <Text>Nous sommes a la rechere d'un macon</Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+};
 
 const FeaturedItems = ({ navigation, loadingkoopitems, koopitems }) => {
   const onViewItem = (item) => {
@@ -183,17 +215,33 @@ const Suggestions = ({ navigation }) => {
             <TouchableOpacity key={i} onPress={(e) => console.log(e)}>
               <View
                 style={[
-                  { marginVertical: 12, borderColor: "#ddd", borderWidth: 1 },
+                  {
+                    marginVertical: 12,
+                    borderRadius: 12,
+                    borderColor: "#ddd",
+                    borderWidth: 1,
+                    overflow: "hidden",
+                  },
                 ]}
               >
                 <View
                   style={[
-                    { height: 200, backgroundColor: "red", overflow: "hidden" },
+                    {
+                      height: 200,
+
+                      backgroundColor: "red",
+                      overflow: "hidden",
+                    },
                   ]}
                 >
                   <Image
                     style={[
-                      { resizeMode: "cover", width: "100%", height: 200 },
+                      {
+                        resizeMode: "cover",
+                        overflow: "hidden",
+                        width: "100%",
+                        height: 200,
+                      },
                     ]}
                     source={require("../assets/images/init.jpg")}
                     transition={1000}
@@ -350,14 +398,16 @@ export default function Look({ navigation }) {
               <MenuButton
                 handleOnPress={onReqService}
                 btn={{
-                  label: "LANCER OFFRE DE SERVICE",
+                  label: "DEMANDE SPECIFIQUE",
                   icon: require("../assets/icons/megaphone.png"),
                 }}
               />
               <Text style={[styles.textCenter, styles.marginV]}>
-                To request a new service which is not listed
+                Lancer une demande speciale
               </Text>
             </View>
+
+            <SpecialRequest />
 
             <FeaturedItems
               loadingkoopitems={loadingkoopitems}

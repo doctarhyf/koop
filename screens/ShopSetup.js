@@ -162,6 +162,9 @@ function ShopSetup({ navigation, route }) {
     }
 
     const finalProfData = { ...profileData, has_shop: has_shop };
+    if (notDefinedOrEmpty(profileData.shop_whatsapp)) {
+      finalProfData.shop_whatsapp = profileData.phone;
+    }
 
     if (!has_shop) {
       delete finalProfData.shop_profile;
@@ -170,6 +173,7 @@ function ShopSetup({ navigation, route }) {
     }
 
     // alert("initializing ... \n" + JSON.stringify(finalProfData));
+
     navigation.navigate(Initializing.ROUTE, finalProfData);
   };
 
