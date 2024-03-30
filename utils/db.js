@@ -1,4 +1,3 @@
-import { ReadFile } from "../helpers/funcs";
 import { KOOP_BUCKET_NAME, TABLE_NAMES, supabase } from "./supabase";
 
 export const UPDATE_SUCCESS = null;

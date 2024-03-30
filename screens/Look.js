@@ -284,7 +284,7 @@ export default function Look({ navigation }) {
     setdata((old) => ({ ...old, SERVICES: koopitems }));
   }, [koopitems]);
 
-  useLayoutEffect(() => {
+  /*   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <TextButton
@@ -294,7 +294,7 @@ export default function Look({ navigation }) {
         />
       ),
     });
-  }, [navigation, data, images]);
+  }, [navigation, data, images]); */
 
   const onRefresh = () => {
     setRefreshing(true);
