@@ -163,7 +163,7 @@ export default function Inbox({ navigation, route }) {
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
         >
-          <Text style={[styles.paddingLarge, styles.textCenter]}>
+          <Text style={[styles.paddingSmall, styles.textCenter]}>
             No Messages
           </Text>
         </ScrollView>
