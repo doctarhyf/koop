@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Pressable,
+  TouchableWithoutFeedback,
 } from "react-native";
 import styles from "../helpers/styles";
 import {
@@ -64,54 +65,55 @@ export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {
 
   return (
     <Modal visible={isMenuVisible} transparent animationType="slide">
-      <View
-        style={[
-          styles.flex1,
-          styles.paddingLarge,
-          { backgroundColor: "#000d" },
-          styles.bgBlue,
-        ]}
-      >
-        {/* <Text style={[styles.textCenter, styles.textWhite]}>MENU</Text> */}
-        <Pressable onPress={(e) => closeMenu()}>
-          <Image
-            source={require("../assets/koop.png")}
-            style={{ height: 120 }}
-            transition={1000}
-            contentFit="contain"
-          />
-        </Pressable>
+      <TouchableWithoutFeedback onPress={(e) => closeMenu()}>
+        <View
+          style={[
+            styles.flex1,
+            styles.paddingLarge,
+            { backgroundColor: "#000d" },
+            styles.bgBlue,
+          ]}
+        >
+          {/* <Text style={[styles.textCenter, styles.textWhite]}>MENU</Text> */}
+          <Pressable onPress={(e) => closeMenu()}>
+            <Image
+              source={require("../assets/koop.png")}
+              style={{ height: 120 }}
+              transition={1000}
+              contentFit="contain"
+            />
+          </Pressable>
 
-        {MAIN_MENU_ITEMS.map((menu, i) => (
-          <View key={i} style={[{ with: "50%" }, styles.roundedMd]}>
-            <TouchableOpacity onPress={(e) => onPressBtn({ id: i })}>
-              <View
-                style={[
-                  styles.flexRow,
-                  styles.alignCenter,
-                  styles.paddingSmall,
-                ]}
-              >
-                <Image
-                  source={i === 0 ? { uri: user.profile } : menu.icon}
+          {MAIN_MENU_ITEMS.map((menu, i) => (
+            <View key={i} style={[{ with: "50%" }, styles.roundedMd]}>
+              <TouchableOpacity onPress={(e) => onPressBtn({ id: i })}>
+                <View
                   style={[
-                    {
-                      marginRight: 12,
-                      width: 40,
-                      height: 40,
-                      borderRadius: 40,
-                    },
-                    styles.overflowHidden,
+                    styles.flexRow,
+                    styles.alignCenter,
+                    styles.paddingSmall,
                   ]}
-                />
+                >
+                  <Image
+                    source={i === 0 ? { uri: user.profile } : menu.icon}
+                    style={[
+                      {
+                        marginRight: 12,
+                        width: 40,
+                        height: 40,
+                        borderRadius: 40,
+                      },
+                      styles.overflowHidden,
+                    ]}
+                  />
 
-                <Text>{menu.label}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        ))}
+                  <Text>{menu.label}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ))}
 
-        {/*  <View style={[st.spacer]}></View>
+          {/*  <View style={[st.spacer]}></View>
 
         <TouchableOpacity onPress={(e) => onPressBtn({ id: -1 })}>
           <View
@@ -133,7 +135,8 @@ export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {
             <Text>SIGN OUT</Text>
           </View>
         </TouchableOpacity> */}
-      </View>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 }
