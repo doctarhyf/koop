@@ -1,5 +1,3 @@
-import ServiceRequest from "../screens/ServiceRequest";
-
 export const DIAPO_PICS = [
   require("../assets/diapo/p1.png"),
   require("../assets/diapo/p2.png"),
@@ -21,7 +19,7 @@ export const MAIN_MENU_BUTTONS = [
   }, */
   {
     label: "LANCER UNE DEMANDE DE SERVICE",
-    route: ServiceRequest.ROUTE,
+    route: "ServiceRequest",
     icon: require("../assets/icons/provide.png"),
   },
   {

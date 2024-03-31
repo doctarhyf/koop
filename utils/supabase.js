@@ -11,6 +11,7 @@ export const TABLE_NAMES = {
   KOOP_MSG_OUTBOX: "koop_messages_out",
   KOOP_MSG_INBOX: "koop_messages_in",
   KOOP_CONTACT_US: "koop_contact_us",
+  KOOP_SERVICES_REQUEST: "koop_serv_req",
 };
 
 export const KOOP_BUCKET_NAME = "koop";
