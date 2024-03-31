@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Share,
   Platform,
+  Alert,
 } from "react-native";
 import UserContext from "../context/UserContext";
 import { KOOP_BLUE } from "../helpers/colors";
@@ -20,6 +21,8 @@ import { Octicons } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { IMG_SIZE } from "../helpers/flow";
+import { onPress } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ICON_SIZE = 24;
 
@@ -58,6 +61,12 @@ const DATA = [
         icon: <FontAwesome6 name="smile-wink" size={24} color="black" />,
         route: "contact_us",
       },
+      {
+        text: "Sign out",
+        icon: <Octicons name="sign-out" size={24} color="black" />,
+        route: "signout",
+      },
+      ,
       {
         text: "About",
         icon: <Entypo name="info-with-circle" size={24} color="black" />,
@@ -106,6 +115,25 @@ export default Settings = ({ navigation, route }) => {
     if (route === "share_app") {
       shareLink();
     }
+
+    if (route === "signout") {
+      Alert.alert("Sign out", "Are you sure you wanna sign out?", [
+        { text: "No", style: "cancel" },
+        {
+          text: "Yes",
+          style: "destructive",
+          onPress: () => {
+            signout();
+          },
+        },
+      ]);
+    }
+  };
+
+  const signout = async () => {
+    await AsyncStorage.removeItem("@KOOP:user");
+
+    navigation.replace("Login");
   };
 
   return (

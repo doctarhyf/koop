@@ -111,7 +111,7 @@ export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {
           </View>
         ))}
 
-        <View style={[st.spacer]}></View>
+        {/*  <View style={[st.spacer]}></View>
 
         <TouchableOpacity onPress={(e) => onPressBtn({ id: -1 })}>
           <View
@@ -132,7 +132,7 @@ export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {
 
             <Text>SIGN OUT</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </Modal>
   );
