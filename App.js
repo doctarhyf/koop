@@ -38,6 +38,7 @@ import About from "./screens/About";
 import ContactUs from "./screens/ContactUs";
 import ChangePIN from "./screens/ChangePIN";
 import ShopSetup from "./screens/ShopSetup";
+import ServiceRequest from "./screens/ServiceRequest";
 
 const SCREENS = [
   { name: "Login", comp: Login, options: { headerShown: false } },
@@ -78,6 +79,11 @@ const SCREENS = [
   { name: "ContactUs", comp: ContactUs },
   { name: "ChangePIN", comp: ChangePIN },
   { name: ShopSetup.ROUTE, comp: ShopSetup, options: { title: "Shop setup" } },
+  {
+    name: ServiceRequest.ROUTE,
+    comp: ServiceRequest,
+    options: { title: "Demande de service" },
+  },
 ];
 
 const Stack = createNativeStackNavigator();

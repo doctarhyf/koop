@@ -13,7 +13,7 @@ import {
 import { Image } from "expo-image";
 import styles from "../helpers/styles";
 import MenuButton from "../components/MenuButton";
-import { BUTTONS } from "../helpers/flow";
+import { MAIN_MENU_BUTTONS } from "../helpers/flow";
 import { KOOP_BLUE, KOOP_BLUE_TRANSLUCIDE } from "../helpers/colors";
 import ModalMenu from "../components/ModalMenu";
 import UserContext from "../context/UserContext";
@@ -138,7 +138,7 @@ const Home = ({ navigation }) => {
               styles.borderTopRadiusLarge,
             ]}
           >
-            {BUTTONS.map((btn, i) => (
+            {MAIN_MENU_BUTTONS.map((btn, i) => (
               <MenuButton key={i} btn={btn} handleOnPress={handleOnPress} />
             ))}
 
