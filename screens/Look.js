@@ -204,7 +204,7 @@ const Suggestions = ({ navigation }) => {
   return (
     <View>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>SUGGESTIONS</Text>
+        <Text style={[styles.mbLarge, styles.mtLarge]}>PROMO</Text>
         <TouchableOpacity onPress={(e) => onViewAll()}>
           <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
         </TouchableOpacity>
