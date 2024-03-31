@@ -111,22 +111,24 @@ export default function Inbox({ navigation, route }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () =>
-        loadingRawMessages || loading ? (
-          <ActivityIndicator
-            animating={loadingRawMessages}
-            style={[styles.paddingLarge]}
-          />
-        ) : (
-          <TouchableOpacity
-            onPress={(e) => {
-              setloading(true);
-              reloadMessages();
-            }}
-          >
-            <FontAwesome name="refresh" size={24} color="black" />
-          </TouchableOpacity>
-        ),
+      headerRight: true
+        ? null
+        : () =>
+            loadingRawMessages || loading ? (
+              <ActivityIndicator
+                animating={loadingRawMessages}
+                style={[styles.paddingLarge]}
+              />
+            ) : (
+              <TouchableOpacity
+                onPress={(e) => {
+                  setloading(true);
+                  reloadMessages();
+                }}
+              >
+                <FontAwesome name="refresh" size={24} color="black" />
+              </TouchableOpacity>
+            ),
     });
   }, [navigation]);
 
@@ -141,17 +143,36 @@ export default function Inbox({ navigation, route }) {
   );
 
   const onExtractContactKey = (item) => item[0];
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = () => {
+    reloadMessages();
+  };
 
   return (
     <View>
-      {<ActivityIndicator animating={loadingRawMessages} color={KOOP_BLUE} />}
+      {
+        <ActivityIndicator
+          animating={loadingRawMessages}
+          color={KOOP_BLUE}
+          style={[styles.paddingLarge]}
+        />
+      }
       {!loadingRawMessages && messages.length === 0 && (
-        <Text style={[styles.paddingLarge, styles.textCenter]}>
-          No Messages
-        </Text>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          <Text style={[styles.paddingLarge, styles.textCenter]}>
+            No Messages
+          </Text>
+        </ScrollView>
       )}
       {messages && messages.length > 0 && (
         <FlatList
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           data={messages}
           keyExtractor={onExtractContactKey}
           renderItem={onRenderContact}
