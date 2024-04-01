@@ -116,7 +116,9 @@ export default function Home({ navigation }) {
   };
 
   const checkUserLogin = async () => {
+    setloading(true);
     const user = await AsyncStorage.getItem("@KOOP:user");
+    setloading(false);
     if (user) {
       console.log("found user => ", user);
       setLogginSuccess(true);
