@@ -132,7 +132,7 @@ export async function insertServiceRequest(itemData) {
   const { images, user_id, label, desc } = itemData;
   const promises_file_read = [];
   const promises_file_upload = [];
-  alert(images.length);
+  //alert(images.length);
 
   if (images.length > 0) {
     images.forEach((img, i) => {

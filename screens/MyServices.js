@@ -42,7 +42,7 @@ export default function MyServices({ navigation }) {
           <TextButton
             iconName="bolt"
             label={"POSTER"}
-            handlePress={(e) => navigation.replace("Provide")}
+            handlePress={(e) => navigation.navigate("Provide")}
           />
         ),
     });
@@ -86,8 +86,8 @@ export default function MyServices({ navigation }) {
     <View>
       <View style={[styles.flexRow, styles.justifyBetween, styles.bgWhite]}>
         {[
-          { label: "POSTED SERVICES", type: "post", icon: null },
-          { label: "REQUESTED SERVICES", type: "red", icon: null },
+          { label: "SERVICES FOURNIS", type: "post", icon: null },
+          { label: "DEMANDES DE SERVICES", type: "red", icon: null },
         ].map((it, i) => (
           <TouchableOpacity key={i} onPress={(e) => onItemsTypeSelect(it.type)}>
             <Text

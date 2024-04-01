@@ -61,8 +61,23 @@ function ServiceRequest({ navigation, route }) {
     try {
       const res = await API.insertServiceRequest(finalData);
 
-      alert(JSON.stringify(res));
       setloading(false);
+
+      //alert(JSON.stringify(res));
+      if (res && res.length === 1) {
+        Alert.alert(
+          "Request posted!",
+          "Votre demande a ete postee avec success.Aller a la page My Products & services?",
+          [
+            { text: "Rester ICI" },
+            {
+              text: "My Prods & Serv,",
+              style: "destructive",
+              onPress: () => navigation.replace("MyServices", res[0]),
+            },
+          ]
+        );
+      }
     } catch (e) {
       setloading(false);
       alert("Error : " + JSON.stringify(e));
