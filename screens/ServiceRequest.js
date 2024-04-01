@@ -6,7 +6,7 @@ import {
   ScrollView,
   Switch,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../helpers/styles";
 import { Image } from "expo-image";
 import SimpSimpleTextButtonle from "../components/SimpleTextButton";
@@ -15,7 +15,8 @@ import { TABLE_NAMES } from "../utils/supabase";
 import ImageAdder from "../components/ImageAdder";
 
 function ServiceRequest({ navigation, route }) {
-  const [servData, setServData] = useState({});
+  const [servData, setServData] = useState({ images: [] });
+  const [images, stimages] = useState([]);
 
   const [hasMoreData, setHasMoreData] = useState(false);
   const toggleHasMoreData = () =>
@@ -25,8 +26,20 @@ function ServiceRequest({ navigation, route }) {
     alert(JSON.stringify(servData));
   };
 
-  const onImageAdded = (dt) => {
-    alert(dt);
+  useEffect(() => {
+    alert(JSON.stringify(servData));
+  }, [servData]);
+
+  const onImageAdded = (img) => {
+    const new_images = [...servData.images];
+
+    const images_exists = new_images.includes(img);
+
+    if (!images_exists) {
+      new_images.push(img);
+    }
+
+    setServData((prev) => ({ ...prev, images: new_images }));
   };
 
   const onImagePressed = (dt) => {
