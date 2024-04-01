@@ -184,13 +184,13 @@ function ServiceRequest({ navigation, route }) {
           text={"POST"}
           handlePress={onPost}
           loading={loading}
-          icon={
+          /* icon={
             <MaterialCommunityIcons
               name="send-circle-outline"
               size={24}
               color={KOOP_BLUE}
             />
-          }
+          } */
         />
       </View>
     </ScrollView>

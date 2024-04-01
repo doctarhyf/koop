@@ -1,4 +1,4 @@
-import { uploadPic } from "./db";
+import { insertItem, uploadPic } from "./db";
 import { supabase, TABLE_NAMES } from "./supabase";
 
 const API_ENDPOINT = "https://konext.vercel.app/api";
@@ -130,13 +130,34 @@ content */
 
 export async function insertServiceRequest(itemData) {
   const { images, user_id, label, desc } = itemData;
+  const promises_file_read = [];
+  const promises_file_upload = [];
+  alert(images.length);
 
-  const promises = [];
+  if (images.length > 0) {
+    images.forEach((img, i) => {
+      const base64 = FileSystem.readAsStringAsync(uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
 
-  return await new Promise((resolve, reject) => {
-    setTimeout(() => {
-      // resolve("resolved");
-      reject("Too many errors");
-    }, 2500);
-  });
+      promises_file_read.push(base64);
+    });
+
+    const res_filez_red = await Promise.all(promises_file_read);
+
+    alert("images ...");
+    return "cool " + res_filez_red;
+    /* 
+const filePath = `user_${phone}/profile_${new Date().getTime()}.jpg`;
+      const contentType = "image/jpg";
+      const { data, error } = await supabase.storage
+        .from("koop")
+        .upload(filePath, decode(base64), { contentType });
+
+    })
+ */
+  } else {
+    const res = await insertItem(TABLE_NAMES.KOOP_SERVICES_REQUEST, itemData);
+    return res;
+  }
 }
