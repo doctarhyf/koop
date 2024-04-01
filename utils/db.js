@@ -1,4 +1,6 @@
 import { KOOP_BUCKET_NAME, TABLE_NAMES, supabase } from "./supabase";
+import { decode } from "base64-arraybuffer";
+import * as FileSystem from "expo-file-system";
 
 export const UPDATE_SUCCESS = null;
 

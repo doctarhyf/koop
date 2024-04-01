@@ -5,29 +5,57 @@ import {
   StyleSheet,
   ScrollView,
   Switch,
+  Alert,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "../helpers/styles";
 import { Image } from "expo-image";
 import SimpSimpleTextButtonle from "../components/SimpleTextButton";
 import * as SB from "../utils/db";
+import * as API from "../utils/api";
 import { TABLE_NAMES } from "../utils/supabase";
 import ImageAdder from "../components/ImageAdder";
-
+//import * as API from "../utils/api";
+import UserContext from "../context/UserContext";
 function ServiceRequest({ navigation, route }) {
   const [servData, setServData] = useState({ images: [] });
-  const [images, stimages] = useState([]);
+  const { user, setuser } = useContext(UserContext);
 
   const [hasMoreData, setHasMoreData] = useState(false);
   const toggleHasMoreData = () =>
     setHasMoreData((previousState) => !previousState);
 
-  const onPost = () => {
-    alert(JSON.stringify(servData));
+  const onPost = async () => {
+    //alert(JSON.stringify(servData));
+
+    const { label, images, desc } = servData;
+
+    if (label.trim().length === 0 || label.length.label < 10) {
+      Alert.alert(
+        `Label : "${label}" too short`,
+        "Label text must be over 10 caracters"
+      );
+      return;
+    }
+
+    if (hasMoreData && (desc.trim().length === 0 || label.length.label < 10)) {
+      Alert.alert(
+        `Dascription text too short`,
+        "Description text must be over 10 caracters"
+      );
+      return;
+    }
+
+    const finalData = { ...servData };
+    finalData.user_id = user.id;
+
+    const res = await API.insertServiceRequest(finalData);
+
+    alert(JSON.stringify(res));
   };
 
   useEffect(() => {
-    alert(JSON.stringify(servData));
+    // alert(JSON.stringify(servData));
   }, [servData]);
 
   const onImageAdded = (img) => {
@@ -40,7 +68,6 @@ function ServiceRequest({ navigation, route }) {
     }
 
     setServData((prev) => ({ ...prev, images: new_images }));
-    ``;
   };
 
   const onImagePressed = (dt) => {

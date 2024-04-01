@@ -1,3 +1,4 @@
+import { uploadPic } from "./db";
 import { supabase, TABLE_NAMES } from "./supabase";
 
 const API_ENDPOINT = "https://konext.vercel.app/api";
@@ -126,3 +127,11 @@ content */
     return { error: true, message: errorMessage };
   }
 };
+
+export async function insertServiceRequest(itemData) {
+  const { images, user_id } = itemData;
+
+  const promises = [];
+
+  return "no pictures uploaded";
+}
