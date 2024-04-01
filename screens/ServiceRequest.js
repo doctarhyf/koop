@@ -19,7 +19,7 @@ import ImageAdder from "../components/ImageAdder";
 //import * as API from "../utils/api";
 import UserContext from "../context/UserContext";
 import LoadingButton from "../components/LoadingButton";
-import { KOOP_BLUE } from "../helpers/colors";
+import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 function ServiceRequest({ navigation, route }) {
   const [servData, setServData] = useState({ images: [] });
   const { user, setuser } = useContext(UserContext);
@@ -34,7 +34,7 @@ function ServiceRequest({ navigation, route }) {
     setloading(true);
     const { label, images, desc } = servData;
 
-    if (label.trim().length === 0 || label.length.label < 10) {
+    if ((label && label.trim().length === 0) || label.length.label < 10) {
       Alert.alert(
         `Label : "${label}" too short`,
         "Label text must be over 10 caracters"
@@ -58,15 +58,16 @@ function ServiceRequest({ navigation, route }) {
     const finalData = { ...servData };
     finalData.user_id = user.id;
 
-    const res = await API.insertServiceRequest(finalData);
+    try {
+      const res = await API.insertServiceRequest(finalData);
 
-    alert(JSON.stringify(res));
-    setloading(false);
+      alert(JSON.stringify(res));
+      setloading(false);
+    } catch (e) {
+      setloading(false);
+      alert("Error : " + JSON.stringify(e));
+    }
   };
-
-  useEffect(() => {
-    // alert(JSON.stringify(servData));
-  }, [servData]);
 
   const onImageAdded = (img) => {
     const new_images = [...servData.images];
@@ -145,8 +146,8 @@ function ServiceRequest({ navigation, route }) {
                 alignSelf: "flex-start",
               },
             ]}
-            trackColor={{ false: "#767577", true: "#81b0ff" }}
-            thumbColor={hasMoreData ? "#f5dd4b" : "#f4f3f4"}
+            trackColor={{ false: "#767577", true: KOOP_BLUE }}
+            thumbColor={hasMoreData ? KOOP_BLUE_DARK : "#f4f3f4"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={(e) => {
               setServData((prev) => ({ ...prev, images: [] }));
@@ -179,7 +180,6 @@ function ServiceRequest({ navigation, route }) {
           </View>
         )}
 
-        {/* <SimpSimpleTextButtonle text={"POST"} handlePress={onPost} /> */}
         <LoadingButton
           text={"POST"}
           handlePress={onPost}

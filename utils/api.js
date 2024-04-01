@@ -135,7 +135,8 @@ export async function insertServiceRequest(itemData) {
 
   return await new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve("resolved");
+      // resolve("resolved");
+      reject("Too many errors");
     }, 2500);
   });
 }
