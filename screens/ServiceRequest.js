@@ -7,6 +7,7 @@ import {
   Switch,
   Alert,
 } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useContext, useEffect, useState } from "react";
 import styles from "../helpers/styles";
 import { Image } from "expo-image";
@@ -17,9 +18,12 @@ import { TABLE_NAMES } from "../utils/supabase";
 import ImageAdder from "../components/ImageAdder";
 //import * as API from "../utils/api";
 import UserContext from "../context/UserContext";
+import LoadingButton from "../components/LoadingButton";
+import { KOOP_BLUE } from "../helpers/colors";
 function ServiceRequest({ navigation, route }) {
   const [servData, setServData] = useState({ images: [] });
   const { user, setuser } = useContext(UserContext);
+  const [loading, setloading] = useState(false);
 
   const [hasMoreData, setHasMoreData] = useState(false);
   const toggleHasMoreData = () =>
@@ -27,7 +31,7 @@ function ServiceRequest({ navigation, route }) {
 
   const onPost = async () => {
     //alert(JSON.stringify(servData));
-
+    setloading(true);
     const { label, images, desc } = servData;
 
     if (label.trim().length === 0 || label.length.label < 10) {
@@ -35,14 +39,19 @@ function ServiceRequest({ navigation, route }) {
         `Label : "${label}" too short`,
         "Label text must be over 10 caracters"
       );
+      setloading(false);
       return;
     }
 
-    if (hasMoreData && (desc.trim().length === 0 || label.length.label < 10)) {
+    if (
+      hasMoreData &&
+      ((desc && desc.trim().length === 0) || label.length.label < 10)
+    ) {
       Alert.alert(
         `Dascription text too short`,
         "Description text must be over 10 caracters"
       );
+      setloading(false);
       return;
     }
 
@@ -52,6 +61,7 @@ function ServiceRequest({ navigation, route }) {
     const res = await API.insertServiceRequest(finalData);
 
     alert(JSON.stringify(res));
+    setloading(false);
   };
 
   useEffect(() => {
@@ -169,7 +179,19 @@ function ServiceRequest({ navigation, route }) {
           </View>
         )}
 
-        <SimpSimpleTextButtonle text={"POST"} handlePress={onPost} />
+        {/* <SimpSimpleTextButtonle text={"POST"} handlePress={onPost} /> */}
+        <LoadingButton
+          text={"POST"}
+          handlePress={onPost}
+          loading={loading}
+          icon={
+            <MaterialCommunityIcons
+              name="send-circle-outline"
+              size={24}
+              color={KOOP_BLUE}
+            />
+          }
+        />
       </View>
     </ScrollView>
   );

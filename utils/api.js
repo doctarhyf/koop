@@ -129,9 +129,13 @@ content */
 };
 
 export async function insertServiceRequest(itemData) {
-  const { images, user_id } = itemData;
+  const { images, user_id, label, desc } = itemData;
 
   const promises = [];
 
-  return "no pictures uploaded";
+  return await new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("resolved");
+    }, 2500);
+  });
 }
