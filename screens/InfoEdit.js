@@ -277,7 +277,7 @@ Democratic Republic of the Congo`
           {/* <Text style={[styles.ti]}>{shoptags.join(";")}</Text> */}
           <View style={[st.villecont]}>
             {categoriesEntreprises.map((cat, i) => (
-              <TouchableOpacity onPress={(e) => onCatSelect(cat)}>
+              <TouchableOpacity key={i} onPress={(e) => onCatSelect(cat)}>
                 <Text
                   style={[
                     st.ville,
