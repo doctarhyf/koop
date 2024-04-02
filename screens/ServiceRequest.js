@@ -20,6 +20,7 @@ import ImageAdder from "../components/ImageAdder";
 import UserContext from "../context/UserContext";
 import LoadingButton from "../components/LoadingButton";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
+import INeed from "../components/INeed";
 function ServiceRequest({ navigation, route }) {
   const [servData, setServData] = useState({ images: [] });
   const { user, setuser } = useContext(UserContext);
@@ -121,18 +122,7 @@ function ServiceRequest({ navigation, route }) {
         <Text style={[{ textAlign: "center" }]}>
           De quel type de service avez vous besoin ?
         </Text>
-        <Text
-          style={[
-            {
-              fontSize: 32,
-              textAlign: "center",
-              marginVertical: 18,
-              fontWeight: "bold",
-            },
-          ]}
-        >
-          J'ai besoin de ...
-        </Text>
+        <INeed />
         <TextInput
           multiline={true}
           style={[st.ti, { marginVertical: 12 }]}
