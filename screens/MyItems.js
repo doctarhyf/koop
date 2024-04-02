@@ -35,6 +35,8 @@ export default function MyItems({ navigation, route }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: `My Items - ${user.phone}`,
+
       headerRight: () =>
         loadingdata ? (
           <ActivityIndicator animating={loadingdata} color={KOOP_BLUE} />
@@ -189,7 +191,7 @@ const st = StyleSheet.create({
   },
   btn: {
     padding: 12,
-    borderBottomWidth: 1,
+
     borderRadius: 18,
     overflow: "hidden",
   },

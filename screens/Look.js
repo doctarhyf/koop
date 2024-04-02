@@ -30,7 +30,7 @@ const SpecialRequest = ({ onSpecialReqItemPress }) => {
   );
 
   return (
-    <View>
+    <View style={[{ marginTop: 12 }]}>
       <Text style={[{ marginBottom: 8 }]}>DEMANDE SPECIALES</Text>
       {loadingsreq && (
         <ActivityIndicator
@@ -45,7 +45,7 @@ const SpecialRequest = ({ onSpecialReqItemPress }) => {
             <View
               style={[
                 styles.flexRow,
-
+                styles.flex1,
                 styles.alignCenter,
                 {
                   gap: 8,
@@ -58,8 +58,10 @@ const SpecialRequest = ({ onSpecialReqItemPress }) => {
               ]}
             >
               <FontAwesome5 name="bolt" size={24} color="green" />
-              <View>
-                <Text style={[{ fontWeight: "bold" }]}>{it.label}</Text>
+              <View style={[styles.flex1]}>
+                <Text style={[{ fontWeight: "bold", flex: 1 }]}>
+                  {it.label}
+                </Text>
                 <Text>{it.created_at}</Text>
               </View>
             </View>
@@ -399,9 +401,10 @@ export default function Look({ navigation }) {
               styles.flex1,
               styles.borderTopRadiusLarge,
               styles.bgWhite,
+              { paddingTop: 12 },
             ]}
           >
-            <View style={styles.mbLarge}>
+            {/*  <View style={styles.mbLarge}>
               <MenuButton
                 handleOnPress={onReqService}
                 btn={{
@@ -413,7 +416,7 @@ export default function Look({ navigation }) {
                 Lancer une demande speciale
               </Text>
             </View>
-
+ */}
             <SpecialRequest onSpecialReqItemPress={onSpecialReqItemPress} />
 
             <FeaturedItems

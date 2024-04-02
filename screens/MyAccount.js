@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  ImageBackground,
+  // ImageBackground,
 } from "react-native";
-
+import ImageBackground from "../components/ImageBackground";
 import styles from "../helpers/styles";
 import {
   KOOP_BLUE,
@@ -158,20 +158,17 @@ export default function MyAccount({ navigation }) {
                 onLongPress={handleProfileChange}
               >
                 <ImageBackground
-                  source={{
-                    uri:
-                      user.profile ||
-                      "https://avatars.githubusercontent.com/u/5081332?v=4",
-                  }}
+                  source={
+                    user.profile ||
+                    "https://avatars.githubusercontent.com/u/5081332?v=4"
+                  }
+                  width={80}
+                  height={80}
                   style={[
                     {
-                      width: 100,
-                      height: 100,
                       backgroundColor: "red",
                       borderRadius: 50,
                       overflow: "hidden",
-                      justifyContent: "center",
-                      alignItems: "center",
                     },
                   ]}
                 >
