@@ -12,7 +12,8 @@ import {
 import { Image } from "expo-image";
 import styles from "../helpers/styles";
 import MenuButton from "../components/MenuButton";
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect, useState, useLayoutEffect, useContext } from "react";
+import UserContext from "../context/UserContext";
 import * as FUNCS from "../helpers/funcs";
 import { IMG_SIZE } from "../helpers/flow";
 import TextButton from "../components/TextButton";
@@ -24,7 +25,8 @@ import { KOOP_BLUE } from "../helpers/colors";
 
 const image = { uri: "https://legacy.reactjs.org/logo-og.png" };
 
-const SpecialRequest = ({ onSpecialReqItemPress }) => {
+const ServiceRequests = ({ navigation, me }) => {
+  const { phone } = me;
   const [loadingsreq, sreqs, errorsreqs, reloadsreqs] = useFetch2(
     "https://konext.vercel.app/api/sreq"
   );
@@ -40,38 +42,48 @@ const SpecialRequest = ({ onSpecialReqItemPress }) => {
         />
       )}
       {sreqs &&
-        sreqs.map((it, i) => (
-          <TouchableOpacity key={i} onPress={onSpecialReqItemPress}>
-            <View
-              style={[
-                styles.flexRow,
-                styles.flex1,
-                styles.alignCenter,
-                {
-                  gap: 8,
-                  padding: 8,
-                  borderColor: "#ddd",
-                  marginBottom: 8,
-                  borderWidth: 1,
-                  borderRadius: 8,
-                },
-              ]}
-            >
-              <FontAwesome5 name="bolt" size={24} color="green" />
-              <View style={[styles.flex1]}>
-                <Text style={[{ fontWeight: "bold", flex: 1 }]}>
-                  {it.label}
-                </Text>
-                <Text>{it.created_at}</Text>
+        sreqs
+          .filter((it, i) => it.phone !== phone)
+          .map((it, i) => (
+            <TouchableOpacity key={i} onPress={(e) => null}>
+              <View
+                style={[
+                  styles.flexRow,
+                  styles.flex1,
+                  styles.alignCenter,
+                  {
+                    gap: 8,
+                    padding: 8,
+                    borderColor: "#ddd",
+                    marginBottom: 8,
+                    borderWidth: 1,
+                    borderRadius: 8,
+                  },
+                ]}
+              >
+                <FontAwesome5 name="bolt" size={24} color="green" />
+                <View style={[styles.flex1]}>
+                  <Text style={[{ fontWeight: "bold", flex: 1 }]}>
+                    {it.label}
+                  </Text>
+                  <Text
+                    style={[styles.textBlue, { fontWeight: "bold" }]}
+                  >{`${it.user_data.display_name} - ${it.user_data.phone}`}</Text>
+                  <Text style={[styles.textGray]}>{it.created_at}</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
+            </TouchableOpacity>
+          ))}
     </View>
   );
 };
 
-const FeaturedItems = ({ navigation, loadingkoopitems, koopitems }) => {
+const FeaturedItems = ({ navigation, me }) => {
+  const [loading, items, error] = useFetch(
+    "https://konext.vercel.app/api/items",
+    true
+  );
+
   const onViewItem = (item) => {
     navigation.navigate("ServiceInfo", item);
   };
@@ -89,14 +101,14 @@ const FeaturedItems = ({ navigation, loadingkoopitems, koopitems }) => {
         </TouchableOpacity>
       </View>
 
-      {loadingkoopitems ? (
-        <ActivityIndicator animating={loadingkoopitems} />
+      {loading ? (
+        <ActivityIndicator animating={loading} />
       ) : (
         <View>
           <ScrollView horizontal>
-            {koopitems &&
-              koopitems.map &&
-              koopitems.map((item, item_idx) => (
+            {items &&
+              items.map &&
+              items.map((item, item_idx) => (
                 <TouchableOpacity
                   key={item_idx}
                   onPress={(e) => onViewItem(item)}
@@ -131,7 +143,12 @@ const FeaturedItems = ({ navigation, loadingkoopitems, koopitems }) => {
   );
 };
 
-const FeaturedShops = ({ navigation, loadingshops, shops }) => {
+const FeaturedShops = ({ navigation, me }) => {
+  const [loading, shops, error] = useFetch(
+    "https://konext.vercel.app/api/shops",
+    true
+  );
+
   const onViewShop = (shop) => {
     // alert(JSON.stringify(shop));
     navigation.navigate("Shop", shop);
@@ -150,8 +167,8 @@ const FeaturedShops = ({ navigation, loadingshops, shops }) => {
           <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
         </TouchableOpacity>
       </View>
-      {loadingshops ? (
-        <ActivityIndicator animating={loadingshops} />
+      {loading ? (
+        <ActivityIndicator animating={loading} />
       ) : (
         <View>
           <ScrollView horizontal>
@@ -192,8 +209,8 @@ const FeaturedShops = ({ navigation, loadingshops, shops }) => {
   );
 };
 
-const Suggestions = ({ navigation }) => {
-  const SUGGESTS_COUNT = 5;
+const FeaturedAd = ({ navigation, me }) => {
+  const SUGGESTS_COUNT = 3;
   const [images, setimages] = useState([]);
   const [loading, setloading] = useState(false);
 
@@ -266,7 +283,9 @@ const Suggestions = ({ navigation }) => {
                 </View>
                 <View style={[{ padding: 12 }]}>
                   <Text>Suggestion</Text>
-                  <Text style={[styles.textGray]}>{it.url}</Text>
+                  <Text style={[styles.textGray]}>
+                    {it.url.substring(0, 100) + " ..."}
+                  </Text>
                 </View>
               </View>
             </TouchableOpacity>
@@ -278,159 +297,38 @@ const Suggestions = ({ navigation }) => {
 };
 
 export default function Look({ navigation }) {
-  const [data, setdata] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
-  const [loadingshops, shops, shopserror] = useFetch(
-    "https://konext.vercel.app/api/shops",
-    true
-  );
-  const [loadingkoopitems, koopitems, koopitemserror] = useFetch(
-    "https://konext.vercel.app/api/items",
-    true
-  );
-  const [images, setImages] = useState([]);
+  const { user, setuser } = useContext(UserContext);
 
-  useEffect(() => {
-    console.log("shops => ", shops);
-    setdata((old) => ({ ...old, SHOPS: shops }));
-  }, [shops]);
+  const st_search = [
+    styles.bgWhite,
+    styles.paddingSmall,
+    styles.marginMin,
+    styles.roundedMd,
+    { overflow: "hidden" },
+  ];
 
-  useEffect(() => {
-    console.log("koopitems => ", koopitems);
-
-    setdata((old) => ({ ...old, SERVICES: koopitems }));
-  }, [koopitems]);
-
-  const onRefresh = () => {
-    setRefreshing(true);
-    // fetchData();
-  };
-
-  useEffect(() => {
-    const loadShopsAndItems = async () => {
-      const randomImages = await FUNCS.GetRandomImages(
-        10,
-        IMG_SIZE.w,
-        IMG_SIZE.h
-      );
-      setImages(randomImages);
-
-      setdata({
-        SERVICES: [...Array(5)].map((it, i) => ({
-          name: `Service ${i}`,
-          id: `${i}`,
-          pic: randomImages[i].urls.regular,
-        })),
-        SHOPS: [...Array(5)].map((it, i) => ({
-          name: `Service ${i + 5}`,
-          id: `${i + 5}`,
-          pic: randomImages[i + 5].urls.regular,
-        })),
-        SUGGESTIONS: [...Array(5)].map((it, i) => ({
-          name: `Service ${i + 5}`,
-          id: `${i + 5}`,
-          pic: randomImages[i + 5].urls.regular,
-        })),
-      });
-
-      //console.log("img url: ", randomImages[0].urls.regular);
-    };
-
-    loadShopsAndItems();
-  }, []);
-
-  const onReqService = (e) => {
-    navigation.navigate("Request");
-  };
-
-  const onItemPress = (block, item) => {
-    const blockName = block[0];
-
-    if (blockName === "SERVICES") {
-      const item = block[1][0];
-      //alert(JSON.stringify(item));
-      navigation.navigate("ServiceInfo", item);
-    }
-
-    if (blockName === "SHOPS") {
-      const item = block[1][0];
-      navigation.navigate("Shop", item);
-    }
-  };
-
-  const onViewAll = (block) => {
-    console.log(block.label);
-    navigation.navigate("Popular");
-  };
-
-  const onSpecialReqItemPress = (item) => {
-    alert(item);
-  };
+  const st_feat_cont = [
+    styles.mtLarge,
+    styles.paddingSmall,
+    styles.flex1,
+    styles.borderTopRadiusLarge,
+    styles.bgWhite,
+    { paddingTop: 12 },
+  ];
 
   return (
     <View style={[styles.flex1, styles.bgBlue]}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={["#0087F5"]} // Customize the refreshing indicator color
-          />
-        }
-      >
+      <ScrollView>
         <View>
           <TouchableOpacity onPress={(e) => navigation.replace("Search")}>
-            <Text
-              style={[
-                styles.bgWhite,
-                styles.paddingSmall,
-                styles.marginMin,
-                styles.roundedMd,
-                styles.mtLarge,
-                { overflow: "hidden" },
-              ]}
-            >
-              Search koop ...
-            </Text>
+            <Text style={st_search}>Rechercher koop ...</Text>
           </TouchableOpacity>
 
-          <View
-            style={[
-              styles.mtLarge,
-              styles.paddingSmall,
-              styles.flex1,
-              styles.borderTopRadiusLarge,
-              styles.bgWhite,
-              { paddingTop: 12 },
-            ]}
-          >
-            {/*  <View style={styles.mbLarge}>
-              <MenuButton
-                handleOnPress={onReqService}
-                btn={{
-                  label: "DEMANDE SPECIFIQUE",
-                  icon: require("../assets/icons/megaphone.png"),
-                }}
-              />
-              <Text style={[styles.textCenter, styles.marginV]}>
-                Lancer une demande speciale
-              </Text>
-            </View>
- */}
-            <SpecialRequest onSpecialReqItemPress={onSpecialReqItemPress} />
-
-            <FeaturedItems
-              loadingkoopitems={loadingkoopitems}
-              koopitems={koopitems}
-              navigation={navigation}
-            />
-            <FeaturedShops
-              loadingshops={loadingshops}
-              shops={shops}
-              navigation={navigation}
-            />
-
-            <Suggestions />
+          <View style={st_feat_cont}>
+            <FeaturedItems me={user} navigation={navigation} />
+            <FeaturedShops me={user} navigation={navigation} />
+            <ServiceRequests me={user} navigation={navigation} />
+            <FeaturedAd me={user} navigation={navigation} />
           </View>
         </View>
       </ScrollView>
