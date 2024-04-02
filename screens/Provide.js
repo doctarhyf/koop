@@ -78,6 +78,7 @@ export default function Provide({ navigation, route }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: "Nouvel article ou service",
       headerRight: () =>
         loading ? (
           <ActivityIndicator animating={loading} />

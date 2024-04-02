@@ -135,7 +135,7 @@ function ServiceRequest({ navigation, route }) {
         </Text>
         <TextInput
           multiline={true}
-          style={[st.ti]}
+          style={[st.ti, { marginVertical: 12 }]}
           placeholder="ex: 1 menuisier pour finir une charpente ..."
           value={servData.label || ""}
           onChangeText={(txt) =>
@@ -150,6 +150,7 @@ function ServiceRequest({ navigation, route }) {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
+              marginVertical: 12,
             },
           ]}
         >
@@ -159,6 +160,7 @@ function ServiceRequest({ navigation, route }) {
               {
                 justifyContent: "flex-start",
                 alignSelf: "flex-start",
+                marginVertical: 12,
               },
             ]}
             trackColor={{ false: "#767577", true: KOOP_BLUE }}
@@ -183,7 +185,7 @@ function ServiceRequest({ navigation, route }) {
               multiline
               numberOfLines={5}
               placeholder="Ajouter beaucouplus de details sur ce que vous recherchez comme services ..."
-              style={[styles.ti]}
+              style={[styles.ti, { paddingVertical: 12 }]}
               textAlignVertical="top"
             />
             <Text>Pictures</Text>

@@ -6,6 +6,7 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
@@ -15,6 +16,8 @@ import UserContext from "../context/UserContext";
 import styles from "../helpers/styles";
 import { FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { ParseCreatedAt } from "../helpers/funcs";
+import { style } from "deprecated-react-native-prop-types/DeprecatedViewPropTypes";
 
 const TAB = {
   MY_ITEMS: 0,
@@ -36,7 +39,15 @@ export default function MyItems({ navigation, route }) {
         loadingdata ? (
           <ActivityIndicator animating={loadingdata} color={KOOP_BLUE} />
         ) : (
-          <TouchableOpacity onPress={(e) => navigation.navigate("Provide")}>
+          <TouchableOpacity
+            onPress={(e) => {
+              if (selectedTabID === TAB.MY_ITEMS) {
+                navigation.navigate("Provide");
+              } else {
+                navigation.navigate("ServiceRequest");
+              }
+            }}
+          >
             <FontAwesome name="send" size={24} color={KOOP_BLUE} />
           </TouchableOpacity>
         ),
@@ -60,15 +71,34 @@ export default function MyItems({ navigation, route }) {
   const extractKey = (item) => item.id;
 
   const handleServReqPress = (item) => {
-    alert(item);
+    Alert.alert(item.label, item.desc);
+  };
+
+  const handleItemMyLongPress = (item) => {
+    Alert.alert("Delete item?", "This action is not reversible", [
+      {
+        text: "NO",
+      },
+      {
+        text: "DELETE",
+        style: "destructive",
+      },
+    ]);
   };
 
   const renderItem = (item) => {
     const { id, label, created_at } = item.item; //service request
     const { name, desc, photos } = item.item; //service or product
 
+    let date = "";
+    const dateData = ParseCreatedAt(created_at);
+
+    if (dateData) {
+      date = `${dateData.d}/${dateData.m}/${dateData.y}`;
+    }
+
     return selectedTabID === TAB.MY_SERVICES_REQUESTS ? (
-      <TouchableOpacity onPress={handleServReqPress}>
+      <TouchableOpacity onPress={(e) => handleServReqPress(item.item)}>
         <View
           style={[
             styles.paddingSmall,
@@ -76,11 +106,14 @@ export default function MyItems({ navigation, route }) {
           ]}
         >
           <Text style={{ fontWeight: "bold" }}>{label}</Text>
-          <Text style={{ color: "#333333" }}>{created_at}</Text>
+          <Text style={{ color: "#333333" }}>{date}</Text>
         </View>
       </TouchableOpacity>
     ) : (
-      <TouchableOpacity onPress={(e) => null}>
+      <TouchableOpacity
+        onPress={(e) => null}
+        onLongPress={handleItemMyLongPress}
+      >
         <View
           style={[
             styles.flexRow,
@@ -97,21 +130,26 @@ export default function MyItems({ navigation, route }) {
             source={photos ? photos[0] : require("../assets/rhyf.png")}
             style={[
               {
-                width: 60,
-                height: 60,
+                width: 70,
+                height: 70,
                 marginRight: 12,
-                borderRadius: 30,
+                borderRadius: 35,
                 overflow: "hidden",
               },
             ]}
           />
 
-          <View style={[{ flexGrow: 1 }]}>
-            <View style={[styles.flexRow, { flexGrow: 1 }]}>
+          <View style={[{ flex: 1 }]}>
+            <View style={[styles.flexRow, { flexGrow: 0 }]}>
               <Text style={[{ flexGrow: 1, fontWeight: "bold" }]}>{name}</Text>
-              <Text style={[styles.textGray]}>{created_at}</Text>
+              <Text style={[styles.textGray]}>{date}</Text>
             </View>
-            <Text style={[styles.textGray]}>{desc}</Text>
+            <Text
+              numberOfLines={3}
+              style={[styles.textGray, { flexShrink: 1 }]}
+            >
+              {desc}
+            </Text>
           </View>
         </View>
       </TouchableOpacity>

@@ -135,3 +135,22 @@ export async function SBFileUpload(
 
   return null;
 }
+
+export function ParseCreatedAt(created_at) {
+  if (created_at === null || created_at === undefined) return "";
+
+  const parts = created_at.split("T");
+  const date = parts[0];
+  const time = parts[1];
+  const [y, m, d] = date.split("-");
+  const [h, i, s] = time.split(".")[0].split(":");
+
+  return {
+    y: parseInt(y),
+    m: parseInt(m),
+    d: parseInt(d),
+    h: parseInt(h),
+    i: parseInt(i),
+    s: parseInt(y),
+  };
+}

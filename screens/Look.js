@@ -18,40 +18,53 @@ import { IMG_SIZE } from "../helpers/flow";
 import TextButton from "../components/TextButton";
 import useItemsLoader from "../hooks/useItemsLoader";
 import { TABLE_NAMES } from "../utils/supabase";
-import useFetch from "../hooks/useFetch";
+import useFetch, { useFetch2 } from "../hooks/useFetch";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { KOOP_BLUE } from "../helpers/colors";
 
 const image = { uri: "https://legacy.reactjs.org/logo-og.png" };
 
 const SpecialRequest = ({ onSpecialReqItemPress }) => {
+  const [loadingsreq, sreqs, errorsreqs, reloadsreqs] = useFetch2(
+    "https://konext.vercel.app/api/sreq"
+  );
+
   return (
     <View>
       <Text style={[{ marginBottom: 8 }]}>DEMANDE SPECIALES</Text>
-      {[...Array(5)].map((it, i) => (
-        <TouchableOpacity onPress={onSpecialReqItemPress}>
-          <View
-            style={[
-              styles.flexRow,
+      {loadingsreq && (
+        <ActivityIndicator
+          color={KOOP_BLUE}
+          animating={true}
+          style={[styles.paddingLarge]}
+        />
+      )}
+      {sreqs &&
+        sreqs.map((it, i) => (
+          <TouchableOpacity key={i} onPress={onSpecialReqItemPress}>
+            <View
+              style={[
+                styles.flexRow,
 
-              styles.alignCenter,
-              {
-                gap: 8,
-                padding: 8,
-                borderColor: "#ddd",
-                marginBottom: 8,
-                borderWidth: 1,
-                borderRadius: 8,
-              },
-            ]}
-          >
-            <FontAwesome5 name="bolt" size={24} color="green" />
-            <View>
-              <Text style={[{ fontWeight: "bold" }]}>Rechere d'un macon</Text>
-              <Text>Nous sommes a la rechere d'un macon</Text>
+                styles.alignCenter,
+                {
+                  gap: 8,
+                  padding: 8,
+                  borderColor: "#ddd",
+                  marginBottom: 8,
+                  borderWidth: 1,
+                  borderRadius: 8,
+                },
+              ]}
+            >
+              <FontAwesome5 name="bolt" size={24} color="green" />
+              <View>
+                <Text style={[{ fontWeight: "bold" }]}>{it.label}</Text>
+                <Text>{it.created_at}</Text>
+              </View>
             </View>
-          </View>
-        </TouchableOpacity>
-      ))}
+          </TouchableOpacity>
+        ))}
     </View>
   );
 };
