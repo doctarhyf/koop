@@ -16,7 +16,7 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import Popular from "./screens/Popular";
 import MyAccount from "./screens/MyAccount";
 import Inbox from "./screens/Inbox";
-import MyServices from "./screens/MyServices";
+import MyItems from "./screens/MyItems";
 import InfoEdit from "./screens/InfoEdit";
 import Settings from "./screens/Settings";
 import Subscriptions from "./screens/Subscriptions";
@@ -60,7 +60,7 @@ const SCREENS = [
   { name: "ViewAll", comp: ViewAll },
   { name: "MyAccount", comp: MyAccount },
   { name: "Inbox", comp: Inbox },
-  { name: "MyServices", comp: MyServices },
+  { name: "MyItems", comp: MyItems },
   { name: "Settings", comp: Settings },
   { name: "Other", comp: Other },
   { name: "Shop", comp: Shop },

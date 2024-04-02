@@ -56,8 +56,6 @@ export default function Provide({ navigation, route }) {
   const upd = route.params;
   const updating = upd !== undefined;
 
-  //alert(JSON.stringify(upd));
-
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
 
   const [showMore, setShowMore] = useState(false);
@@ -171,9 +169,9 @@ export default function Provide({ navigation, route }) {
           console.error("res => ", res);
           Alert.alert("Item posted", "Your item has been posted!", [
             {
-              text: "MY SERVICES",
+              text: "My Items",
               onPress: () => {
-                navigation.replace("MyServices");
+                navigation.replace("MyItems");
               },
             },
           ]);

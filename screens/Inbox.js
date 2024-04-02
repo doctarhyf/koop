@@ -149,25 +149,27 @@ export default function Inbox({ navigation, route }) {
   };
 
   return (
-    <View>
-      {
+    <View style={{ flex: 1 }}>
+      {/* {
         <ActivityIndicator
           animating={loadingRawMessages}
           color={KOOP_BLUE}
           style={[styles.paddingLarge]}
         />
-      }
-      {!loadingRawMessages && messages.length === 0 && (
-        <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-          <Text style={[styles.paddingSmall, styles.textCenter]}>
+      } */}
+
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {!loadingRawMessages && messages.length === 0 && (
+          <Text style={[styles.paddingLarge, styles.textCenter]}>
             No Messages
           </Text>
-        </ScrollView>
-      )}
+        )}
+      </ScrollView>
+
       {messages && messages.length > 0 && (
         <FlatList
           refreshControl={
