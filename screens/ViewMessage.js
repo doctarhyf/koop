@@ -10,6 +10,7 @@ import {
   ScrollView,
   Image,
   ActivityIndicator,
+  Vibration,
 } from "react-native";
 import styles from "../helpers/styles";
 import { KOOP_BLUE, KOOP_GREEN } from "../helpers/colors";
@@ -73,6 +74,9 @@ export default function ViewMessage({ route, navigation }) {
       to_id: contact.id,
       content: newMessage,
     });
+
+    Vibration.vibrate(250);
+    setNewMessage("");
 
     const newMessages = [
       ...messages,

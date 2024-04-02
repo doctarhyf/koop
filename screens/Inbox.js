@@ -15,6 +15,7 @@ import {
   FlatList,
   Image,
   RefreshControl,
+  Vibration,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Text } from "react-native";
@@ -105,32 +106,21 @@ export default function Inbox({ navigation, route }) {
       const parsedMessages = Object.entries(rawmessages);
       setmessages(parsedMessages);
       setloading(false);
+      Vibration.vibrate(250);
     }
     setloading(false);
   }, [rawmessages]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: true
-        ? null
-        : () =>
-            loadingRawMessages || loading ? (
-              <ActivityIndicator
-                animating={loadingRawMessages}
-                style={[styles.paddingLarge]}
-              />
-            ) : (
-              <TouchableOpacity
-                onPress={(e) => {
-                  setloading(true);
-                  reloadMessages();
-                }}
-              >
-                <FontAwesome name="refresh" size={24} color="black" />
-              </TouchableOpacity>
-            ),
+      headerRight: () => (
+        <ActivityIndicator
+          color={KOOP_BLUE}
+          animating={refreshing || loadingRawMessages}
+        />
+      ),
     });
-  }, [navigation]);
+  }, [navigation, refreshing, loadingRawMessages]);
 
   const handleContactPress = (message_data) => {
     //alert(JSON.stringify(message_data));
