@@ -111,7 +111,7 @@ export default function MyItems({ navigation, route }) {
       </TouchableOpacity>
     ) : (
       <TouchableOpacity
-        onPress={(e) => null}
+        onPress={(e) => navigation.navigate("ServiceInfo", item.item)}
         onLongPress={handleItemMyLongPress}
       >
         <View

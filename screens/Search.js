@@ -8,8 +8,8 @@ import {
   onTagPress,
   TouchableOpacity,
   ActivityIndicator,
-  Image,
 } from "react-native";
+import { Image } from "expo-image";
 import styles from "../helpers/styles";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
@@ -91,7 +91,8 @@ export default function Search({ navigation }) {
               <View style={[styles.flexRow, styles.paddingSmall]}>
                 <Image
                   style={[{ width: 62, height: 62 }, styles.marginRight]}
-                  source={{ uri: it.photos[0] }}
+                  source={it.photos[0]}
+                  transition={1000}
                 />
                 <View>
                   <Text>{it.name}</Text>
