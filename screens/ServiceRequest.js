@@ -73,7 +73,7 @@ function ServiceRequest({ navigation, route }) {
             {
               text: "My Prods & Serv,",
               style: "destructive",
-              onPress: () => navigation.replace("MyServices", res[0]),
+              onPress: () => navigation.replace("MyItems", res[0]),
             },
           ]
         );

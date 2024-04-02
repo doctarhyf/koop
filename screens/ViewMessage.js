@@ -105,9 +105,9 @@ export default function ViewMessage({ route, navigation }) {
           />
         )}
 
-        <View style={[styles.flexRow, styles.paddingMid]}>
+        <View style={[styles.flexRow, styles.paddingMid, { flex: 1 }]}>
           <TextInput
-            style={[styles.txtInput]}
+            style={[styles.txtInput, { flex: 1 }]}
             placeholder="Type your message ..."
             value={newMessage}
             onChangeText={(txt) => setNewMessage(txt)}
@@ -116,8 +116,22 @@ export default function ViewMessage({ route, navigation }) {
           {loading ? (
             <ActivityIndicator animating={loading} color={KOOP_BLUE} />
           ) : (
-            <TouchableOpacity onPress={onSendMessage}>
-              <Text>SEND</Text>
+            <TouchableOpacity
+              onPress={(e) => newMessage.trim().length > 0 && onSendMessage()}
+            >
+              <View
+                style={[
+                  {
+                    justifyContent: "center",
+                    alignItems: "center",
+
+                    flexGrow: 1,
+                    paddingHorizontal: 8,
+                  },
+                ]}
+              >
+                <Text>SEND</Text>
+              </View>
             </TouchableOpacity>
           )}
         </View>

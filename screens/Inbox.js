@@ -149,15 +149,7 @@ export default function Inbox({ navigation, route }) {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      {/* {
-        <ActivityIndicator
-          animating={loadingRawMessages}
-          color={KOOP_BLUE}
-          style={[styles.paddingLarge]}
-        />
-      } */}
-
+    <View style={{}}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

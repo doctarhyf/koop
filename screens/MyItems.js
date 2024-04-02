@@ -160,7 +160,7 @@ export default function MyItems({ navigation, route }) {
     <View style={[{ flex: 1 }]}>
       <View style={[st.menu]}>
         {["Mes Articles & Services", "Demandes et Recherches"].map((it, i) => (
-          <TouchableOpacity onPress={(e) => setSelectedTabID(i)}>
+          <TouchableOpacity key={i} onPress={(e) => setSelectedTabID(i)}>
             <Text style={[st.btn, selectedTabID === i ? st.active : null]}>
               {it}
             </Text>
