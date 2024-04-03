@@ -16,6 +16,7 @@ import styles from "../helpers/styles";
 import { KOOP_BLUE, KOOP_GREEN } from "../helpers/colors";
 import * as API from "../utils/api";
 import UserContext from "../context/UserContext";
+import { ParseCreatedAt } from "../helpers/funcs";
 
 export default function ViewMessage({ route, navigation }) {
   const { user, setuser } = useContext(UserContext);
@@ -58,7 +59,10 @@ export default function ViewMessage({ route, navigation }) {
       <View style={[]}>
         <View style={[{ flexDirection: me ? "row-reverse" : "row" }]}>
           <Text style={[st.msg, { backgroundColor: me ? KOOP_GREEN : "#ddd" }]}>
-            {content}
+            {content}{" "}
+            <Text style={[{ fontSize: 12, color: me ? "white" : "#999999" }]}>
+              {ParseCreatedAt(created_at).shortTime}
+            </Text>
           </Text>
           <Text style={[{ flexGrow: 1 }]}></Text>
         </View>

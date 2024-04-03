@@ -96,7 +96,7 @@ export default function MyItems({ navigation, route }) {
     const dateData = ParseCreatedAt(created_at);
 
     if (dateData) {
-      date = `${dateData.d}/${dateData.m}/${dateData.y}`;
+      date = dateData.full;
     }
 
     return selectedTabID === TAB.MY_SERVICES_REQUESTS ? (

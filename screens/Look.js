@@ -72,7 +72,9 @@ const ServiceRequests = ({ navigation, me }) => {
                   <Text
                     style={[styles.textBlue, { fontWeight: "bold" }]}
                   >{`${it.user_data.display_name} - ${it.user_data.phone}`}</Text>
-                  <Text style={[styles.textGray]}>{it.created_at}</Text>
+                  <Text style={[styles.textGray]}>
+                    {FUNCS.ParseCreatedAt(it.created_at).full}
+                  </Text>
                 </View>
               </View>
             </TouchableOpacity>

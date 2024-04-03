@@ -145,12 +145,24 @@ export function ParseCreatedAt(created_at) {
   const [y, m, d] = date.split("-");
   const [h, i, s] = time.split(".")[0].split(":");
 
-  return {
+  const date_parts = {
     y: parseInt(y),
     m: parseInt(m),
     d: parseInt(d),
     h: parseInt(h),
     i: parseInt(i),
     s: parseInt(y),
+  };
+
+  const shortDate = `${d}/${m}`;
+  const fullTime = `${h}:${i}:${s}`;
+  const shortTime = `${h}:${i}`;
+
+  return {
+    fullTime: fullTime,
+    shortTime: shortTime,
+    full: `${d}/${m}/${y} - ${h}:${i}:${s}`,
+    parts: date_parts,
+    shortDate: shortDate,
   };
 }
