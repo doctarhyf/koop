@@ -108,7 +108,7 @@ export default function MyAccount({ navigation }) {
 
   const handleInfoPress = (data) => {
     if (data[0] === "prods") {
-      navigation.navigate("MyServices");
+      navigation.navigate("MyItems");
       return;
     }
 
