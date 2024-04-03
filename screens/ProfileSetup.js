@@ -137,6 +137,7 @@ function ProfileSetup({ navigation, route }) {
       phone: phone,
       display_name: display_name,
       // shop_name: shop_name,
+      ville: ville,
       profile: profile,
     };
 
