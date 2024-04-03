@@ -1,11 +1,13 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   Image,
   StyleSheet,
+  Alert,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import {
   KOOP_BLUE,
@@ -14,6 +16,7 @@ import {
 } from "../helpers/colors";
 import styles from "../helpers/styles";
 import MenuButton from "../components/MenuButton";
+import CustomAlert from "../components/CustomAlert";
 
 const SUBS = [
   {
@@ -41,9 +44,21 @@ const PAYMENT_METHODS = [
   { icon: require("../assets/icons/mpesa.png"), label: "VISA" },
 ];
 
-export default function Subscriptions() {
+export default function Subscriptions({ navigation, route }) {
   const [selectedSub, setselectedSub] = React.useState(0);
   const [selectedPayment, setselectedPayment] = React.useState(0);
+  const [show, setshow] = useState(false);
+
+  const handleOnPress = (e) => {
+    if (show === false) {
+      setTimeout(() => {
+        navigation.navigate("PaymentResult");
+        setshow(false);
+      }, 2500);
+    }
+
+    setshow((prev) => !prev);
+  };
 
   return (
     <ScrollView>
@@ -130,9 +145,16 @@ export default function Subscriptions() {
             label: "CHANGE SUBSCRIPTION",
             icon: require("../assets/icons/subscription.png"),
           }}
-          handleOnPress={(e) => console.log(e)}
+          handleOnPress={handleOnPress}
         />
       </View>
+      <CustomAlert
+        visible={show}
+        onClose={(e) => setshow(false)}
+        message={"this is sample message"}
+      >
+        <ActivityIndicator animating={true} color={KOOP_BLUE} />
+      </CustomAlert>
     </ScrollView>
   );
 }

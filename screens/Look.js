@@ -30,6 +30,7 @@ const ServiceRequests = ({ navigation, me }) => {
   const [loadingsreq, servicesRequests, errorsreqs, reloadsreqs] = useFetch2(
     "https://konext.vercel.app/api/sreq"
   );
+  const limit = 4;
 
   return (
     <View style={[{ marginTop: 12 }]}>
@@ -43,7 +44,9 @@ const ServiceRequests = ({ navigation, me }) => {
       )}
       {servicesRequests &&
         servicesRequests
-          .filter((serviceRequest, i) => serviceRequest.phone !== phone)
+          .filter(
+            (serviceRequest, i) => serviceRequest.phone !== phone && i < limit
+          )
           .map((it, i) => (
             <TouchableOpacity
               key={i}
