@@ -34,7 +34,7 @@ const MEDIA_TYPE_CAMERA = 0;
 function ProfileSetup({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
   const [display_name, set_display_name] = useState("");
-  const [shop_name, set_shop_name] = useState("");
+
   const [ville, setville] = useState(null);
   const [profile, set_profile] = useState(null);
   const [promoCode, setPromoCode] = useState("");
@@ -124,7 +124,7 @@ function ProfileSetup({ navigation, route }) {
       return;
     }
 
-    if (display_name === "" || shop_name === "") {
+    if (display_name === "") {
       seterror(true);
 
       setTimeout(() => {
@@ -136,7 +136,7 @@ function ProfileSetup({ navigation, route }) {
     const profileData = {
       phone: phone,
       display_name: display_name,
-      shop_name: shop_name,
+      // shop_name: shop_name,
       profile: profile,
     };
 
@@ -220,32 +220,6 @@ function ProfileSetup({ navigation, route }) {
           <Text style={[st.selfStart]}>
             Ceci est le nom de votre profil en tant que client
           </Text>
-
-          <View style={[{ height: 20 }]} />
-          <View style={[styles.flexRow, styles.alignCenter]}>
-            <MaterialCommunityIcons
-              name="google-my-business"
-              size={24}
-              color="black"
-            />
-            <View style={[{ width: 10 }]} />
-            <TextInput
-              value={shop_name}
-              onChangeText={(txt) => set_shop_name(txt)}
-              style={[
-                st.ti,
-                { borderBottomColor: error ? "red" : "grey" },
-                styles.paddingSmall,
-              ]}
-              placeholderTextColor={error ? "red" : "grey"}
-              placeholder={
-                display_name && display_name.length > 1
-                  ? `ex: ${display_name.toUpperCase()} BUSINESS `
-                  : "business name"
-              }
-            />
-          </View>
-          <Text style={[st.selfStart]}>Ceci est le nom de votre Maison </Text>
 
           <View style={[{ height: 20 }]} />
 

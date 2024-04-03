@@ -126,6 +126,10 @@ function ShopSetup({ navigation, route }) {
       label: "No profle picture",
       message: "Please upload a profile picture for your shop",
     },
+    SHOP_NAME: {
+      label: "No shop name",
+      message: "Please provide your shop name",
+    },
     SHOP_ADDRESS: {
       label: "No shop address",
       message: "Please provide your shop physical address",
@@ -141,11 +145,18 @@ function ShopSetup({ navigation, route }) {
   };
 
   const onNext = () => {
-    const { shop_profile, shop_add, shop_desc, shop_tags } = profileData;
+    const { shop_profile, shop_name, shop_add, shop_desc, shop_tags } =
+      profileData;
 
     if (has_shop && notDefinedOrEmpty(shop_profile)) {
       Vibration.vibrate(250);
       Alert.alert(ERROS.SHOP_PROFILE.label, ERROS.SHOP_PROFILE.message);
+      return;
+    }
+
+    if (has_shop && notDefinedOrEmpty(shop_name)) {
+      Vibration.vibrate(250);
+      Alert.alert(ERROS.SHOP_NAME.label, ERROS.SHOP_NAME.message);
       return;
     }
 
@@ -247,6 +258,30 @@ function ShopSetup({ navigation, route }) {
                   <AntDesign name="camera" size={24} color="gray" />
                 </ImageBackground>
               </TouchableOpacity>
+
+              <View style={[{ height: 20 }]} />
+              <View style={[styles.flexRow, styles.alignCenter]}>
+                <MaterialCommunityIcons
+                  name="google-my-business"
+                  size={24}
+                  color="black"
+                />
+                <View style={[{ width: 10 }]} />
+                <TextInput
+                  value={profileData.shop_name}
+                  onChangeText={(txt) => onUpdateProfileData("shop_name", txt)}
+                  style={[
+                    st.ti,
+                    { borderBottomColor: error ? "red" : "grey" },
+                    styles.paddingSmall,
+                  ]}
+                  placeholderTextColor={error ? "red" : "grey"}
+                  placeholder={"My Business name"}
+                />
+              </View>
+              <Text style={[st.selfStart]}>
+                Ceci est le nom de votre Maison{" "}
+              </Text>
 
               <View style={[{ height: 20 }]} />
               <View style={[styles.flexRow, styles.alignCenter]}>
@@ -435,6 +470,27 @@ const st = StyleSheet.create({
     marginBottom: 24,
     overflow: "hidden",
   },
+  ti: {
+    borderBottomWidth: 1,
+    width: "80%",
+  },
+  selfStart: {
+    alignSelf: "flex-start",
+  },
+  error: {
+    backgroundColor: "red",
+    color: "white",
+    fontSize: 11,
+    padding: 8,
+    margin: 12,
+    textAlign: "center",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginVertical: 32,
+  },
+
   ti: {
     borderBottomWidth: 1,
     width: "80%",
