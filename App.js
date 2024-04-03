@@ -39,6 +39,7 @@ import ContactUs from "./screens/ContactUs";
 import ChangePIN from "./screens/ChangePIN";
 import ShopSetup from "./screens/ShopSetup";
 import ServiceRequest from "./screens/ServiceRequest";
+import ViewServiceRequest from "./screens/ViewServiceRequest";
 
 const SCREENS = [
   { name: "Login", comp: Login, options: { headerShown: false } },
@@ -84,6 +85,7 @@ const SCREENS = [
     comp: ServiceRequest,
     options: { title: "Demande de service" },
   },
+  { name: "ViewServiceRequest", comp: ViewServiceRequest },
 ];
 
 const Stack = createNativeStackNavigator();

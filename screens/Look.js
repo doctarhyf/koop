@@ -27,7 +27,7 @@ const image = { uri: "https://legacy.reactjs.org/logo-og.png" };
 
 const ServiceRequests = ({ navigation, me }) => {
   const { phone } = me;
-  const [loadingsreq, sreqs, errorsreqs, reloadsreqs] = useFetch2(
+  const [loadingsreq, servicesRequests, errorsreqs, reloadsreqs] = useFetch2(
     "https://konext.vercel.app/api/sreq"
   );
 
@@ -41,11 +41,14 @@ const ServiceRequests = ({ navigation, me }) => {
           style={[styles.paddingLarge]}
         />
       )}
-      {sreqs &&
-        sreqs
-          .filter((it, i) => it.phone !== phone)
+      {servicesRequests &&
+        servicesRequests
+          .filter((serviceRequest, i) => serviceRequest.phone !== phone)
           .map((it, i) => (
-            <TouchableOpacity key={i} onPress={(e) => null}>
+            <TouchableOpacity
+              key={i}
+              onPress={(e) => navigation.navigate("ViewServiceRequest", it)}
+            >
               <View
                 style={[
                   styles.flexRow,
