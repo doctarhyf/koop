@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
   Vibration,
   Switch,
+  FlatList,
 } from "react-native";
 
 import UserContext from "../context/UserContext";
@@ -25,6 +26,8 @@ import * as ImagePicker from "expo-image-picker";
 import TextButton from "../components/TextButton";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import ShopSetup from "./ShopSetup";
+import CustomAlert from "../components/CustomAlert";
+import { VILLES } from "../helpers/flow";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -32,6 +35,7 @@ function ProfileSetup({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
   const [display_name, set_display_name] = useState("");
   const [shop_name, set_shop_name] = useState("");
+  const [ville, setville] = useState(null);
   const [profile, set_profile] = useState(null);
   const [promoCode, setPromoCode] = useState("");
   const [hasPromoCode, setHasPromoCode] = useState(false);
@@ -105,6 +109,12 @@ function ProfileSetup({ navigation, route }) {
       return;
     }
 
+    if (ville === null || ville.trim() === "") {
+      Vibration.vibrate(250);
+      Alert.alert("Votre ville?", "Veuillir choisir votre ville svp");
+      return;
+    }
+
     if (hasPromoCode && promoCode.trim() === "") {
       Vibration.vibrate(250);
       Alert.alert(
@@ -134,6 +144,18 @@ function ProfileSetup({ navigation, route }) {
       profileData.invited_with_promo = promoCode;
 
     navigation.replace(ShopSetup.ROUTE, profileData);
+  };
+
+  const [showvilles, setshowvilles] = useState(false);
+  const showVilleSelector = (e) => {
+    setshowvilles(true);
+  };
+
+  const handleVillePress = (item) => {
+    const ville = item.item;
+
+    setville(ville);
+    setshowvilles(false);
   };
 
   return (
@@ -192,12 +214,13 @@ function ProfileSetup({ navigation, route }) {
                 styles.paddingSmall,
               ]}
               placeholderTextColor={error ? "red" : "grey"}
-              placeholder={"profile"}
+              placeholder={"Votre nom de profile"}
             />
           </View>
           <Text style={[st.selfStart]}>
             Ceci est le nom de votre profil en tant que client
           </Text>
+
           <View style={[{ height: 20 }]} />
           <View style={[styles.flexRow, styles.alignCenter]}>
             <MaterialCommunityIcons
@@ -223,8 +246,72 @@ function ProfileSetup({ navigation, route }) {
             />
           </View>
           <Text style={[st.selfStart]}>Ceci est le nom de votre Maison </Text>
+
           <View style={[{ height: 20 }]} />
 
+          <TouchableOpacity onPress={(e) => showVilleSelector()}>
+            <View style={[styles.flexRow, styles.alignCenter]}>
+              <MaterialCommunityIcons
+                name="google-my-business"
+                size={24}
+                color="black"
+              />
+              <View style={[{ width: 10 }]} />
+              <Text
+                style={[
+                  ville ? { color: "#000000" } : styles.textBlue,
+                  st.ti,
+                  { borderBottomColor: "grey" },
+                  styles.paddingSmall,
+                ]}
+              >
+                {ville || "Choisissez votre ville"}
+              </Text>
+            </View>
+          </TouchableOpacity>
+          {/*  <Text style={[st.selfStart]}>Votre ville </Text> */}
+
+          <CustomAlert
+            visible={showvilles}
+            onClose={(e) => setshow(false)}
+            message={"this is sample message"}
+          >
+            <View
+              style={[
+                {
+                  backgroundColor: "white",
+
+                  width: "80%",
+                  margin: 24,
+                  padding: 12,
+                  borderRadius: 12,
+                  height: 320,
+                },
+              ]}
+            >
+              <FlatList
+                keyExtractor={(it, i) => i}
+                renderItem={(item) => (
+                  <TouchableOpacity onPress={(e) => handleVillePress(item)}>
+                    <Text
+                      style={[
+                        {
+                          padding: 8,
+
+                          margin: 8,
+                        },
+                      ]}
+                    >
+                      {item.item}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+                data={VILLES}
+              />
+            </View>
+          </CustomAlert>
+
+          <View style={[{ height: 20 }]} />
           <View
             style={[
               {

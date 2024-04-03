@@ -22,29 +22,7 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 
-const VILLES = [
-  "Kinshasa",
-  "Lubumbashi",
-  "Mbuji-Mayi",
-  "Kananga",
-  "Kisangani",
-  "Bukavu",
-  "Tshikapa",
-  "Kolwezi",
-  "Likasi",
-  "Goma",
-  "Bunia",
-  "Matadi",
-  "Uvira",
-  "Isiro",
-  "Boma",
-  "Beni",
-  "Butembo",
-  "Mbandaka",
-  "Kikwit",
-  "Bumba",
-  "Autre",
-];
+import { VILLES } from "../helpers/flow";
 
 const categoriesEntreprises = [
   "Commerce de détail",

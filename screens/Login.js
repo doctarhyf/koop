@@ -170,6 +170,7 @@ export default function Home({ navigation }) {
 
             <View>
               <TextInput
+                maxLength={10}
                 keyboardType="phone-pad"
                 style={[styles.txtInput, styles.mt]}
                 placeholder="Phone ex: 0980967780"

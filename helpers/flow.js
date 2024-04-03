@@ -33,3 +33,27 @@ export const MAIN_MENU_BUTTONS = [
     icon: require("../assets/icons/other.png"),
   },
 ];
+
+export const VILLES = [
+  "Kinshasa",
+  "Lubumbashi",
+  "Mbuji-Mayi",
+  "Kananga",
+  "Kisangani",
+  "Bukavu",
+  "Tshikapa",
+  "Kolwezi",
+  "Likasi",
+  "Goma",
+  "Bunia",
+  "Matadi",
+  "Uvira",
+  "Isiro",
+  "Boma",
+  "Beni",
+  "Butembo",
+  "Mbandaka",
+  "Kikwit",
+  "Bumba",
+  "Autre",
+];
