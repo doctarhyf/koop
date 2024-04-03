@@ -13,6 +13,7 @@ import useItemsLoader from "../hooks/useItemsLoader";
 import { TABLE_NAMES } from "../utils/supabase";
 import { KOOP_BLUE } from "../helpers/colors";
 import { loadAllItems, loadItem } from "../utils/db";
+import { ParseCreatedAt } from "../helpers/funcs";
 
 export default function Comments({ route, navigation }) {
   const { params } = route;
@@ -85,7 +86,7 @@ export default function Comments({ route, navigation }) {
             </View>
             <Text>{comment.comment}</Text>
             <Text style={[styles.textGray, styles.marginTopSmall]}>
-              {new Date().toString()}
+              {ParseCreatedAt(comment.created_at).full}
             </Text>
           </View>
         ))}

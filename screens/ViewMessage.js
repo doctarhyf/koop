@@ -58,7 +58,15 @@ export default function ViewMessage({ route, navigation }) {
     return (
       <View style={[]}>
         <View style={[{ flexDirection: me ? "row-reverse" : "row" }]}>
-          <Text style={[st.msg, { backgroundColor: me ? KOOP_GREEN : "#ddd" }]}>
+          <Text
+            style={[
+              st.msg,
+              {
+                backgroundColor: me ? KOOP_GREEN : "#ddd",
+                textAlign: me ? "right" : "left",
+              },
+            ]}
+          >
             {content}{" "}
             <Text style={[{ fontSize: 12, color: me ? "white" : "#999999" }]}>
               {ParseCreatedAt(created_at).shortTime}
