@@ -41,6 +41,7 @@ import ShopSetup from "./screens/ShopSetup";
 import ServiceRequest from "./screens/ServiceRequest";
 import PaymentResult from "./screens/PaymentResult";
 import ViewServiceRequest from "./screens/ViewServiceRequest";
+import registerNNPushToken from "native-notify";
 
 const SCREENS = [
   { name: "Login", comp: Login, options: { headerShown: false } },
@@ -92,7 +93,9 @@ const SCREENS = [
 
 const Stack = createNativeStackNavigator();
 
-function App() {
+export default function App() {
+  registerNNPushToken(20602, "b4XsCQJJ9vzPICDZTpbPuy");
+
   const [user, setuser] = useState(null);
 
   return (
@@ -114,5 +117,3 @@ function App() {
     </UserContext.Provider>
   );
 }
-
-export default App;

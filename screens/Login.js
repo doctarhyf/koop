@@ -59,7 +59,7 @@ export default function Home({ navigation }) {
 
     ////////////////////////////////
 
-    const scheduleNotification = async () => {
+    /*   const scheduleNotification = async () => {
       await Notifications.scheduleNotificationAsync({
         content: {
           title: "Hello!",
@@ -70,7 +70,7 @@ export default function Home({ navigation }) {
       });
     };
 
-    scheduleNotification();
+    scheduleNotification(); */
 
     //////////////////////////////
   }, []);
@@ -133,14 +133,14 @@ export default function Home({ navigation }) {
     }
   };
 
-  const askNotificationPermission = () => {
+  /*  const askNotificationPermission = () => {
     Notifications.requestPermissionsAsync().then((status) => {
       alert("Permission status:" + JSON.stringify(status));
     });
-  };
+  }; */
 
   const checkUserLogin = async () => {
-    askNotificationPermission();
+    //askNotificationPermission();
 
     //return;
     setloading(true);
