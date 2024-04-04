@@ -46,7 +46,7 @@ export default function ServiceInfo({ navigation, route }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: item.name,
+      title: "Item",
       headerRight: () =>
         loading ? (
           <ActivityIndicator animating={loading} />
@@ -141,7 +141,11 @@ export default function ServiceInfo({ navigation, route }) {
 
         <View style={[styles.paddingMid]}>
           <View>
+            <Text style={[styles.textGray]}>
+              {FUNCS.ParseCreatedAt(item.created_at).full}
+            </Text>
             <Text style={[st.labelServName]}>{item.name}</Text>
+
             {item.desc && <Text style={[st.label]}>{item.desc}</Text>}
             {item.link && <Text style={[st.label]}>{item.link}</Text>}
           </View>
@@ -204,8 +208,8 @@ export default function ServiceInfo({ navigation, route }) {
             {!commentPosted && (
               <TextInput
                 textAlignVertical="top"
-                style={[styles.ti]}
-                multilines={true}
+                style={[styles.ti, { padding: 8 }]}
+                multilines
                 numberOfLines={10}
                 value={comment}
                 onChangeText={(txt) => setcomment(txt)}
