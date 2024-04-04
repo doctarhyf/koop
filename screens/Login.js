@@ -21,6 +21,7 @@ import { TABLE_NAMES, supabase } from "../utils/supabase";
 import { getItemByRowEqVal, getUser } from "../utils/db";
 import * as API from "../utils/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Notifications from "expo-notifications";
 
 import UserContext from "../context/UserContext";
 import ProfileSetup from "./ProfileSetup";
@@ -55,6 +56,23 @@ export default function Home({ navigation }) {
     };
 
     fetchImages();
+
+    ////////////////////////////////
+
+    const scheduleNotification = async () => {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "Hello!",
+          body: "This is a local notification!",
+          data: { data: "goes here" },
+        },
+        trigger: { seconds: 10 },
+      });
+    };
+
+    scheduleNotification();
+
+    //////////////////////////////
   }, []);
 
   const saveSession = async (userData) => {
@@ -115,7 +133,16 @@ export default function Home({ navigation }) {
     }
   };
 
+  const askNotificationPermission = () => {
+    Notifications.requestPermissionsAsync().then((status) => {
+      alert("Permission status:" + JSON.stringify(status));
+    });
+  };
+
   const checkUserLogin = async () => {
+    askNotificationPermission();
+
+    //return;
     setloading(true);
     const user = await AsyncStorage.getItem("@KOOP:user");
     setloading(false);
