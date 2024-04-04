@@ -64,7 +64,7 @@ function ServiceRequest({ navigation, route }) {
 
       setloading(false);
 
-      //alert(JSON.stringify(res));
+      alert("res upd => " + JSON.stringify(res));
       if (res && res.length === 1) {
         Alert.alert(
           "Request posted!",

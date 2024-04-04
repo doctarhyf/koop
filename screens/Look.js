@@ -68,13 +68,18 @@ const ServiceRequests = ({ navigation, me }) => {
                 ]}
               >
                 <FontAwesome5 name="bolt" size={24} color="green" />
+
                 <View style={[styles.flex1]}>
+                  <Text>
+                    <Text style={[styles.textBlue, styles.fontBold]}>
+                      {it.user_data.ville}
+                    </Text>{" "}
+                    - {it.user_data.display_name}
+                  </Text>
                   <Text style={[{ fontWeight: "bold", flex: 1 }]}>
                     {it.label}
                   </Text>
-                  <Text
-                    style={[styles.textBlue, { fontWeight: "bold" }]}
-                  >{`${it.user_data.display_name} - ${it.user_data.phone}`}</Text>
+
                   <Text style={[styles.textGray]}>
                     {FUNCS.ParseCreatedAt(it.created_at).full}
                   </Text>

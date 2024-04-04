@@ -169,6 +169,18 @@ export default function MyItems({ navigation, route }) {
           </TouchableOpacity>
         ))}
       </View>
+      {!loadingdata && itemsdata && itemsdata.length === 0 && (
+        <View
+          style={[
+            styles.paddingLarge,
+            styles.flex1,
+            styles.justifyCenter,
+            styles.alignCenter,
+          ]}
+        >
+          <Text>No items availabe</Text>
+        </View>
+      )}
       {errordata && <Text>{JSON.stringify(errordata)}</Text>}
       <FlatList
         style={[{ padding: 12 }]}
