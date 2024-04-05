@@ -145,10 +145,12 @@ const Home = ({ navigation }) => {
             />
           )}
           {!isInfoPaneVisible && (
-            <View>
+            <View
+              style={[styles.flex1, styles.justifyCenter, styles.alignCenter]}
+            >
               <Image
                 source={require("../assets/koop.png")}
-                style={[{ width: 120, height: 80 }]}
+                style={[{ width: 160, height: 120 }]}
               />
             </View>
           )}

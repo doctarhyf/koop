@@ -34,7 +34,12 @@ const ServiceRequests = ({ navigation, me }) => {
 
   return (
     <View style={[{ marginTop: 12 }]}>
-      <Text style={[{ marginBottom: 8 }]}>DEMANDE SPECIALES</Text>
+      <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
+        <Text style={[styles.mbLarge, styles.mtLarge]}>PROMO</Text>
+        <TouchableOpacity onPress={(e) => onViewAll()}>
+          <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
+        </TouchableOpacity>
+      </View>
       {loadingsreq && (
         <ActivityIndicator
           color={KOOP_BLUE}
@@ -250,9 +255,6 @@ const FeaturedAd = ({ navigation, me }) => {
     <View>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
         <Text style={[styles.mbLarge, styles.mtLarge]}>PROMO</Text>
-        <TouchableOpacity onPress={(e) => onViewAll()}>
-          <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
-        </TouchableOpacity>
       </View>
       {loading ? (
         <ActivityIndicator animating={loading} size={32} />
