@@ -144,6 +144,14 @@ const Home = ({ navigation }) => {
               onCloseInfoPane={onCloseInfoPane}
             />
           )}
+          {!isInfoPaneVisible && (
+            <View>
+              <Image
+                source={require("../assets/koop.png")}
+                style={[{ width: 120, height: 80 }]}
+              />
+            </View>
+          )}
           <Image
             style={styles.alignSelfCenter}
             source={require("../assets/koop.png")}
