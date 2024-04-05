@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Alert,
   Platform,
+  Vibration,
 } from "react-native";
 import { Image } from "expo-image";
 import { blurhash } from "../utils/const";
@@ -56,23 +57,6 @@ export default function Home({ navigation }) {
     };
 
     fetchImages();
-
-    ////////////////////////////////
-
-    /*   const scheduleNotification = async () => {
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: "Hello!",
-          body: "This is a local notification!",
-          data: { data: "goes here" },
-        },
-        trigger: { seconds: 10 },
-      });
-    };
-
-    scheduleNotification(); */
-
-    //////////////////////////////
   }, []);
 
   const saveSession = async (userData) => {
@@ -81,7 +65,16 @@ export default function Home({ navigation }) {
   };
 
   const onRequestOtp = async () => {
+    const { otp } = creds;
+
+    if (otp === undefined || otp === null || otp.trim() === "") {
+      Vibration.vibrate(250);
+      alert("PIN cant be empty");
+      return;
+    }
+
     if (formaterror !== null) {
+      Vibration.vibrate(250);
       alert("Invalid phone number", "The phone number enterred is invalid!");
       return;
     }
@@ -125,7 +118,6 @@ export default function Home({ navigation }) {
         alert("Error login, try again later");
       }
     } else {
-      //user logged in
       setloading(false);
       setLogginSuccess(true);
       await saveSession(userData);
@@ -133,16 +125,7 @@ export default function Home({ navigation }) {
     }
   };
 
-  /*  const askNotificationPermission = () => {
-    Notifications.requestPermissionsAsync().then((status) => {
-      alert("Permission status:" + JSON.stringify(status));
-    });
-  }; */
-
   const checkUserLogin = async () => {
-    //askNotificationPermission();
-
-    //return;
     setloading(true);
     const user = await AsyncStorage.getItem("@KOOP:user");
     setloading(false);
@@ -163,8 +146,6 @@ export default function Home({ navigation }) {
   }, [creds]);
 
   function onLoginValueChange(type, val) {
-    // Pattern for a 10-digit phone number
-
     setcreds((old) => ({ ...old, [type]: val }));
   }
 
@@ -189,9 +170,11 @@ export default function Home({ navigation }) {
         {!loading && (
           <View style={[styles.formCont]}>
             <View>
-              <Text style={[styles.tc, styles.bigText]}>Welcome to KOOP</Text>
-              <Text style={[styles.tc]}>
-                Pleas use your phone number to login
+              <Text style={[styles.tc, styles.bigText, { marginVertical: 8 }]}>
+                Welcome to KOOP
+              </Text>
+              <Text style={[styles.tc, , { marginVertical: 8 }]}>
+                Please enter your phone number below. The default PIN is 0000
               </Text>
             </View>
 
@@ -216,8 +199,9 @@ export default function Home({ navigation }) {
                 keyboardType="number-pad"
                 secureTextEntry
                 style={[styles.txtInput, styles.mt]}
-                placeholder="OTP"
+                placeholder="PIN" //"OTP"
                 value={creds.otp || ""}
+                maxLength={6}
                 onChangeText={(text) => onLoginValueChange("otp", text)}
               />
               <TouchableOpacity
@@ -232,7 +216,7 @@ export default function Home({ navigation }) {
                       loading ? { backgroundColor: "grey" } : "",
                     ]}
                   >
-                    REQUEST OTP
+                    LOGIN
                   </Text>
                 )}
               </TouchableOpacity>
@@ -255,16 +239,6 @@ export default function Home({ navigation }) {
             <ActivityIndicator color={WHITE} animating={loading} />
           </View>
         )}
-
-        {/*   {logginSuccess && (
-          <View style={[styles.logginsuccess]}>
-            <Image
-              source={require("../assets/icons/check.png")}
-              style={[{ width: 40, height: 40 }]}
-            />
-            <Text>Loggin success</Text>
-          </View>
-        )} */}
       </View>
     </ScrollView>
   );

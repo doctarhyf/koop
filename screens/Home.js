@@ -17,12 +17,20 @@ import { MAIN_MENU_BUTTONS } from "../helpers/flow";
 import { KOOP_BLUE, KOOP_BLUE_TRANSLUCIDE } from "../helpers/colors";
 import ModalMenu from "../components/ModalMenu";
 import UserContext from "../context/UserContext";
-import usePicURL from "../hooks/usePicURL";
-import TextButton from "../components/TextButton";
+import { AntDesign } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const InfoPane = ({ navigation, gotoMyAccount }) => {
+const InfoPane = ({ navigation, gotoMyAccount, onCloseInfoPane }) => {
   return (
-    <View style={[st.infpane]}>
+    <View
+      style={[
+        st.infpane,
+        styles.marginMin,
+        styles.flexRow,
+        styles.alignCenter,
+        { borderRadius: 8, borderColor: "#bbbbbb", borderWidth: 1 },
+      ]}
+    >
       <View style={[st.store]}>
         <Image
           source={require("../assets/icons/store.png")}
@@ -32,6 +40,7 @@ const InfoPane = ({ navigation, gotoMyAccount }) => {
       </View>
       <View>
         <Text>Finish setting up your profile and your shop</Text>
+
         <TouchableOpacity onPress={gotoMyAccount}>
           <Text
             style={[styles.textBlue, styles.paddingSmall, styles.textCenter]}
@@ -40,6 +49,12 @@ const InfoPane = ({ navigation, gotoMyAccount }) => {
           </Text>
         </TouchableOpacity>
       </View>
+      <TouchableOpacity
+        onPress={(e) => onCloseInfoPane()}
+        style={[{ padding: 12 }]}
+      >
+        <AntDesign name="closecircle" size={24} color="red" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -47,8 +62,15 @@ const InfoPane = ({ navigation, gotoMyAccount }) => {
 const Home = ({ navigation }) => {
   const { user, setuser } = useContext(UserContext);
   const [isMenuVisible, setMenuVisible] = useState(false);
+  const [isInfoPaneVisible, setIsInfoPaneVisible] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const loadInfoPaneVisible = async () => {
+      const visible = (await AsyncStorage.getItem("info_pane")) === null;
+      setIsInfoPaneVisible(visible);
+    };
+    loadInfoPaneVisible();
+  }, []);
 
   const openMenu = () => {
     setMenuVisible(true);
@@ -106,11 +128,22 @@ const Home = ({ navigation }) => {
     navigation.navigate("MyAccount", user);
   };
 
+  const onCloseInfoPane = async () => {
+    AsyncStorage.setItem("info_pane", "false");
+    setIsInfoPaneVisible(false);
+  };
+
   return (
     <SafeAreaView style={[styles.bgBlue, styles.flex1]}>
       <ScrollView>
         <View>
-          <InfoPane navigation={navigation} gotoMyAccount={gotoMyAccount} />
+          {isInfoPaneVisible && (
+            <InfoPane
+              navigation={navigation}
+              gotoMyAccount={gotoMyAccount}
+              onCloseInfoPane={onCloseInfoPane}
+            />
+          )}
           <Image
             style={styles.alignSelfCenter}
             source={require("../assets/koop.png")}
