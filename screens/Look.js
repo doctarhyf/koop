@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
+  Alert,
 } from "react-native";
 import { Image } from "expo-image";
 import styles from "../helpers/styles";
@@ -23,9 +24,147 @@ import useFetch, { useFetch2 } from "../hooks/useFetch";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { KOOP_BLUE } from "../helpers/colors";
 
-const image = { uri: "https://legacy.reactjs.org/logo-og.png" };
+const FeaturedItems = ({ navigation, me, onViewAll }) => {
+  const [loading, items, error] = useFetch(
+    "https://konext.vercel.app/api/items",
+    true
+  );
 
-const ServiceRequests = ({ navigation, me }) => {
+  const onViewItem = (item) => {
+    navigation.navigate("ServiceInfo", item);
+  };
+
+  return (
+    <View>
+      <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
+        <Text style={[styles.mbLarge, styles.mtLarge]}>{`POPULAR ITEMS`}</Text>
+        <TouchableOpacity onPress={(e) => onViewAll(FUNCS.VIEW_ALL_TYPE.ITEMS)}>
+          <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
+        </TouchableOpacity>
+      </View>
+
+      {loading ? (
+        <ActivityIndicator animating={loading} />
+      ) : (
+        <View>
+          <ScrollView horizontal>
+            {items &&
+              items.map &&
+              items.map((item, item_idx) => (
+                <TouchableOpacity
+                  key={item_idx}
+                  onPress={(e) => onViewItem(item)}
+                >
+                  <ImageBackground
+                    style={[
+                      styles.bgBlue,
+                      styles.roundedSmall,
+                      styles.marginH,
+                      st.imgbg,
+                      styles.justifyEnd,
+                      styles.overflowHidden,
+                    ]}
+                    source={{
+                      uri: item.photos[0], //"https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg",
+                    }}
+                  >
+                    <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
+                      <Text style={styles.textWhite}>{item.name}</Text>
+                      <Text style={[styles.textGreen]}>{item.shop_name}</Text>
+                      <Text style={[styles.textGray, { fontSize: 12 }]}>
+                        + 40 items
+                      </Text>
+                    </View>
+                  </ImageBackground>
+                </TouchableOpacity>
+              ))}
+          </ScrollView>
+        </View>
+      )}
+    </View>
+  );
+};
+
+const FeaturedShops = ({ navigation, me, onViewAll }) => {
+  const [loading, shops, error] = useFetch(
+    "https://konext.vercel.app/api/shops",
+    true
+  );
+
+  const onViewShop = (shop) => {
+    if (me.id === shop.id) {
+      Alert.alert(
+        "Your shop",
+        "This is your shop, if you want to change some information go to My Account?",
+        [
+          {
+            text: "Cancel",
+          },
+          {
+            text: "My Account",
+            onPress: () => {
+              navigation.navigate("MyAccount");
+            },
+            style: "destructive",
+          },
+        ]
+      );
+      return;
+    }
+    navigation.navigate("Shop", shop);
+  };
+
+  return (
+    <View>
+      <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
+        <Text style={[styles.mbLarge, styles.mtLarge]}>POPULAR SHOPS</Text>
+        <TouchableOpacity onPress={(e) => onViewAll(FUNCS.VIEW_ALL_TYPE.SHOPS)}>
+          <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
+        </TouchableOpacity>
+      </View>
+      {loading ? (
+        <ActivityIndicator animating={loading} />
+      ) : (
+        <View>
+          <ScrollView horizontal>
+            {shops &&
+              shops.map &&
+              shops.map((shop, shop_idx) => (
+                <TouchableOpacity
+                  key={shop_idx}
+                  onPress={(e) => onViewShop(shop)}
+                >
+                  <ImageBackground
+                    style={[
+                      styles.bgBlue,
+                      styles.roundedSmall,
+                      styles.marginH,
+                      { width: 200, height: 140 },
+                      styles.justifyEnd,
+                      styles.overflowHidden,
+                    ]}
+                    source={{
+                      uri: shop.shop_profile, //"https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg",
+                    }}
+                  >
+                    <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
+                      <Text style={styles.textWhite}>{shop.shop_name}</Text>
+                      {/*  <Text style={[styles.textGreen]}>{curShop.shop_name}</Text> */}
+                      <Text style={[styles.textGray, { fontSize: 12 }]}>
+                        + 40 items
+                      </Text>
+                    </View>
+                  </ImageBackground>
+                </TouchableOpacity>
+              ))}
+          </ScrollView>
+        </View>
+      )}
+    </View>
+  );
+};
+
+const ServiceRequests = ({ navigation, me, onViewAll }) => {
   const { phone } = me;
   const [loadingsreq, servicesRequests, errorsreqs, reloadsreqs] = useFetch2(
     "https://konext.vercel.app/api/sreq"
@@ -36,7 +175,9 @@ const ServiceRequests = ({ navigation, me }) => {
     <View style={[{ marginTop: 12 }]}>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
         <Text style={[styles.mbLarge, styles.mtLarge]}>PROMO</Text>
-        <TouchableOpacity onPress={(e) => onViewAll()}>
+        <TouchableOpacity
+          onPress={(e) => onViewAll(FUNCS.VIEW_ALL_TYPE.SERVICE_REQUESTS)}
+        >
           <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
         </TouchableOpacity>
       </View>
@@ -92,137 +233,6 @@ const ServiceRequests = ({ navigation, me }) => {
               </View>
             </TouchableOpacity>
           ))}
-    </View>
-  );
-};
-
-const FeaturedItems = ({ navigation, me }) => {
-  const [loading, items, error] = useFetch(
-    "https://konext.vercel.app/api/items",
-    true
-  );
-
-  const onViewItem = (item) => {
-    navigation.navigate("ServiceInfo", item);
-  };
-
-  const onViewAll = (cur) => {
-    console.log(cur);
-    navigation.navigate("ViewAll", "Featured Items");
-  };
-  return (
-    <View>
-      <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>{`POPULAR ITEMS`}</Text>
-        <TouchableOpacity onPress={(e) => onViewAll()}>
-          <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
-        </TouchableOpacity>
-      </View>
-
-      {loading ? (
-        <ActivityIndicator animating={loading} />
-      ) : (
-        <View>
-          <ScrollView horizontal>
-            {items &&
-              items.map &&
-              items.map((item, item_idx) => (
-                <TouchableOpacity
-                  key={item_idx}
-                  onPress={(e) => onViewItem(item)}
-                >
-                  <ImageBackground
-                    style={[
-                      styles.bgBlue,
-                      styles.roundedSmall,
-                      styles.marginH,
-                      st.imgbg,
-                      styles.justifyEnd,
-                      styles.overflowHidden,
-                    ]}
-                    source={{
-                      uri: item.photos[0], //"https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg",
-                    }}
-                  >
-                    <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
-                      <Text style={styles.textWhite}>{item.name}</Text>
-                      <Text style={[styles.textGreen]}>{item.shop_name}</Text>
-                      <Text style={[styles.textGray, { fontSize: 12 }]}>
-                        + 40 items
-                      </Text>
-                    </View>
-                  </ImageBackground>
-                </TouchableOpacity>
-              ))}
-          </ScrollView>
-        </View>
-      )}
-    </View>
-  );
-};
-
-const FeaturedShops = ({ navigation, me }) => {
-  const [loading, shops, error] = useFetch(
-    "https://konext.vercel.app/api/shops",
-    true
-  );
-
-  const onViewShop = (shop) => {
-    // alert(JSON.stringify(shop));
-    navigation.navigate("Shop", shop);
-  };
-
-  const onViewAll = (cur) => {
-    console.log(cur);
-    navigation.navigate("ViewAll", "All Shops");
-  };
-
-  return (
-    <View>
-      <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>POPULAR SHOPS</Text>
-        <TouchableOpacity onPress={(e) => onViewAll()}>
-          <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
-        </TouchableOpacity>
-      </View>
-      {loading ? (
-        <ActivityIndicator animating={loading} />
-      ) : (
-        <View>
-          <ScrollView horizontal>
-            {shops &&
-              shops.map &&
-              shops.map((shop, shop_idx) => (
-                <TouchableOpacity
-                  key={shop_idx}
-                  onPress={(e) => onViewShop(shop)}
-                >
-                  <ImageBackground
-                    style={[
-                      styles.bgBlue,
-                      styles.roundedSmall,
-                      styles.marginH,
-                      { width: 200, height: 140 },
-                      styles.justifyEnd,
-                      styles.overflowHidden,
-                    ]}
-                    source={{
-                      uri: shop.shop_profile, //"https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg",
-                    }}
-                  >
-                    <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
-                      <Text style={styles.textWhite}>{shop.shop_name}</Text>
-                      {/*  <Text style={[styles.textGreen]}>{curShop.shop_name}</Text> */}
-                      <Text style={[styles.textGray, { fontSize: 12 }]}>
-                        + 40 items
-                      </Text>
-                    </View>
-                  </ImageBackground>
-                </TouchableOpacity>
-              ))}
-          </ScrollView>
-        </View>
-      )}
     </View>
   );
 };
@@ -331,6 +341,10 @@ export default function Look({ navigation }) {
     { paddingTop: 12 },
   ];
 
+  const onViewAll = (type) => {
+    navigation.navigate("ViewAll", type);
+  };
+
   return (
     <View style={[styles.flex1, styles.bgBlue]}>
       <ScrollView>
@@ -340,9 +354,21 @@ export default function Look({ navigation }) {
           </TouchableOpacity>
 
           <View style={st_feat_cont}>
-            <FeaturedItems me={user} navigation={navigation} />
-            <FeaturedShops me={user} navigation={navigation} />
-            <ServiceRequests me={user} navigation={navigation} />
+            <FeaturedItems
+              me={user}
+              navigation={navigation}
+              onViewAll={onViewAll}
+            />
+            <FeaturedShops
+              me={user}
+              navigation={navigation}
+              onViewAll={onViewAll}
+            />
+            <ServiceRequests
+              me={user}
+              navigation={navigation}
+              onViewAll={onViewAll}
+            />
             <FeaturedAd me={user} navigation={navigation} />
           </View>
         </View>

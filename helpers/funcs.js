@@ -166,3 +166,9 @@ export function ParseCreatedAt(created_at) {
     shortDate: shortDate,
   };
 }
+
+export const VIEW_ALL_TYPE = {
+  ITEMS: "koop_items",
+  SHOPS: "koop_shops",
+  SERVICE_REQUESTS: "koop_sreqs",
+};
