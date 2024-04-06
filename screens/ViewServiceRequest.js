@@ -90,7 +90,7 @@ export default function ViewServiceRequest({ navigation, route }) {
 
       {showMore && (
         <View>
-          <Text> {serviceRequest.desc} </Text>
+          <Text>Description </Text>
           <Text>Photos</Text>
         </View>
       )}
@@ -112,7 +112,7 @@ export default function ViewServiceRequest({ navigation, route }) {
       >
         {[
           {
-            label: "Interrese",
+            label: "Interrested",
             icon: <Ionicons name="pricetags" size={24} color={KOOP_BLUE} />,
           },
           {

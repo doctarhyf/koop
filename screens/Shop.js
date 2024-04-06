@@ -146,6 +146,14 @@ export default function Shop({ route, navigation }) {
           )}
 
           <Text style={[styles.textBlue, , styles.marginTopLarge]}>
+            Services and items
+          </Text>
+
+          <Text style={[styles.textBlue, , styles.marginTopLarge]}>
+            Services requests
+          </Text>
+
+          <Text style={[styles.textBlue, , styles.marginTopLarge]}>
             Contacts
           </Text>
 
