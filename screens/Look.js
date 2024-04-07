@@ -44,7 +44,7 @@ const FeaturedItems = ({ navigation, me, onViewAll }) => {
       </View>
 
       {loading ? (
-        <ActivityIndicator animating={loading} />
+        <ActivityIndicator animating={loading} color={KOOP_BLUE} />
       ) : (
         <View>
           <ScrollView horizontal>
@@ -123,7 +123,7 @@ const FeaturedShops = ({ navigation, me, onViewAll }) => {
         </TouchableOpacity>
       </View>
       {loading ? (
-        <ActivityIndicator animating={loading} />
+        <ActivityIndicator animating={loading} color={KOOP_BLUE} />
       ) : (
         <View>
           <ScrollView horizontal>
@@ -267,7 +267,7 @@ const FeaturedAd = ({ navigation, me }) => {
         <Text style={[styles.mbLarge, styles.mtLarge]}>PROMO</Text>
       </View>
       {loading ? (
-        <ActivityIndicator animating={loading} size={32} />
+        <ActivityIndicator animating={loading} size={32} color={KOOP_BLUE} />
       ) : (
         <ScrollView>
           {images.map((it, i) => (

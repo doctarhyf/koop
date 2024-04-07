@@ -1,6 +1,13 @@
 import React, { useLayoutEffect } from "react";
-import { FlatList, RefreshControl, Text, View } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  Text,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import { useFetch2 } from "../hooks/useFetch";
+import styles from "../helpers/styles";
 
 export default function ViewAll({ route, navigation }) {
   const type = route.params;
@@ -14,7 +21,15 @@ export default function ViewAll({ route, navigation }) {
     });
   }, [navigation]);
 
-  return (
+  const keyExtractor = (item) => Math.random();
+
+  const renderItem = (item) => <Text>{Math.random()}</Text>;
+
+  return loading ? (
+    <View style={[styles.flex1, styles.alignCenter, styles.justifyCenter]}>
+      <ActivityIndicator animating={true} style={[styles.paddingLarge]} />
+    </View>
+  ) : (
     <View>
       {error && <Text>Error</Text>}
       {data && (
