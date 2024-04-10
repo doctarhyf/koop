@@ -25,11 +25,6 @@ export default function SendMessage({ route, navigation }) {
     `Hello, ${shop_name}, I would like to know more about ${name} please!`
   );
 
-  //alert(JSON.stringify(route.params));
-
-  //alert(`from_id: ${from_id}\nto_id : ${to_id}`);
-  // alert(`${JSON.stringify(route.params)}`);
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () =>

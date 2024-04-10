@@ -1,4 +1,4 @@
-import { View, Text, Switch, TouchableOpacity } from "react-native";
+import { View, Text, Switch, TouchableOpacity, Linking } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import SimpleTextButton from "../components/SimpleTextButton";
 import styles from "../helpers/styles";
@@ -8,6 +8,12 @@ import { Feather } from "@expo/vector-icons";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import { ParseCreatedAt } from "../helpers/funcs";
 import { Image } from "expo-image";
+
+const ACTION = {
+  SEND_MESSAGE: "send_message",
+  INTERESTED: "interested",
+  CALL_NOW: "call_now",
+};
 
 export default function ViewServiceRequest({ navigation, route }) {
   const serviceRequest = route.params;
@@ -21,8 +27,29 @@ export default function ViewServiceRequest({ navigation, route }) {
     });
   }, [navigation]);
 
+  const makePhoneCall = (phone) => {
+    const phoneNumber = phone; // The phone number you want to call
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
+
   const onAction = (it) => {
-    alert(it);
+    const { action } = it;
+    switch (action) {
+      case ACTION.SEND_MESSAGE:
+        navigation.navigate("SendMessage", postedBy);
+        break;
+
+      case ACTION.INTERESTED:
+        alert("Interested");
+        break;
+
+      case ACTION.CALL_NOW:
+        makePhoneCall(postedBy.phone);
+        break;
+
+      default:
+        break;
+    }
   };
 
   const toggleSwitch = () => setShowMore((previousState) => !previousState);
@@ -113,10 +140,12 @@ export default function ViewServiceRequest({ navigation, route }) {
         {[
           {
             label: "Interrested",
+            action: ACTION.INTERESTED,
             icon: <Ionicons name="pricetags" size={24} color={KOOP_BLUE} />,
           },
           {
             label: "Send text",
+            action: ACTION.SEND_MESSAGE,
             icon: (
               <MaterialCommunityIcons
                 name="message-text-outline"
@@ -127,6 +156,7 @@ export default function ViewServiceRequest({ navigation, route }) {
           },
           {
             label: "Call now",
+            action: ACTION.CALL_NOW,
             icon: <Feather name="phone-call" size={24} color={KOOP_BLUE} />,
           },
         ].map((it, i) => (

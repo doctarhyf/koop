@@ -70,7 +70,6 @@ function ServiceRequest({ navigation, route }) {
           "Request posted!",
           "Votre demande a ete postee avec success.Aller a la page My Products & services?",
           [
-            { text: "Rester ICI" },
             {
               text: "My Prods & Serv,",
               style: "destructive",

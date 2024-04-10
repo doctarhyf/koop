@@ -174,7 +174,7 @@ const ServiceRequests = ({ navigation, me, onViewAll }) => {
   return (
     <View style={[{ marginTop: 12 }]}>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>PROMO</Text>
+        <Text style={[styles.mbLarge, styles.mtLarge]}>DEMANDE SERVICE</Text>
         <TouchableOpacity
           onPress={(e) => onViewAll(FUNCS.VIEW_ALL_TYPE.SERVICE_REQUESTS)}
         >
@@ -354,11 +354,11 @@ export default function Look({ navigation }) {
           </TouchableOpacity>
 
           <View style={st_feat_cont}>
-            <FeaturedItems
+            {/*   <FeaturedItems
               me={user}
               navigation={navigation}
               onViewAll={onViewAll}
-            />
+            /> */}
             <FeaturedShops
               me={user}
               navigation={navigation}

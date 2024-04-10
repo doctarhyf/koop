@@ -17,6 +17,8 @@ import { width } from "deprecated-react-native-prop-types/DeprecatedImagePropTyp
 import useItemsLoader from "../hooks/useItemsLoader";
 import { TABLE_NAMES } from "../utils/supabase";
 import useFetch from "../hooks/useFetch";
+import { VILLES } from "../helpers/flow";
+import { ParseCreatedAt } from "../helpers/funcs";
 
 function Tag({ label = "My tag" }) {
   return (
@@ -33,7 +35,7 @@ function Tag({ label = "My tag" }) {
 export default function Search({ navigation }) {
   const [q, setq] = useState("");
   const [loadingItems, items, error] = useFetch(
-    "https://konext.vercel.app/api/items"
+    "https://konext.vercel.app/api/sreq"
   );
   const [itemsf, setitemsf] = useState(null);
 
@@ -74,8 +76,8 @@ export default function Search({ navigation }) {
         horizontal
         style={[styles.paddingSmall, { paddingRight: 12 }]}
       >
-        {[...Array(15)].map((it, i) => (
-          <Tag key={i} label={`My Tag${i}`} onTagPress={onTagPress} />
+        {VILLES.map((it, i) => (
+          <Tag key={i} label={it} onTagPress={onTagPress} />
         ))}
       </ScrollView>
 
@@ -91,18 +93,18 @@ export default function Search({ navigation }) {
               <View style={[styles.flexRow, styles.paddingSmall]}>
                 <Image
                   style={[{ width: 62, height: 62 }, styles.marginRight]}
-                  source={it.photos[0]}
+                  source={"" || it.user_data.profile}
                   transition={1000}
                 />
                 <View>
-                  <Text>{it.name}</Text>
+                  <Text>{it.label}</Text>
                   {it.desc && (
                     <Text numberOfLines={2} style={[styles.textGray]}>
                       {it.desc}
                     </Text>
                   )}
                   <Text style={[{ fontSize: 12 }, styles.textGray]}>
-                    {it.created_at}
+                    {ParseCreatedAt(it.created_at).full}
                   </Text>
                 </View>
               </View>
