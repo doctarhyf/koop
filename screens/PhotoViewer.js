@@ -10,7 +10,7 @@ export default function PhotoViewer({ route, navigation }) {
     <View style={[styles.flex1, styles.bgBlack]}>
       <Image
         transition={1000}
-        source={{ uri: params } || require("../assets/koop.png")}
+        source={params || require("../assets/koop.png")}
         style={[styles.flex1, { width: "100%", height: "100%" }]}
       />
     </View>

@@ -1,5 +1,5 @@
 import { View, Text, Switch, TouchableOpacity, Linking } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import SimpleTextButton from "../components/SimpleTextButton";
 import styles from "../helpers/styles";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,6 +8,7 @@ import { Feather } from "@expo/vector-icons";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import { ParseCreatedAt } from "../helpers/funcs";
 import { Image } from "expo-image";
+import UserContext from "../context/UserContext";
 
 const ACTION = {
   SEND_MESSAGE: "send_message",
@@ -15,7 +16,32 @@ const ACTION = {
   CALL_NOW: "call_now",
 };
 
+const ACTION_BUTTONS = [
+  {
+    label: "Interrested",
+    action: ACTION.INTERESTED,
+    icon: <Ionicons name="pricetags" size={24} color={KOOP_BLUE} />,
+  },
+  {
+    label: "Message",
+    action: ACTION.SEND_MESSAGE,
+    icon: (
+      <MaterialCommunityIcons
+        name="message-text-outline"
+        size={24}
+        color={KOOP_BLUE}
+      />
+    ),
+  },
+  {
+    label: "Call now",
+    action: ACTION.CALL_NOW,
+    icon: <Feather name="phone-call" size={24} color={KOOP_BLUE} />,
+  },
+];
+
 export default function ViewServiceRequest({ navigation, route }) {
+  const { user, setuser } = useContext(UserContext);
   const serviceRequest = route.params;
   const postedBy = serviceRequest.user_data;
   const [showMore, setShowMore] = useState(false);
@@ -23,7 +49,7 @@ export default function ViewServiceRequest({ navigation, route }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Info de la demande",
+      title: "Details",
     });
   }, [navigation]);
 
@@ -33,10 +59,28 @@ export default function ViewServiceRequest({ navigation, route }) {
   };
 
   const onAction = (it) => {
+    //alert(JSON.stringify(postedBy));
+
+    // { shop_name, shop_id, from_id, to_id, name }
+
+    const shop_name = postedBy.shop_name;
+    const shop_id = serviceRequest.user_id;
+    const from_id = user.id;
+    const to_id = postedBy.id;
+    const name = serviceRequest.label;
+
+    const data = {
+      shop_name: shop_name,
+      shop_id: shop_id,
+      from_id: from_id,
+      to_id: to_id,
+      name: name,
+    };
+
     const { action } = it;
     switch (action) {
       case ACTION.SEND_MESSAGE:
-        navigation.navigate("SendMessage", postedBy);
+        navigation.navigate("SendMessage", data);
         break;
 
       case ACTION.INTERESTED:
@@ -56,6 +100,7 @@ export default function ViewServiceRequest({ navigation, route }) {
 
   return (
     <View style={[styles.paddingMid]}>
+      {/*  <Text>{JSON.stringify(postedBy)}</Text> */}
       <View
         style={[
           { gap: 12 },
@@ -64,15 +109,19 @@ export default function ViewServiceRequest({ navigation, route }) {
           styles.alignCenter,
         ]}
       >
-        <Image
-          source={postedBy.profile}
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: 40,
-            overflow: "hidden",
-          }}
-        />
+        <TouchableOpacity
+          onPress={(e) => navigation.navigate("PhotoViewer", postedBy.profile)}
+        >
+          <Image
+            source={postedBy.profile}
+            style={{
+              width: 80,
+              height: 80,
+              borderRadius: 40,
+              overflow: "hidden",
+            }}
+          />
+        </TouchableOpacity>
 
         <View>
           <Text>
@@ -137,29 +186,7 @@ export default function ViewServiceRequest({ navigation, route }) {
           styles.paddingSmall,
         ]}
       >
-        {[
-          {
-            label: "Interrested",
-            action: ACTION.INTERESTED,
-            icon: <Ionicons name="pricetags" size={24} color={KOOP_BLUE} />,
-          },
-          {
-            label: "Send text",
-            action: ACTION.SEND_MESSAGE,
-            icon: (
-              <MaterialCommunityIcons
-                name="message-text-outline"
-                size={24}
-                color={KOOP_BLUE}
-              />
-            ),
-          },
-          {
-            label: "Call now",
-            action: ACTION.CALL_NOW,
-            icon: <Feather name="phone-call" size={24} color={KOOP_BLUE} />,
-          },
-        ].map((it, i) => (
+        {ACTION_BUTTONS.map((it, i) => (
           <TouchableOpacity onPress={(e) => onAction(it)}>
             <View style={[styles.justifyCenter, styles.alignCenter]}>
               <Text>{it.label}</Text>

@@ -46,40 +46,17 @@ export default function SendMessage({ route, navigation }) {
       to_id: to_id,
       content: message,
     });
-    alert(JSON.stringify(res));
 
-    navigation.goBack();
-
-    /* //alert(`Sending message from ${from_id} to ${to_id}, message : ${message}`);
-    //return;
-    const res = await sendMessage(from_id, to_id, message);
-    const [inbox, outbox] = res;
-
-    //alert(JSON.stringify(res));
-
-    if (
-      inbox &&
-      inbox[0] &&
-      inbox[0].created_at &&
-      outbox &&
-      outbox[0] &&
-      outbox[0].created_at
-    ) {
-      Alert.alert("Message sent", "Your message has been sent successfully", [
-        {
-          text: "OK",
-          onPress: (e) => {
-            setloading(false);
-            navigation.goBack();
-          },
-        },
-      ]);
+    if (res.id) {
+      Alert.alert(
+        "Message sent",
+        `Your message to ${shop_name} has been sent successfully!`
+      );
+      console.error(JSON.stringify(res));
     } else {
-      setloading(false);
-      alert("Error sending message\n" + JSON.stringify(res));
+      Alert.alert("Error sending message", JSON.stringify(res));
     }
-
-    console.error("sendMsg => ", res); */
+    navigation.goBack();
 
     setloading(false);
   };
