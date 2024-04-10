@@ -137,7 +137,7 @@ const FeaturedShops = ({ navigation, me, onViewAll }) => {
                   <ImageBackground
                     style={[
                       styles.bgBlue,
-                      styles.roundedSmall,
+                      styles.roundedMd,
                       styles.marginH,
                       { width: 200, height: 140 },
                       styles.justifyEnd,
