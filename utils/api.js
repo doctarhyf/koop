@@ -1,7 +1,12 @@
 import { insertItem, uploadPic } from "./db";
 import { supabase, TABLE_NAMES } from "./supabase";
+import * as FileSystem from "expo-file-system";
+import { decode } from "base64-arraybuffer";
 
-const API_ENDPOINT = "https://konext.vercel.app/api";
+const TESTING = true;
+const API_ENDPOINT = TESTING
+  ? ' "https://localhost:3000/api'
+  : "https://konext.vercel.app/api";
 
 export const login = async (phone, pin) => {
   const API_LOGIN = `${API_ENDPOINT}/auth/login`;
@@ -128,36 +133,64 @@ content */
   }
 };
 
-export async function insertServiceRequest(itemData) {
+export async function insertServiceRequest(user, itemData) {
   const { images, user_id, label, desc } = itemData;
   const promises_file_read = [];
-  const promises_file_upload = [];
-  //alert(images.length);
 
   if (images.length > 0) {
-    images.forEach((img, i) => {
-      const base64 = FileSystem.readAsStringAsync(uri, {
+    const promises = [];
+
+    //console.log("images => ", servdata.photos);
+    // Upload the same image 4 times for demonstration purposes
+    for (let i = 0; i < images.length; i++) {
+      //console.error(images[i]);
+      const imagePath = `user_${
+        user.phone
+      }/item_${i}_${new Date().getTime()}.jpg`;
+      const fileData = await FileSystem.readAsStringAsync(images[i], {
         encoding: FileSystem.EncodingType.Base64,
       });
 
-      promises_file_read.push(base64);
+      promises.push(
+        supabase.storage.from("koop").upload(imagePath, decode(fileData), {
+          cacheControl: "3600",
+          contentType: "image/jpeg",
+        })
+      );
+    }
+
+    // Wait for all uploads to complete
+    const results = await Promise.all(promises);
+    const imagesPaths = [];
+    results.forEach((it, i) => imagesPaths.push(it.data.fullPath));
+
+    console.error(imagesPaths);
+    itemData.images = imagesPaths;
+  }
+
+  try {
+    const response = await fetch(`${API_ENDPOINT}/sreq/post`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(itemData), //nouveau design
     });
 
-    const res_filez_red = await Promise.all(promises_file_read);
+    if (!response.ok) {
+      errorMessage = "Network response was not ok";
+      throw new Error(errorMessage);
+    }
 
-    alert("images ...");
-    return "cool " + res_filez_red;
-    /* 
-const filePath = `user_${phone}/profile_${new Date().getTime()}.jpg`;
-      const contentType = "image/jpg";
-      const { data, error } = await supabase.storage
-        .from("koop")
-        .upload(filePath, decode(base64), { contentType });
-
-    })
- */
-  } else {
-    const res = await insertItem(TABLE_NAMES.KOOP_SERVICES_REQUEST, itemData);
-    return res;
+    message = await response.json();
+    console.log(message);
+    return message;
+  } catch (error) {
+    // Handle errors
+    errorMessage = `There was a problem with the fetch operation: ${JSON.stringify(
+      error
+    )}`;
+    console.error(errorMessage);
+    return { error: true, message: errorMessage };
   }
 }

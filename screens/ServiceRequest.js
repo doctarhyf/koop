@@ -22,7 +22,11 @@ import LoadingButton from "../components/LoadingButton";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import INeed from "../components/INeed";
 function ServiceRequest({ navigation, route }) {
-  const [servData, setServData] = useState({ images: [] });
+  const [servData, setServData] = useState({
+    images: [],
+    label: "this is a label",
+    desc: "this is a desc ...",
+  });
   const { user, setuser } = useContext(UserContext);
   const [loading, setloading] = useState(false);
 
@@ -60,40 +64,38 @@ function ServiceRequest({ navigation, route }) {
     finalData.user_id = user.id;
 
     try {
-      const res = await API.insertServiceRequest(finalData);
+      setloading(true);
+      const res = await API.insertServiceRequest(user, finalData);
 
+      // alert("res upd => " + JSON.stringify(res));
       setloading(false);
-
-      alert("res upd => " + JSON.stringify(res));
-      if (res && res.length === 1) {
+      return;
+      const posted = res.id;
+      if (posted) {
         Alert.alert(
           "Request posted!",
           "Votre demande a ete postee avec success.Aller a la page My Products & services?",
           [
             {
-              text: "My Prods & Serv,",
-              style: "destructive",
-              onPress: () => navigation.replace("MyItems", res[0]),
+              text: "Cool",
+            },
+            {
+              text: "Voir mes Annonces",
+
+              onPress: () => navigation.replace("MyItems", res),
             },
           ]
         );
       }
+      setloading(false);
     } catch (e) {
       setloading(false);
       alert("Error : " + JSON.stringify(e));
     }
   };
 
-  const onImageAdded = (img) => {
-    const new_images = [...servData.images];
-
-    const images_exists = new_images.includes(img);
-
-    if (!images_exists) {
-      new_images.push(img);
-    }
-
-    setServData((prev) => ({ ...prev, images: new_images }));
+  const onImageAdded = (newimages) => {
+    setServData((prev) => ({ ...prev, images: newimages }));
   };
 
   const onImagePressed = (dt) => {
@@ -190,18 +192,20 @@ function ServiceRequest({ navigation, route }) {
           </View>
         )}
 
-        <LoadingButton
-          text={"POST"}
-          handlePress={onPost}
-          loading={loading}
-          /* icon={
+        <View style={[styles.paddingLarge]}>
+          <LoadingButton
+            text={"POST"}
+            handlePress={onPost}
+            loading={loading}
+            /* icon={
             <MaterialCommunityIcons
               name="send-circle-outline"
               size={24}
               color={KOOP_BLUE}
             />
           } */
-        />
+          />
+        </View>
       </View>
     </ScrollView>
   );
