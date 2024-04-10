@@ -42,6 +42,8 @@ import ServiceRequest from "./screens/ServiceRequest";
 import PaymentResult from "./screens/PaymentResult";
 import ViewServiceRequest from "./screens/ViewServiceRequest";
 import registerNNPushToken from "native-notify";
+import FirstPage from "./screens/FirstPage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SCREENS = [
   { name: "Login", comp: Login, options: { headerShown: false } },
@@ -89,6 +91,7 @@ const SCREENS = [
   },
   { name: "ViewServiceRequest", comp: ViewServiceRequest },
   { name: "PaymentResult", comp: PaymentResult },
+  { name: "FirstPage", comp: FirstPage },
 ];
 
 const Stack = createNativeStackNavigator();
@@ -102,7 +105,7 @@ export default function App() {
     <UserContext.Provider value={{ user, setuser }}>
       <RootSiblingParent>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Login">
+          <Stack.Navigator initialRouteName={"FirstPage"}>
             {SCREENS.map((scr, i) => (
               <Stack.Screen
                 key={i}
