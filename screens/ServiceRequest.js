@@ -65,11 +65,9 @@ function ServiceRequest({ navigation, route }) {
 
     try {
       setloading(true);
-      const res = await API.insertServiceRequest(user, finalData);
 
-      // alert("res upd => " + JSON.stringify(res));
-      setloading(false);
-      return;
+      const res = await API.insertServiceRequest(user, finalData);
+      // alert(JSON.stringify(res));
       const posted = res.id;
       if (posted) {
         Alert.alert(

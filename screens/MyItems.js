@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
+import AnnonceItem from "../components/AnnonceItem";
 import { KOOP_BLUE } from "../helpers/colors";
 import useFetch, { useFetch2 } from "../hooks/useFetch";
 import UserContext from "../context/UserContext";
@@ -29,9 +30,10 @@ export default function MyItems({ navigation, route }) {
   const END_POINT_MY_SERVICES_REQUESTS = `https://konext.vercel.app/api/sreq?user_id=${user.id}`;
   const END_POINT_MY_ITEMS = `https://konext.vercel.app/api/items?user_id=${user.id}`;
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedTabID, setSelectedTabID] = useState(0);
-  const [loadingdata, itemsdata, errordata, reloaddata] =
-    useFetch2(END_POINT_MY_ITEMS);
+  const [selectedTabID, setSelectedTabID] = useState(TAB.MY_SERVICES_REQUESTS);
+  const [loadingdata, itemsdata, errordata, reloaddata] = useFetch2(
+    END_POINT_MY_SERVICES_REQUESTS
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -72,11 +74,24 @@ export default function MyItems({ navigation, route }) {
 
   const extractKey = (item) => item.id;
 
-  const handleServReqPress = (item) => {
-    Alert.alert(item.label, item.desc);
+  const handleAnnouncePress = (item) => {
+    //Alert.alert(item.label, item.desc);
+    navigation.navigate("ViewServiceRequest", item);
   };
 
   const handleItemMyLongPress = (item) => {
+    Alert.alert("Delete item?", "This action is not reversible", [
+      {
+        text: "NO",
+      },
+      {
+        text: "DELETE",
+        style: "destructive",
+      },
+    ]);
+  };
+
+  const onAnnonceLongPress = (item) => {
     Alert.alert("Delete item?", "This action is not reversible", [
       {
         text: "NO",
@@ -100,16 +115,11 @@ export default function MyItems({ navigation, route }) {
     }
 
     return selectedTabID === TAB.MY_SERVICES_REQUESTS ? (
-      <TouchableOpacity onPress={(e) => handleServReqPress(item.item)}>
-        <View
-          style={[
-            styles.paddingSmall,
-            { borderBottomWidth: 1, borderBottomColor: "#dddddd" },
-          ]}
-        >
-          <Text style={{ fontWeight: "bold" }}>{label}</Text>
-          <Text style={{ color: "#333333" }}>{date}</Text>
-        </View>
+      <TouchableOpacity
+        onPress={(e) => handleAnnouncePress(item.item)}
+        onLongPress={(e) => onAnnonceLongPress(item.item)}
+      >
+        <AnnonceItem item={item.item} me />
       </TouchableOpacity>
     ) : (
       <TouchableOpacity
@@ -160,15 +170,19 @@ export default function MyItems({ navigation, route }) {
 
   return (
     <View style={[{ flex: 1 }]}>
-      <View style={[st.menu]}>
-        {["Mes Articles & Services", "Demandes et Recherches"].map((it, i) => (
-          <TouchableOpacity key={i} onPress={(e) => setSelectedTabID(i)}>
-            <Text style={[st.btn, selectedTabID === i ? st.active : null]}>
-              {it}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      {false && (
+        <View style={[st.menu]}>
+          {["Mes Articles & Services", "Demandes et Recherches"].map(
+            (it, i) => (
+              <TouchableOpacity key={i} onPress={(e) => setSelectedTabID(i)}>
+                <Text style={[st.btn, selectedTabID === i ? st.active : null]}>
+                  {it}
+                </Text>
+              </TouchableOpacity>
+            )
+          )}
+        </View>
+      )}
       {!loadingdata && itemsdata && itemsdata.length === 0 && (
         <View
           style={[

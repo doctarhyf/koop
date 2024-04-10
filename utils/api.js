@@ -3,7 +3,7 @@ import { supabase, TABLE_NAMES } from "./supabase";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 
-const TESTING = true;
+const TESTING = false;
 const API_ENDPOINT = TESTING
   ? ' "https://localhost:3000/api'
   : "https://konext.vercel.app/api";
@@ -135,15 +135,12 @@ content */
 
 export async function insertServiceRequest(user, itemData) {
   const { images, user_id, label, desc } = itemData;
-  const promises_file_read = [];
+  let errorMessage = null;
 
   if (images.length > 0) {
     const promises = [];
 
-    //console.log("images => ", servdata.photos);
-    // Upload the same image 4 times for demonstration purposes
     for (let i = 0; i < images.length; i++) {
-      //console.error(images[i]);
       const imagePath = `user_${
         user.phone
       }/item_${i}_${new Date().getTime()}.jpg`;
@@ -169,7 +166,7 @@ export async function insertServiceRequest(user, itemData) {
   }
 
   try {
-    const response = await fetch(`${API_ENDPOINT}/sreq/post`, {
+    const response = await fetch(`${API_ENDPOINT}/sreq/send`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -182,9 +179,9 @@ export async function insertServiceRequest(user, itemData) {
       throw new Error(errorMessage);
     }
 
-    message = await response.json();
-    console.log(message);
-    return message;
+    const result = await response.json();
+    console.log(result);
+    return result;
   } catch (error) {
     // Handle errors
     errorMessage = `There was a problem with the fetch operation: ${JSON.stringify(

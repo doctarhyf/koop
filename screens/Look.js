@@ -23,6 +23,7 @@ import { TABLE_NAMES } from "../utils/supabase";
 import useFetch, { useFetch2 } from "../hooks/useFetch";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { KOOP_BLUE } from "../helpers/colors";
+import AnnonceItem from "../components/AnnonceItem";
 
 const FeaturedItems = ({ navigation, me, onViewAll }) => {
   const [loading, items, error] = useFetch(
@@ -198,39 +199,7 @@ const ServiceRequests = ({ navigation, me, onViewAll }) => {
               key={i}
               onPress={(e) => navigation.navigate("ViewServiceRequest", it)}
             >
-              <View
-                style={[
-                  styles.flexRow,
-                  styles.flex1,
-                  styles.alignCenter,
-                  {
-                    gap: 8,
-                    padding: 8,
-                    borderColor: "#ddd",
-                    marginBottom: 8,
-                    borderWidth: 1,
-                    borderRadius: 8,
-                  },
-                ]}
-              >
-                <FontAwesome5 name="bolt" size={24} color="green" />
-
-                <View style={[styles.flex1]}>
-                  <Text>
-                    <Text style={[styles.textBlue, styles.fontBold]}>
-                      {it.user_data.ville}
-                    </Text>{" "}
-                    - {it.user_data.display_name}
-                  </Text>
-                  <Text style={[{ fontWeight: "bold", flex: 1 }]}>
-                    {it.label}
-                  </Text>
-
-                  <Text style={[styles.textGray]}>
-                    {FUNCS.ParseCreatedAt(it.created_at).full}
-                  </Text>
-                </View>
-              </View>
+              <AnnonceItem item={it} />
             </TouchableOpacity>
           ))}
     </View>

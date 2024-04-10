@@ -47,6 +47,7 @@ export default function ViewServiceRequest({ navigation, route }) {
   const postedBy = serviceRequest.user_data;
   const [showMore, setShowMore] = useState(false);
   const date = ParseCreatedAt(postedBy.created_at).full;
+  const me = serviceRequest.user_id === user.id;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -133,7 +134,7 @@ export default function ViewServiceRequest({ navigation, route }) {
 
         <View>
           <Text>
-            {postedBy.ville} - {postedBy.display_name}
+            {postedBy.ville} - {me ? "Moi" : postedBy.display_name}
           </Text>
           <Text style={[styles.textGray]}>{date}</Text>
         </View>
@@ -179,30 +180,33 @@ export default function ViewServiceRequest({ navigation, route }) {
         </View>
       )}
 
-      <View
-        style={[
-          styles.flexRow,
-          {
-            gap: 18,
-            borderTopColor: "#cccccc",
-            borderTopWidth: 1,
-            backgroundColor: "#eeeeee99",
-            marginTop: 12,
-          },
-          styles.justifyCenter,
-          styles.alignCenter,
-          styles.paddingSmall,
-        ]}
-      >
-        {ACTION_BUTTONS.map((it, i) => (
-          <TouchableOpacity onPress={(e) => onAction(it)}>
-            <View style={[styles.justifyCenter, styles.alignCenter]}>
-              <Text>{it.label}</Text>
-              {it.icon}
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
+      {!me && (
+        <View
+          style={[
+            styles.flexRow,
+            {
+              gap: 18,
+              borderTopColor: "#cccccc",
+              borderTopWidth: 1,
+              backgroundColor: "#eeeeee99",
+              marginTop: 12,
+            },
+            styles.justifyCenter,
+            styles.alignCenter,
+            styles.paddingSmall,
+          ]}
+        >
+          {ACTION_BUTTONS.map((it, i) => (
+            <TouchableOpacity onPress={(e) => onAction(it)}>
+              <View style={[styles.justifyCenter, styles.alignCenter]}>
+                <Text>{it.label}</Text>
+                {it.icon}
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+      {me && <SimpleTextButton text={"DELETE"} />}
     </View>
   );
 }
