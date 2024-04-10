@@ -1,4 +1,11 @@
-import { View, Text, Switch, TouchableOpacity, Linking } from "react-native";
+import {
+  View,
+  Text,
+  Switch,
+  TouchableOpacity,
+  Linking,
+  Alert,
+} from "react-native";
 import React, { useContext, useLayoutEffect, useState } from "react";
 import SimpleTextButton from "../components/SimpleTextButton";
 import styles from "../helpers/styles";
@@ -10,11 +17,17 @@ import { ParseCreatedAt } from "../helpers/funcs";
 import { Image } from "expo-image";
 import UserContext from "../context/UserContext";
 import { FontAwesome } from "@expo/vector-icons";
+import * as API from "../utils/api";
+import { TABLE_NAMES } from "../utils/supabase";
+import LoadingButton from "../components/LoadingButton";
+import { AntDesign } from "@expo/vector-icons";
+import ImagesViewer from "../components/ImagesViewer";
 
 const ACTION = {
   SEND_MESSAGE: "send_message",
   INTERESTED: "interested",
   CALL_NOW: "call_now",
+  VIEW_SHOP: "view_shop",
 };
 
 const ACTION_BUTTONS = [
@@ -39,6 +52,11 @@ const ACTION_BUTTONS = [
     action: ACTION.CALL_NOW,
     icon: <Feather name="phone-call" size={24} color={KOOP_BLUE} />,
   },
+  {
+    label: "Voir le shop",
+    action: ACTION.VIEW_SHOP,
+    icon: <Feather name="home" size={24} color={KOOP_BLUE} />,
+  },
 ];
 
 export default function ViewServiceRequest({ navigation, route }) {
@@ -48,6 +66,7 @@ export default function ViewServiceRequest({ navigation, route }) {
   const [showMore, setShowMore] = useState(false);
   const date = ParseCreatedAt(postedBy.created_at).full;
   const me = serviceRequest.user_id === user.id;
+  const [loading, setloading] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -106,6 +125,44 @@ export default function ViewServiceRequest({ navigation, route }) {
   };
 
   const toggleSwitch = () => setShowMore((previousState) => !previousState);
+
+  const onDelete = async (item) => {
+    setloading(true);
+
+    Alert.alert("Delete item?", "There is no undo after deletion", [
+      {
+        text: "No",
+      },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          const res = await API.deleteItem(
+            TABLE_NAMES.KOOP_SERVICES_REQUEST,
+            "id",
+            item.id
+          );
+
+          setloading(false);
+
+          if (res.error === null) {
+            Alert.alert(
+              "Announce deleted!",
+              "Your announce has been deleted successfuly!",
+              [
+                {
+                  text: "OK",
+                  onPress: () => navigation.goBack(),
+                },
+              ]
+            );
+          } else {
+            Alert.alert("Error deleting", JSON.stringify(error));
+          }
+        },
+      },
+    ]);
+  };
 
   return (
     <View style={[styles.paddingMid]}>
@@ -175,8 +232,11 @@ export default function ViewServiceRequest({ navigation, route }) {
 
       {showMore && (
         <View>
-          <Text>Description </Text>
-          <Text>Photos</Text>
+          <Text>{serviceRequest.desc}</Text>
+          <ImagesViewer
+            images={serviceRequest.images}
+            navigation={navigation}
+          />
         </View>
       )}
 
@@ -206,7 +266,14 @@ export default function ViewServiceRequest({ navigation, route }) {
           ))}
         </View>
       )}
-      {me && <SimpleTextButton text={"DELETE"} />}
+      {me && (
+        <LoadingButton
+          handlePress={(e) => onDelete(serviceRequest)}
+          loading={loading}
+          text={"Delete Announcement"}
+          icon={<AntDesign name="delete" size={24} color="black" />}
+        />
+      )}
     </View>
   );
 }

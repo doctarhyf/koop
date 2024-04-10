@@ -191,3 +191,11 @@ export async function insertServiceRequest(user, itemData) {
     return { error: true, message: errorMessage };
   }
 }
+
+export async function deleteItem(tableName, rowName, rowVal) {
+  let res = supabase.from(tableName).delete().eq(rowName, rowVal);
+  console.error(
+    `deleting item from ${tableName} where ${rowName} === ${rowVal}`
+  );
+  return res;
+}

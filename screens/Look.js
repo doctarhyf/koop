@@ -13,7 +13,13 @@ import {
 import { Image } from "expo-image";
 import styles from "../helpers/styles";
 import MenuButton from "../components/MenuButton";
-import { useEffect, useState, useLayoutEffect, useContext } from "react";
+import {
+  useEffect,
+  useState,
+  useLayoutEffect,
+  useContext,
+  useCallback,
+} from "react";
 import UserContext from "../context/UserContext";
 import * as FUNCS from "../helpers/funcs";
 import { IMG_SIZE } from "../helpers/flow";
@@ -24,6 +30,7 @@ import useFetch, { useFetch2 } from "../hooks/useFetch";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { KOOP_BLUE } from "../helpers/colors";
 import AnnonceItem from "../components/AnnonceItem";
+import { useFocusEffect } from "@react-navigation/native";
 
 const FeaturedItems = ({ navigation, me, onViewAll }) => {
   const [loading, items, error] = useFetch(
@@ -87,9 +94,15 @@ const FeaturedItems = ({ navigation, me, onViewAll }) => {
 };
 
 const FeaturedShops = ({ navigation, me, onViewAll }) => {
-  const [loading, shops, error] = useFetch(
+  const [loading, shops, error, reload] = useFetch2(
     "https://konext.vercel.app/api/shops",
     true
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      reload();
+    }, [])
   );
 
   const onViewShop = (shop) => {
@@ -171,6 +184,12 @@ const ServiceRequests = ({ navigation, me, onViewAll }) => {
     "https://konext.vercel.app/api/sreq"
   );
   const limit = 4;
+
+  useFocusEffect(
+    useCallback(() => {
+      reloadsreqs();
+    }, [])
+  );
 
   return (
     <View style={[{ marginTop: 12 }]}>
