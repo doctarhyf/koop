@@ -87,27 +87,22 @@ export default function ViewServiceRequest({ navigation, route }) {
   };
 
   const onAction = (it) => {
-    //alert(JSON.stringify(postedBy));
-
-    // { shop_name, shop_id, from_id, to_id, name }
-
     const shop_name = postedBy.shop_name;
     const shop_id = serviceRequest.user_id;
     const from_id = user.id;
     const to_id = postedBy.id;
     const name = serviceRequest.label;
 
-    const data = {
-      shop_name: shop_name,
-      shop_id: shop_id,
-      from_id: from_id,
-      to_id: to_id,
-      name: name,
-    };
-
     const { action } = it;
     switch (action) {
       case ACTION.SEND_MESSAGE:
+        const data = {
+          shop_name: shop_name,
+          shop_id: shop_id,
+          from_id: from_id,
+          to_id: to_id,
+          name: name,
+        };
         navigation.navigate("SendMessage", data);
         break;
 
@@ -117,6 +112,10 @@ export default function ViewServiceRequest({ navigation, route }) {
 
       case ACTION.CALL_NOW:
         makePhoneCall(postedBy.phone);
+        break;
+
+      case ACTION.VIEW_SHOP:
+        navigation.navigate("Shop", postedBy);
         break;
 
       default:

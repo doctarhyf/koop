@@ -37,7 +37,7 @@ export default function MyItems({ navigation, route }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: `My Items - ${user.phone}`,
+      title: `Mes Annonces`,
 
       headerRight: () =>
         loadingdata ? (

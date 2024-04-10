@@ -144,6 +144,8 @@ export default function Shop({ route, navigation }) {
               )
           )}
 
+          <SimpleTextButton text={"Commentaires"} handlePress={(e) => null} />
+
           <SimpleTextButton
             text={"Products and Services"}
             handlePress={onProdAndServ}
