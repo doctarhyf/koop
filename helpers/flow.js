@@ -18,12 +18,12 @@ export const MAIN_MENU_BUTTONS = [
     icon: require("../assets/icons/provide.png"),
   }, */
   {
-    label: "LANCER UNE DEMANDE DE SERVICE",
+    label: "NOUVELLE ANNONCE",
     route: "ServiceRequest",
     icon: require("../assets/icons/provide.png"),
   },
   {
-    label: "LOOK FOR A SERVICE",
+    label: "ANNONCES",
     route: "Look",
     icon: require("../assets/icons/megaphone.png"),
   },

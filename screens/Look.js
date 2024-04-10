@@ -330,7 +330,8 @@ export default function Look({ navigation }) {
     styles.paddingSmall,
     styles.marginMin,
     styles.roundedMd,
-    { overflow: "hidden" },
+
+    { overflow: "hidden", marginTop: 24 },
   ];
 
   const st_feat_cont = [
@@ -367,11 +368,6 @@ export default function Look({ navigation }) {
           </TouchableOpacity>
 
           <View style={st_feat_cont}>
-            {/*   <FeaturedItems
-              me={user}
-              navigation={navigation}
-              onViewAll={onViewAll}
-            /> */}
             <FeaturedShops
               me={user}
               navigation={navigation}

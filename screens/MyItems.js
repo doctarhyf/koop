@@ -18,7 +18,6 @@ import styles from "../helpers/styles";
 import { FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { ParseCreatedAt } from "../helpers/funcs";
-import { style } from "deprecated-react-native-prop-types/DeprecatedViewPropTypes";
 
 const TAB = {
   MY_ITEMS: 0,

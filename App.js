@@ -59,7 +59,7 @@ const SCREENS = [
   },
   { name: "Provide", comp: Provide }, //SendMessage
   { name: "SendMessage", comp: SendMessage },
-  { name: "Look", comp: Look },
+  { name: "Look", comp: Look, options: { title: "Welcome to KOOP" } },
   { name: "ViewAll", comp: ViewAll },
   { name: "MyAccount", comp: MyAccount },
   { name: "Inbox", comp: Inbox },

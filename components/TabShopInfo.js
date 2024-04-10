@@ -108,9 +108,9 @@ export default TabShopInfo = ({ user, handleInfoPress, navigation }) => {
     // social end
 
     prods: {
-      value: "Producs & Services",
+      value: "Mes Annonces",
       icon: "globe",
-      placeholder: "Products & Services",
+      placeholder: "Mes Annonces ...",
       editable: false,
     },
   };
