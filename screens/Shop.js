@@ -113,8 +113,8 @@ export default function Shop({ route, navigation }) {
                 icon: require("../assets/icons/mail.png"),
               }}
               handleOnPress={(e) => {
-                alert("Should show send message GUI");
-                navigation.navigate("Request");
+                //alert("Should show send message GUI");
+                navigation.navigate("SendMessage", shop);
               }}
             />
           </View>

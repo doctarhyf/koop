@@ -58,7 +58,7 @@ export default function Search({ navigation }) {
 
     const f = items.filter(
       (it, i) =>
-        it.name.toLowerCase().includes(txt.toLowerCase()) ||
+        it.label.toLowerCase().includes(txt.toLowerCase()) ||
         (it.desc && it.desc.toLowerCase().includes(txt.toLowerCase()))
     );
     setitemsf(f);
@@ -88,7 +88,7 @@ export default function Search({ navigation }) {
           itemsf.map((it, i) => (
             <TouchableOpacity
               key={i}
-              onPress={(e) => navigation.navigate("ServiceInfo", it)}
+              onPress={(e) => navigation.navigate("ViewServiceRequest", it)}
             >
               <View style={[styles.flexRow, styles.paddingSmall]}>
                 <Image
