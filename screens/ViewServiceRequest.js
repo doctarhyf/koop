@@ -9,6 +9,7 @@ import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import { ParseCreatedAt } from "../helpers/funcs";
 import { Image } from "expo-image";
 import UserContext from "../context/UserContext";
+import { FontAwesome } from "@expo/vector-icons";
 
 const ACTION = {
   SEND_MESSAGE: "send_message",
@@ -50,6 +51,13 @@ export default function ViewServiceRequest({ navigation, route }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Details",
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={(e) => navigation.navigate("ServiceRequest")}
+        >
+          <FontAwesome name="send" size={24} color={KOOP_BLUE} />
+        </TouchableOpacity>
+      ),
     });
   }, [navigation]);
 

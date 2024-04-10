@@ -174,7 +174,7 @@ const ServiceRequests = ({ navigation, me, onViewAll }) => {
   return (
     <View style={[{ marginTop: 12 }]}>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>DEMANDE SERVICE</Text>
+        <Text style={[styles.mbLarge, styles.mtLarge]}>ANNONCES</Text>
         <TouchableOpacity
           onPress={(e) => onViewAll(FUNCS.VIEW_ALL_TYPE.SERVICE_REQUESTS)}
         >

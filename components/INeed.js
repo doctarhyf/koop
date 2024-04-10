@@ -3,15 +3,15 @@ import React, { useEffect, useState } from "react";
 
 const professions = [
   "Médecin",
-  "Enseignant",
+  "Un macon",
   "Ingénieur",
-  "Artiste",
-  "Infirmier",
+  "Un electricien",
+  "Une vehicule a acheter",
   "Programmeur",
-  "Chef",
-  "Musicien",
-  "Écrivain",
-  "Athlète",
+  "Un service traiteur",
+  "Une plaquette arduino",
+  "un MacBook",
+  "un iPhone 15",
 ];
 
 const getRandomColor = () => {
@@ -58,9 +58,12 @@ const RandomProfessionComponent = () => {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor,
+        padding: 12,
       }}
     >
-      <Text style={{ fontSize: 24, color: textColor }}>{randomProfession}</Text>
+      <Text style={{ fontSize: 24, color: textColor }}>
+        {randomProfession} ...
+      </Text>
     </View>
   );
 };
@@ -71,14 +74,14 @@ export default function INeed() {
       <Text
         style={[
           {
-            fontSize: 32,
+            fontSize: 28,
             textAlign: "center",
             marginVertical: 18,
             fontWeight: "bold",
           },
         ]}
       >
-        J'ai besoin de/Je suis ...
+        J'ai besoin de/Je suis/Je cherche ...
       </Text>
       <RandomProfessionComponent />
     </View>

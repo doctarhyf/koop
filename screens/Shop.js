@@ -13,6 +13,7 @@ import styles from "../helpers/styles";
 import { useLayoutEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { KOOP_BLUE } from "../helpers/colors";
+import SimpleTextButton from "../components/SimpleTextButton";
 
 export default function Shop({ route, navigation }) {
   const [loading, setloading] = useState(false);
@@ -33,11 +34,6 @@ export default function Shop({ route, navigation }) {
     from_id,
     to_id,
   } = shop;
-
-  //alert(JSON.stringify(shop));
-  /*   alert(
-    `from_id : ${from_id}, to_id : ${to_id}, equals : ${from_id === to_id}`
-  ); */
 
   const CONTACTS = [
     {
@@ -65,26 +61,11 @@ export default function Shop({ route, navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: shop_name,
-      /* headerRight: () =>
-        loading ? (
-          <ActivityIndicator animating={loading} />
-        ) : (
-          from_id !== to_id && (
-            <TouchableOpacity onPress={onSendMessage}>
-              <FontAwesome name="send" size={24} color={KOOP_BLUE} />
-            </TouchableOpacity>
-          )
-        ), */
     });
   }, [navigation]);
 
-  const onSendMessage = (e) => {
-    navigation.navigate("SendMessage", {
-      shop_name: shop_name,
-      shop_id: shop_id,
-      from_id: from_id,
-      to_id: to_id,
-    });
+  const onProdAndServ = (e) => {
+    alert("Prods and servs");
   };
 
   return (
@@ -113,7 +94,6 @@ export default function Shop({ route, navigation }) {
                 icon: require("../assets/icons/mail.png"),
               }}
               handleOnPress={(e) => {
-                //alert("Should show send message GUI");
                 navigation.navigate("SendMessage", shop);
               }}
             />
@@ -146,14 +126,6 @@ export default function Shop({ route, navigation }) {
           )}
 
           <Text style={[styles.textBlue, , styles.marginTopLarge]}>
-            Services and items
-          </Text>
-
-          <Text style={[styles.textBlue, , styles.marginTopLarge]}>
-            Services requests
-          </Text>
-
-          <Text style={[styles.textBlue, , styles.marginTopLarge]}>
             Contacts
           </Text>
 
@@ -171,6 +143,11 @@ export default function Shop({ route, navigation }) {
                 </TouchableOpacity>
               )
           )}
+
+          <SimpleTextButton
+            text={"Products and Services"}
+            handlePress={onProdAndServ}
+          />
         </View>
       </View>
     </ScrollView>

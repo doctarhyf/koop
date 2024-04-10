@@ -119,12 +119,16 @@ function ServiceRequest({ navigation, route }) {
           />
         </View>
         <Text style={[{ textAlign: "center" }]}>
-          De quel type de service avez vous besoin, ou en mesure d'offrie ?
+          Lancer une nouvelle annonce, un article ou une demande de service
         </Text>
         <INeed />
         <TextInput
           multiline={true}
-          style={[st.ti, { marginVertical: 12 }]}
+          style={[
+            st.ti,
+            { marginVertical: 12, textAlignVertical: "center" },
+            styles.paddingSmall,
+          ]}
           placeholder="ex: 1 menuisier pour finir une charpente ..."
           value={servData.label || ""}
           onChangeText={(txt) =>
