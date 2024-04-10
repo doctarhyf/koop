@@ -93,10 +93,16 @@ const FeaturedItems = ({ navigation, me, onViewAll }) => {
   );
 };
 
-const FeaturedShops = ({ navigation, me, onViewAll }) => {
+const FeaturedShops = ({ navigation, me, onViewAll, refreshing }) => {
   const [loading, shops, error, reload] = useFetch2(
     "https://konext.vercel.app/api/shops",
     true
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      refreshing && reload();
+    }, [refreshing])
   );
 
   useFocusEffect(
@@ -178,12 +184,18 @@ const FeaturedShops = ({ navigation, me, onViewAll }) => {
   );
 };
 
-const ServiceRequests = ({ navigation, me, onViewAll }) => {
+const ServiceRequests = ({ navigation, me, onViewAll, refreshing }) => {
   const { phone } = me;
   const [loadingsreq, servicesRequests, errorsreqs, reloadsreqs] = useFetch2(
     "https://konext.vercel.app/api/sreq"
   );
   const limit = 4;
+
+  useFocusEffect(
+    useCallback(() => {
+      refreshing && reloadsreqs();
+    }, [refreshing])
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -311,6 +323,7 @@ const FeaturedAd = ({ navigation, me }) => {
 
 export default function Look({ navigation }) {
   const { user, setuser } = useContext(UserContext);
+  const [refreshing, setrefreshing] = useState(false);
 
   const st_search = [
     styles.bgWhite,
@@ -333,9 +346,21 @@ export default function Look({ navigation }) {
     navigation.navigate("ViewAll", type);
   };
 
+  const onRefresh = (e) => {
+    setrefreshing(true);
+
+    setTimeout(() => {
+      setrefreshing(false);
+    }, 2500);
+  };
+
   return (
     <View style={[styles.flex1, styles.bgBlue]}>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         <View>
           <TouchableOpacity onPress={(e) => navigation.replace("Search")}>
             <Text style={st_search}>Rechercher koop ...</Text>
@@ -351,11 +376,13 @@ export default function Look({ navigation }) {
               me={user}
               navigation={navigation}
               onViewAll={onViewAll}
+              refreshing={refreshing}
             />
             <ServiceRequests
               me={user}
               navigation={navigation}
               onViewAll={onViewAll}
+              refreshing={refreshing}
             />
             <FeaturedAd me={user} navigation={navigation} />
           </View>

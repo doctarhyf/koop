@@ -127,8 +127,6 @@ export default function ViewServiceRequest({ navigation, route }) {
   const toggleSwitch = () => setShowMore((previousState) => !previousState);
 
   const onDelete = async (item) => {
-    setloading(true);
-
     Alert.alert("Delete item?", "There is no undo after deletion", [
       {
         text: "No",
@@ -137,6 +135,7 @@ export default function ViewServiceRequest({ navigation, route }) {
         text: "Delete",
         style: "destructive",
         onPress: async () => {
+          setloading(true);
           const res = await API.deleteItem(
             TABLE_NAMES.KOOP_SERVICES_REQUEST,
             "id",
