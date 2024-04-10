@@ -85,7 +85,7 @@ const SCREENS = [
   {
     name: ServiceRequest.ROUTE,
     comp: ServiceRequest,
-    options: { title: "Demande de service" },
+    options: { title: "Demander/Offrir un service" },
   },
   { name: "ViewServiceRequest", comp: ViewServiceRequest },
   { name: "PaymentResult", comp: PaymentResult },

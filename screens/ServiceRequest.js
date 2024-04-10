@@ -119,7 +119,7 @@ function ServiceRequest({ navigation, route }) {
           />
         </View>
         <Text style={[{ textAlign: "center" }]}>
-          De quel type de service avez vous besoin ?
+          De quel type de service avez vous besoin, ou en mesure d'offrie ?
         </Text>
         <INeed />
         <TextInput

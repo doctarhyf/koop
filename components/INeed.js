@@ -78,7 +78,7 @@ export default function INeed() {
           },
         ]}
       >
-        J'ai besoin de ...
+        J'ai besoin de/Je suis ...
       </Text>
       <RandomProfessionComponent />
     </View>
