@@ -6,6 +6,8 @@ import {
   Linking,
   Alert,
   StyleSheet,
+  TextInput,
+  ScrollView,
 } from "react-native";
 import React, { useContext, useLayoutEffect, useState } from "react";
 import SimpleTextButton from "../components/SimpleTextButton";
@@ -69,6 +71,11 @@ export default function ViewServiceRequest({ navigation, route }) {
   const date = ParseCreatedAt(postedBy.created_at).full;
   const me = serviceRequest.user_id === user.id;
   const [loading, setloading] = useState(false);
+  const [comment, setcomment] = useState("");
+
+  const onComment = (e) => {
+    alert(comment);
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -165,147 +172,169 @@ export default function ViewServiceRequest({ navigation, route }) {
   };
 
   return (
-    <View style={[styles.paddingMid]}>
-      {/*  <Text>{JSON.stringify(postedBy)}</Text> */}
-      <View
-        style={[
-          { gap: 12 },
-          styles.flexRow,
-          styles.justifyCenter,
-          styles.alignCenter,
-        ]}
-      >
-        <TouchableOpacity
-          onPress={(e) => navigation.navigate("PhotoViewer", postedBy.profile)}
-        >
-          <Image
-            source={postedBy.profile}
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 40,
-              overflow: "hidden",
-            }}
-          />
-        </TouchableOpacity>
-
-        <View>
-          <Text>
-            {postedBy.ville} - {me ? "Moi" : postedBy.display_name}
-          </Text>
-          <Text style={[styles.textGray]}>{serviceRequest.timeAgo}</Text>
-        </View>
-      </View>
-
-      <Text
-        style={[
-          {
-            backgroundColor: "#eeeeee",
-            fontSize: 18,
-            fontWeight: "bold",
-            borderRadius: 8,
-          },
-          styles.paddingSmall,
-        ]}
-      >
-        {serviceRequest.label}
-      </Text>
-
-      <View
-        style={[
-          styles.paddingMid,
-          styles.flexRow,
-          { gap: 8 },
-          styles.justifyCenter,
-          styles.alignCenter,
-        ]}
-      >
-        <Text>View more details</Text>
-        <Switch
-          trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
-          thumbColor={showMore ? KOOP_BLUE : "#f4f3f4"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={showMore}
-        />
-      </View>
-
-      {showMore && (
-        <View>
-          <Text>{serviceRequest.desc}</Text>
-          <ImagesViewer
-            images={serviceRequest.images}
-            navigation={navigation}
-          />
-        </View>
-      )}
-
-      {!me && (
+    <ScrollView>
+      <View style={[styles.paddingMid]}>
+        {/*  <Text>{JSON.stringify(postedBy)}</Text> */}
         <View
           style={[
+            { gap: 12 },
             styles.flexRow,
-            st.gray_bg,
             styles.justifyCenter,
             styles.alignCenter,
+          ]}
+        >
+          <TouchableOpacity
+            onPress={(e) =>
+              navigation.navigate("PhotoViewer", postedBy.profile)
+            }
+          >
+            <Image
+              source={postedBy.profile}
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 40,
+                overflow: "hidden",
+              }}
+            />
+          </TouchableOpacity>
+
+          <View>
+            <Text>
+              {postedBy.ville} - {me ? "Moi" : postedBy.display_name}
+            </Text>
+            <Text style={[styles.textGray]}>{serviceRequest.timeAgo}</Text>
+          </View>
+        </View>
+
+        <Text
+          style={[
+            {
+              backgroundColor: "#eeeeee",
+              fontSize: 18,
+              fontWeight: "bold",
+              borderRadius: 8,
+            },
             styles.paddingSmall,
           ]}
         >
-          {ACTION_BUTTONS.map((it, i) => (
-            <TouchableOpacity key={i} onPress={(e) => onAction(it)}>
-              <View style={[styles.justifyCenter, styles.alignCenter]}>
-                <Text>{it.label}</Text>
+          {serviceRequest.label}
+        </Text>
+
+        <View
+          style={[
+            styles.paddingMid,
+            styles.flexRow,
+            { gap: 8 },
+            styles.justifyCenter,
+            styles.alignCenter,
+          ]}
+        >
+          <Text>View more details</Text>
+          <Switch
+            trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
+            thumbColor={showMore ? KOOP_BLUE : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={showMore}
+          />
+        </View>
+
+        {showMore && (
+          <View>
+            <Text>{serviceRequest.desc}</Text>
+            <ImagesViewer
+              images={serviceRequest.images}
+              navigation={navigation}
+            />
+          </View>
+        )}
+
+        {!me && (
+          <View
+            style={[
+              styles.flexRow,
+              st.gray_bg,
+              styles.justifyCenter,
+              styles.alignCenter,
+              styles.paddingSmall,
+            ]}
+          >
+            {ACTION_BUTTONS.map((it, i) => (
+              <TouchableOpacity key={i} onPress={(e) => onAction(it)}>
+                <View style={[styles.justifyCenter, styles.alignCenter]}>
+                  <Text>{it.label}</Text>
+                  {it.icon}
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+
+        <View style={[st.gray_bg, { padding: 12 }]}>
+          {[
+            {
+              icon: <Entypo name="eye" size={48} color="black" />,
+              label: "Views",
+            },
+            {
+              icon: <AntDesign name="tags" size={48} color="black" />,
+              label: "Interested",
+            },
+            {
+              icon: <FontAwesome name="comments" size={48} color="black" />,
+              label: "Comments",
+              onPress: () => navigation.navigate("Comments"),
+            },
+          ].map((it, i) => (
+            <TouchableOpacity onPress={(e) => it.onPress && it.onPress()}>
+              <View style={[styles.flexRow, styles.alignCenter, { gap: 8 }]}>
                 {it.icon}
+                <View>
+                  <Text style={[]}>{it.label}</Text>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      color: KOOP_BLUE_DARK,
+                      fontSize: 42,
+                    }}
+                  >
+                    0
+                  </Text>
+                </View>
               </View>
             </TouchableOpacity>
           ))}
         </View>
-      )}
-      {me && (
-        <>
+
+        {!me && (
+          <View>
+            <TextInput
+              value={comment}
+              onChangeText={setcomment}
+              multiline
+              numberOfLines={5}
+              textAlignVertical="top"
+              style={[styles.ti, { padding: 12 }]}
+              placeholder="Laisser un commentaire ..."
+            />
+            <SimpleTextButton
+              text={"ENVOYER COMMENTAIRE"}
+              handlePress={onComment}
+            />
+          </View>
+        )}
+
+        {me && (
           <LoadingButton
             handlePress={(e) => onDelete(serviceRequest)}
             loading={loading}
             text={"Delete Announcement"}
             icon={<AntDesign name="delete" size={24} color="black" />}
           />
-          <View style={[st.gray_bg, { padding: 12 }]}>
-            {[
-              {
-                icon: <Entypo name="eye" size={48} color="black" />,
-                label: "Views",
-              },
-              {
-                icon: <AntDesign name="tags" size={48} color="black" />,
-                label: "Interested",
-              },
-              {
-                icon: <FontAwesome name="comments" size={48} color="black" />,
-                label: "Comments",
-                onPress: () => navigation.navigate("Comments"),
-              },
-            ].map((it, i) => (
-              <TouchableOpacity onPress={(e) => it.onPress && it.onPress()}>
-                <View style={[styles.flexRow, styles.alignCenter, { gap: 8 }]}>
-                  {it.icon}
-                  <View>
-                    <Text style={[]}>{it.label}</Text>
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        color: KOOP_BLUE_DARK,
-                        fontSize: 42,
-                      }}
-                    >
-                      0
-                    </Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </>
-      )}
-    </View>
+        )}
+      </View>
+    </ScrollView>
   );
 }
 
