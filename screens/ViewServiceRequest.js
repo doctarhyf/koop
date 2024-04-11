@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Linking,
   Alert,
+  StyleSheet,
 } from "react-native";
 import React, { useContext, useLayoutEffect, useState } from "react";
 import SimpleTextButton from "../components/SimpleTextButton";
@@ -22,6 +23,7 @@ import { TABLE_NAMES } from "../utils/supabase";
 import LoadingButton from "../components/LoadingButton";
 import { AntDesign } from "@expo/vector-icons";
 import ImagesViewer from "../components/ImagesViewer";
+import { Entypo } from "@expo/vector-icons";
 
 const ACTION = {
   SEND_MESSAGE: "send_message",
@@ -242,13 +244,7 @@ export default function ViewServiceRequest({ navigation, route }) {
         <View
           style={[
             styles.flexRow,
-            {
-              gap: 18,
-              borderTopColor: "#cccccc",
-              borderTopWidth: 1,
-              backgroundColor: "#eeeeee99",
-              marginTop: 12,
-            },
+            st.gray_bg,
             styles.justifyCenter,
             styles.alignCenter,
             styles.paddingSmall,
@@ -265,13 +261,60 @@ export default function ViewServiceRequest({ navigation, route }) {
         </View>
       )}
       {me && (
-        <LoadingButton
-          handlePress={(e) => onDelete(serviceRequest)}
-          loading={loading}
-          text={"Delete Announcement"}
-          icon={<AntDesign name="delete" size={24} color="black" />}
-        />
+        <>
+          <LoadingButton
+            handlePress={(e) => onDelete(serviceRequest)}
+            loading={loading}
+            text={"Delete Announcement"}
+            icon={<AntDesign name="delete" size={24} color="black" />}
+          />
+          <View style={[st.gray_bg, { padding: 12 }]}>
+            {[
+              {
+                icon: <Entypo name="eye" size={48} color="black" />,
+                label: "Views",
+              },
+              {
+                icon: <AntDesign name="tags" size={48} color="black" />,
+                label: "Interested",
+              },
+              {
+                icon: <FontAwesome name="comments" size={48} color="black" />,
+                label: "Comments",
+                onPress: () => navigation.navigate("Comments"),
+              },
+            ].map((it, i) => (
+              <TouchableOpacity onPress={(e) => it.onPress && it.onPress()}>
+                <View style={[styles.flexRow, styles.alignCenter, { gap: 8 }]}>
+                  {it.icon}
+                  <View>
+                    <Text style={[]}>{it.label}</Text>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        color: KOOP_BLUE_DARK,
+                        fontSize: 42,
+                      }}
+                    >
+                      0
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </>
       )}
     </View>
   );
 }
+
+const st = StyleSheet.create({
+  gray_bg: {
+    gap: 18,
+    borderTopColor: "#cccccc",
+    borderTopWidth: 1,
+    backgroundColor: "#eeeeee99",
+    marginTop: 12,
+  },
+});
