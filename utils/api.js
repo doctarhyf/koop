@@ -102,11 +102,6 @@ export const likeItem = async (user_id, item_id) => {
 };
 
 export const sendMessage = async (message) => {
-  /*message object 
-from_id ,
-to_id ,
-content */
-
   try {
     const response = await fetch(`${API_ENDPOINT}/messages/send`, {
       method: "POST",
@@ -131,6 +126,47 @@ content */
     )}`;
     console.error(errorMessage);
     return { error: true, message: errorMessage };
+  }
+};
+
+const postItem = async (itemBody, apiPath) => {
+  const API_FULL_PATH = `${API_ENDPOINT}${apiPath}`;
+
+  console.error(
+    `POST require to "${API_FULL_PATH}" \n data : ${JSON.stringify(itemBody)} `
+  );
+  try {
+    const response = await fetch(API_FULL_PATH, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(itemBody), //nouveau design
+    });
+
+    if (!response.ok) {
+      errorMessage = "Network response was not ok";
+      throw new Error(errorMessage);
+    }
+
+    itemBody = await response.json();
+    console.log(itemBody);
+    return itemBody;
+  } catch (error) {
+    // Handle errors
+    errorMessage = `There was a problem with the post operation to "${API_FULL_PATH}" ${JSON.stringify(
+      error
+    )}`;
+    console.error(errorMessage);
+    return { error: true, message: errorMessage };
+  }
+};
+
+export const postComment = async (commentBody) => {
+  try {
+    return await postItem(commentBody, "/comments/post");
+  } catch (e) {
+    return { error: true, message: JSON.stringify(e) };
   }
 };
 

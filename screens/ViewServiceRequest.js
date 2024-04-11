@@ -73,8 +73,24 @@ export default function ViewServiceRequest({ navigation, route }) {
   const [loading, setloading] = useState(false);
   const [comment, setcomment] = useState("");
 
-  const onComment = (e) => {
-    alert(comment);
+  const sendComment = async (e) => {
+    if (comment.trim() === "") {
+      Alert.alert("Empty comment", "Write something to post please ...");
+      return;
+    }
+
+    setloading(true);
+
+    const commentBody = {
+      item_id: serviceRequest.id,
+      posted_by_id: user.id,
+      comment: comment,
+    };
+
+    const r = await API.postComment(commentBody);
+
+    alert(JSON.stringify(r));
+    setloading(false);
   };
 
   useLayoutEffect(() => {
@@ -311,7 +327,7 @@ export default function ViewServiceRequest({ navigation, route }) {
           <View>
             <TextInput
               value={comment}
-              onChangeText={setcomment}
+              onChangeText={(txt) => setcomment(txt)}
               multiline
               numberOfLines={5}
               textAlignVertical="top"
@@ -320,7 +336,7 @@ export default function ViewServiceRequest({ navigation, route }) {
             />
             <SimpleTextButton
               text={"ENVOYER COMMENTAIRE"}
-              handlePress={onComment}
+              handlePress={sendComment}
             />
           </View>
         )}
