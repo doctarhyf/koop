@@ -25,7 +25,11 @@ const TAB = {
 };
 
 export default function MyItems({ navigation, route }) {
-  const { user, setuser } = useContext(UserContext);
+  let { user, setuser } = useContext(UserContext);
+  const id = route.params;
+
+  if (id) user.id = id;
+
   const END_POINT_MY_SERVICES_REQUESTS = `https://konext.vercel.app/api/sreq?user_id=${user.id}`;
   const END_POINT_MY_ITEMS = `https://konext.vercel.app/api/items?user_id=${user.id}`;
   const [refreshing, setRefreshing] = useState(false);

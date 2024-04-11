@@ -10,12 +10,16 @@ import {
 import { Image } from "expo-image";
 import MenuButton from "../components/MenuButton";
 import styles from "../helpers/styles";
-import { useLayoutEffect, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { KOOP_BLUE } from "../helpers/colors";
 import SimpleTextButton from "../components/SimpleTextButton";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import LoadingButton from "../components/LoadingButton";
+import UserContext from "../context/UserContext";
 
 export default function Shop({ route, navigation }) {
+  const { user, setuser } = useContext(UserContext);
   const [loading, setloading] = useState(false);
   let { params } = route;
   const shop = params;
@@ -64,8 +68,13 @@ export default function Shop({ route, navigation }) {
     });
   }, [navigation]);
 
-  const onProdAndServ = (e) => {
-    alert("Prods and servs");
+  const showAnnonces = (e) => {
+    //alert("Prods and servs");
+    navigation.navigate("MyItems", shop.id);
+  };
+
+  const showCommentaires = (e) => {
+    navigation.navigate("Comments", { item_id: user.id, item_type: "shop" });
   };
 
   return (
@@ -101,8 +110,9 @@ export default function Shop({ route, navigation }) {
         </ImageBackground>
         <View style={styles.paddingMid}>
           <Text style={[styles.textBlue]}>About</Text>
+          <Text>{shop_desc}</Text>
 
-          {shop_desc ? (
+          {/* {shop_desc ? (
             <View style={[st.tagscont]}>
               {shop_desc.split(";").map((t, i) => (
                 <Text style={[st.tag]} key={i}>
@@ -114,7 +124,7 @@ export default function Shop({ route, navigation }) {
             <Text style={[{ fontStyle: "italic", color: "#ddd" }]}>
               About {shop_name}
             </Text>
-          )}
+          )} */}
 
           {shop_add && (
             <View>
@@ -144,11 +154,22 @@ export default function Shop({ route, navigation }) {
               )
           )}
 
-          <SimpleTextButton text={"Commentaires"} handlePress={(e) => null} />
+          <LoadingButton
+            icon={
+              <MaterialCommunityIcons
+                name="flash-alert"
+                size={24}
+                color="black"
+              />
+            }
+            text={"TOUTES LES ANONCES"}
+            handlePress={showAnnonces}
+          />
 
-          <SimpleTextButton
-            text={"Products and Services"}
-            handlePress={onProdAndServ}
+          <LoadingButton
+            icon={<FontAwesome name="comments" size={24} color="black" />}
+            text={"COMMENTAIRES"}
+            handlePress={showCommentaires}
           />
         </View>
       </View>

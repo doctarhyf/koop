@@ -69,7 +69,8 @@ export default function ViewServiceRequest({ navigation, route }) {
   const postedBy = serviceRequest.user_data;
   const [showMore, setShowMore] = useState(false);
   const date = ParseCreatedAt(postedBy.created_at).full;
-  const me = serviceRequest.user_id === user.id;
+  let me = serviceRequest.user_id === user.id;
+
   const [loading, setloading] = useState(false);
   const [comment, setcomment] = useState("");
 

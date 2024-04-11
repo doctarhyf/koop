@@ -223,10 +223,7 @@ const ServiceRequests = ({ navigation, me, onViewAll, refreshing }) => {
       )}
       {servicesRequests &&
         servicesRequests
-          .filter(
-            (serviceRequest, i) =>
-              true || (serviceRequest.user_data.phone !== phone && i < limit)
-          )
+          .filter((it, i) => i < limit)
           .map((it, i) => (
             <TouchableOpacity
               key={i}
@@ -304,7 +301,7 @@ const FeaturedAd = ({ navigation, me }) => {
                         height: 200,
                       },
                     ]}
-                    source={require("../assets/images/init.jpg")}
+                    source={it.url}
                     transition={1000}
                   />
                 </View>
