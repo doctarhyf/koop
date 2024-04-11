@@ -2,6 +2,7 @@ import { insertItem, uploadPic } from "./db";
 import { supabase, TABLE_NAMES } from "./supabase";
 import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
+import { SBFileUpload } from "../helpers/funcs";
 
 const TESTING = false;
 const API_ENDPOINT = TESTING
@@ -141,28 +142,19 @@ export async function insertServiceRequest(user, itemData) {
     const promises = [];
 
     for (let i = 0; i < images.length; i++) {
-      const imagePath = `user_${
+      const imageLocalURI = images[i];
+      const imageServerPath = `user_${
         user.phone
       }/item_${i}_${new Date().getTime()}.jpg`;
       const fileData = await FileSystem.readAsStringAsync(images[i], {
         encoding: FileSystem.EncodingType.Base64,
       });
 
-      promises.push(
-        supabase.storage.from("koop").upload(imagePath, decode(fileData), {
-          cacheControl: "3600",
-          contentType: "image/jpeg",
-        })
-      );
+      promises.push(SBFileUpload(imageLocalURI, imageServerPath));
     }
 
-    // Wait for all uploads to complete
     const results = await Promise.all(promises);
-    const imagesPaths = [];
-    results.forEach((it, i) => imagesPaths.push(it.data.fullPath));
-
-    console.error(imagesPaths);
-    itemData.images = imagesPaths;
+    itemData.images = results;
   }
 
   try {
