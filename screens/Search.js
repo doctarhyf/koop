@@ -60,27 +60,6 @@ export default function Search({ navigation }) {
         it.label.toLowerCase().includes(txt.toLowerCase())
       )
     );
-
-    /*  let original_items = [...items];
-    let filtered_items;
-    const ville_selected = selected_tags.length > 0;
-
-    if (ville_selected) {
-      filtered_items = original_items.filter((it) =>
-        selected_tags.includes(it.user_data.ville)
-      );
-    }
-
-    if (txt.trim() === "") {
-      setitemsf(filtered_items);
-      return;
-    }
-
-    setitemsf(
-      filtered_items.filter((it) =>
-        it.label.toLowerCase().includes(txt.toLowerCase())
-      )
-    ); */
   };
 
   const onTagsUpdate = (tags) => {
@@ -118,7 +97,7 @@ export default function Search({ navigation }) {
         <ActivityIndicator animating={loadingItems} color={KOOP_BLUE} />
       )}
 
-      {itemsf.length > 0 && (
+      {itemsf && itemsf.length > 0 && (
         <FlatList
           style={[{ margin: 12, flex: 1 }]}
           renderItem={renderItem}
@@ -127,7 +106,7 @@ export default function Search({ navigation }) {
         />
       )}
 
-      {itemsf.length === 0 && (
+      {itemsf && itemsf.length === 0 && (
         <Text style={[styles.textCenter, styles.paddingLarge]}>
           No items found
         </Text>
