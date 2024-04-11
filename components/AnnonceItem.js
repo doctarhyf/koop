@@ -44,9 +44,7 @@ export default function AnnonceItem({ item, me, showProfile }) {
         )}
         <Text style={[{ fontWeight: "bold", flex: 1 }]}>{item.label}</Text>
 
-        <Text style={[styles.textGray]}>
-          {FUNCS.ParseCreatedAt(item.created_at).full}
-        </Text>
+        <Text style={[styles.textGray]}>{item.timeAgo}</Text>
       </View>
     </View>
   );

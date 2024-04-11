@@ -191,7 +191,7 @@ export default function ViewServiceRequest({ navigation, route }) {
           <Text>
             {postedBy.ville} - {me ? "Moi" : postedBy.display_name}
           </Text>
-          <Text style={[styles.textGray]}>{date}</Text>
+          <Text style={[styles.textGray]}>{serviceRequest.timeAgo}</Text>
         </View>
       </View>
 
