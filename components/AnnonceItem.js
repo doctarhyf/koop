@@ -3,8 +3,9 @@ import React from "react";
 import styles from "../helpers/styles";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as FUNCS from "../helpers/funcs";
+import { Image } from "expo-image";
 
-export default function AnnonceItem({ item, me }) {
+export default function AnnonceItem({ item, me, showProfile }) {
   return (
     <View
       style={[
@@ -21,7 +22,16 @@ export default function AnnonceItem({ item, me }) {
         },
       ]}
     >
-      <FontAwesome5 name="bolt" size={24} color="green" />
+      {showProfile ? (
+        <Image
+          source={item.user_data.profile}
+          style={[
+            { width: 60, height: 60, borderRadius: 30, overflow: "hidden" },
+          ]}
+        />
+      ) : (
+        <FontAwesome5 name="bolt" size={24} color="green" />
+      )}
 
       <View style={[styles.flex1]}>
         {!me && (

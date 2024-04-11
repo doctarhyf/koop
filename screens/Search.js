@@ -21,6 +21,7 @@ import useFetch from "../hooks/useFetch";
 import { VILLES } from "../helpers/flow";
 import { ParseCreatedAt } from "../helpers/funcs";
 import TagsSelector from "../components/TagsSelector";
+import AnnonceItem from "../components/AnnonceItem";
 
 export default function Search({ navigation }) {
   const [q, setq] = useState("");
@@ -39,16 +40,20 @@ export default function Search({ navigation }) {
   const onSearch = (txt) => {
     setq(txt);
 
-    if (txt === "") {
-      setitemsf([...items]);
+    if (txt.trim() === "") {
+      setitemsf(
+        items.filter((it) => selected_tags.includes(it.user_data.ville))
+      );
+      return;
     }
 
-    const f = items.filter(
-      (it, i) =>
-        it.label.toLowerCase().includes(txt.toLowerCase()) ||
-        (it.desc && it.desc.toLowerCase().includes(txt.toLowerCase()))
+    setitemsf(
+      items.filter(
+        (it) =>
+          selected_tags.includes(it.user_data.ville) &&
+          it.label.toLowerCase().includes(txt.toLowerCase())
+      )
     );
-    setitemsf(f);
   };
 
   const onTagsUpdate = (tags) => {
@@ -61,8 +66,18 @@ export default function Search({ navigation }) {
     setitemsf(items.filter((it) => tags.includes(it.user_data.ville)));
   };
 
+  const renderItem = (item) => (
+    <TouchableOpacity
+      onPress={(e) => navigation.navigate("ViewServiceRequest", item.item)}
+    >
+      <AnnonceItem item={item.item} showProfile />
+    </TouchableOpacity>
+  );
+
+  const keyExtractor = (item) => item.index;
+
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <TextInput
         style={[styles.ti, { marginHorizontal: 18, marginTop: 18 }]}
         value={q}
@@ -73,36 +88,13 @@ export default function Search({ navigation }) {
       <TagsSelector onTagsUpdate={onTagsUpdate} data={VILLES} />
 
       <ActivityIndicator animating={loadingItems} color={KOOP_BLUE} />
-      <ScrollView>
-        {itemsf &&
-          itemsf.map &&
-          itemsf.map((it, i) => (
-            <TouchableOpacity
-              key={i}
-              onPress={(e) => navigation.navigate("ViewServiceRequest", it)}
-            >
-              <View style={[styles.flexRow, styles.paddingSmall]}>
-                <Image
-                  style={[{ width: 62, height: 62 }, styles.marginRight]}
-                  source={"" || it.user_data.profile}
-                  transition={1000}
-                />
-                <View>
-                  <Text>{it.label}</Text>
-                  {it.desc && (
-                    <Text numberOfLines={2} style={[styles.textGray]}>
-                      {it.desc}
-                    </Text>
-                  )}
-                  <Text>{it.user_data.ville}</Text>
-                  <Text style={[{ fontSize: 12 }, styles.textGray]}>
-                    {ParseCreatedAt(it.created_at).full}
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))}
-      </ScrollView>
+
+      <FlatList
+        style={[{ margin: 12, flex: 1 }]}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        data={itemsf}
+      />
     </View>
   );
 }
