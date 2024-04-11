@@ -296,7 +296,7 @@ export default function ViewServiceRequest({ navigation, route }) {
                     style={{
                       fontWeight: "bold",
                       color: KOOP_BLUE_DARK,
-                      fontSize: 42,
+                      fontSize: 24,
                     }}
                   >
                     0
