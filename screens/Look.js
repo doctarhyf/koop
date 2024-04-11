@@ -31,6 +31,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { KOOP_BLUE } from "../helpers/colors";
 import AnnonceItem from "../components/AnnonceItem";
 import { useFocusEffect } from "@react-navigation/native";
+import { FontAwesome } from "@expo/vector-icons";
 
 const FeaturedItems = ({ navigation, me, onViewAll }) => {
   const [loading, items, error] = useFetch(
@@ -325,6 +326,19 @@ const FeaturedAd = ({ navigation, me }) => {
 export default function Look({ navigation }) {
   const { user, setuser } = useContext(UserContext);
   const [refreshing, setrefreshing] = useState(false);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Details",
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={(e) => navigation.navigate("ServiceRequest")}
+        >
+          <FontAwesome name="send" size={24} color={KOOP_BLUE} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   const st_search = [
     styles.bgWhite,

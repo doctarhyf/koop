@@ -354,9 +354,11 @@ export default function ViewServiceRequest({ navigation, route }) {
               style={[styles.ti, { padding: 12 }]}
               placeholder="Laisser un commentaire ..."
             />
-            <SimpleTextButton
+            <LoadingButton
+              loading={loading}
               text={"ENVOYER COMMENTAIRE"}
               handlePress={sendComment}
+              icon={<FontAwesome name="send" size={24} color={KOOP_BLUE} />}
             />
           </View>
         )}

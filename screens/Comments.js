@@ -21,12 +21,12 @@ export default function Comments({ route, navigation }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: `Comments (${comments_count})`,
+      title: `Comments (${comments_count || comments.length})`,
       headerRight: () => (
         <ActivityIndicator animating={loading} color={KOOP_BLUE} />
       ),
     });
-  }, [route, loading]);
+  }, [route, loading, comments]);
 
   const keyExtractor = (item) => item.id;
 
