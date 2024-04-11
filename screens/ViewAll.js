@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import {
   FlatList,
   RefreshControl,
@@ -9,11 +9,32 @@ import {
 import { useFetch2 } from "../hooks/useFetch";
 import styles from "../helpers/styles";
 
+const ITEMS_TYPE = {
+  ANNOUNCES: {
+    id: "koop_sreqs",
+    api: "https://konext.vercel.app/api/sreq",
+  },
+  SHOPS: {
+    id: "koop_shops",
+    api: "https://konext.vercel.app/api/shops",
+  },
+};
+
 export default function ViewAll({ route, navigation }) {
   const type = route.params;
   const [loading, data, error, reload] = useFetch2(
     "https://konext.vercel.app/api/sreq"
   );
+
+  useEffect(() => {
+    let apiPath = ITEMS_TYPE.ANNOUNCES.api;
+    if (ITEMS_TYPE.SHOPS.id === type) {
+      apiPath = ITEMS_TYPE.SHOPS.api;
+    }
+
+    alert(apiPath);
+    reload(apiPath);
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({

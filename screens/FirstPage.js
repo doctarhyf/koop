@@ -26,6 +26,7 @@ export default function FirstPage({ navigation, route }) {
 
   const onAgreeTOS = async (e) => {
     const r = await AsyncStorage.setItem("agreed", "true");
+    navigation.navigate("Login");
   };
 
   return (
