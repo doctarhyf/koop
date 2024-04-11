@@ -20,8 +20,12 @@ export default function Comments({ route, navigation }) {
   const [loading, comments, error, reload] = useFetch2(apiPath);
 
   useLayoutEffect(() => {
+    let comlen = 0;
+
+    if (comments) comlen = comments.length;
+
     navigation.setOptions({
-      title: `Comments (${comments_count || comments.length})`,
+      title: `Comments (${comments_count || comlen})`,
       headerRight: () => (
         <ActivityIndicator animating={loading} color={KOOP_BLUE} />
       ),
