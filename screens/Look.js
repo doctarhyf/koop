@@ -189,7 +189,7 @@ const ServiceRequests = ({ navigation, me, onViewAll, refreshing }) => {
   const [loadingsreq, servicesRequests, errorsreqs, reloadsreqs] = useFetch2(
     "https://konext.vercel.app/api/sreq"
   );
-  const limit = 4;
+  const limit = 5;
 
   useFocusEffect(
     useCallback(() => {
@@ -223,7 +223,8 @@ const ServiceRequests = ({ navigation, me, onViewAll, refreshing }) => {
       {servicesRequests &&
         servicesRequests
           .filter(
-            (serviceRequest, i) => serviceRequest.phone !== phone && i < limit
+            (serviceRequest, i) =>
+              serviceRequest.user_data.phone !== phone && i < limit
           )
           .map((it, i) => (
             <TouchableOpacity
