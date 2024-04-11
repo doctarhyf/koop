@@ -6,9 +6,8 @@ import * as FUNCS from "../helpers/funcs";
 import { Image } from "expo-image";
 import UserContext from "../context/UserContext";
 
-export default function AnnonceItem({ item, showProfile }) {
-  const { user, setuser } = useContext(UserContext);
-  const me = user.phone === item.user_data.phone;
+export default function AnnonceItem({ item, itsMyItem, showProfile }) {
+  const me = itsMyItem;
 
   return (
     <View
@@ -42,7 +41,10 @@ export default function AnnonceItem({ item, showProfile }) {
           <Text style={[styles.textBlue, styles.fontBold]}>
             {item.user_data.ville}
           </Text>
-          - {me ? "Moi" : item.user_data.display_name}
+          -{" "}
+          {me
+            ? `${item.user_data.display_name} (Me)`
+            : item.user_data.display_name}
         </Text>
 
         <Text style={[{ fontWeight: "bold", flex: 1 }]}>{item.label}</Text>

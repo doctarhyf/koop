@@ -26,12 +26,15 @@ const TAB = {
 
 export default function MyItems({ navigation, route }) {
   let { user, setuser } = useContext(UserContext);
-  const id = route.params;
+  const viewingOtherShopID = route.params;
 
-  if (id) user.id = id;
+  let id = user.id;
+  if (viewingOtherShopID && viewingOtherShopID !== user.id) {
+    id = viewingOtherShopID;
+  }
 
-  const END_POINT_MY_SERVICES_REQUESTS = `https://konext.vercel.app/api/sreq?user_id=${user.id}`;
-  const END_POINT_MY_ITEMS = `https://konext.vercel.app/api/items?user_id=${user.id}`;
+  const END_POINT_MY_SERVICES_REQUESTS = `https://konext.vercel.app/api/sreq?user_id=${id}`;
+  const END_POINT_MY_ITEMS = `https://konext.vercel.app/api/items?user_id=${id}`;
   const [refreshing, setRefreshing] = useState(false);
   const [selectedTabID, setSelectedTabID] = useState(TAB.MY_SERVICES_REQUESTS);
   const [loadingdata, itemsdata, errordata, reloaddata] = useFetch2(
@@ -40,7 +43,7 @@ export default function MyItems({ navigation, route }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: `Mes Annonces`,
+      title: `${viewingOtherShopID ? "" : "Mes "}Annonces`,
 
       headerRight: () =>
         loadingdata ? (
@@ -79,6 +82,9 @@ export default function MyItems({ navigation, route }) {
 
   const handleAnnouncePress = (item) => {
     //Alert.alert(item.label, item.desc);
+    if (viewingOtherShopID && viewingOtherShopID !== user.id) {
+      item.other = true;
+    }
     navigation.navigate("ViewServiceRequest", item);
   };
 

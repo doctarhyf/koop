@@ -33,7 +33,7 @@ import AnnonceItem from "../components/AnnonceItem";
 import { useFocusEffect } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 
-const FeaturedItems = ({ navigation, me, onViewAll }) => {
+/* const FeaturedItems = ({ navigation, me, onViewAll }) => {
   const [loading, items, error] = useFetch(
     "https://konext.vercel.app/api/items",
     true
@@ -92,9 +92,10 @@ const FeaturedItems = ({ navigation, me, onViewAll }) => {
       )}
     </View>
   );
-};
+}; */
 
-const FeaturedShops = ({ navigation, me, onViewAll, refreshing }) => {
+const FeaturedShops = ({ navigation, onViewAll, refreshing }) => {
+  const { user, setuser } = useContext(UserContext);
   const [loading, shops, error, reload] = useFetch2(
     "https://konext.vercel.app/api/shops",
     true
@@ -113,7 +114,7 @@ const FeaturedShops = ({ navigation, me, onViewAll, refreshing }) => {
   );
 
   const onViewShop = (shop) => {
-    if (me.id === shop.id) {
+    if (shop.id === user.id) {
       Alert.alert(
         "Your shop",
         "This is your shop, if you want to change some information go to My Account?",
@@ -185,8 +186,8 @@ const FeaturedShops = ({ navigation, me, onViewAll, refreshing }) => {
   );
 };
 
-const ServiceRequests = ({ navigation, me, onViewAll, refreshing }) => {
-  const { phone } = me;
+const ServiceRequests = ({ navigation, onViewAll, refreshing }) => {
+  const { user, setuser } = useContext(UserContext);
   const [loadingsreq, servicesRequests, errorsreqs, reloadsreqs] = useFetch2(
     "https://konext.vercel.app/api/sreq"
   );
@@ -229,14 +230,14 @@ const ServiceRequests = ({ navigation, me, onViewAll, refreshing }) => {
               key={i}
               onPress={(e) => navigation.navigate("ViewServiceRequest", it)}
             >
-              <AnnonceItem item={it} me={phone === it.user_data.phone} />
+              <AnnonceItem item={it} itsMyItem={it.user_id === user.id} />
             </TouchableOpacity>
           ))}
     </View>
   );
 };
 
-const FeaturedAd = ({ navigation, me }) => {
+const FeaturedAd = ({ navigation }) => {
   const SUGGESTS_COUNT = 3;
   const [images, setimages] = useState([]);
   const [loading, setloading] = useState(false);
@@ -321,7 +322,6 @@ const FeaturedAd = ({ navigation, me }) => {
 };
 
 export default function Look({ navigation }) {
-  const { user, setuser } = useContext(UserContext);
   const [refreshing, setrefreshing] = useState(false);
 
   useLayoutEffect(() => {
@@ -381,18 +381,16 @@ export default function Look({ navigation }) {
 
           <View style={st_feat_cont}>
             <FeaturedShops
-              me={user}
               navigation={navigation}
               onViewAll={onViewAll}
               refreshing={refreshing}
             />
             <ServiceRequests
-              me={user}
               navigation={navigation}
               onViewAll={onViewAll}
               refreshing={refreshing}
             />
-            <FeaturedAd me={user} navigation={navigation} />
+            <FeaturedAd navigation={navigation} />
           </View>
         </View>
       </ScrollView>
