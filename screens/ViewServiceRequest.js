@@ -96,7 +96,7 @@ export default function ViewServiceRequest({ navigation, route }) {
         {
           text: "OK",
           onPress: () =>
-            navigation.navigate("Comments", {
+            navigation.replace("Comments", {
               item_id: commentBody.item_id,
               item_type: commentBody.item_type,
             }),
