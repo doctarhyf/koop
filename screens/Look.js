@@ -224,14 +224,14 @@ const ServiceRequests = ({ navigation, me, onViewAll, refreshing }) => {
         servicesRequests
           .filter(
             (serviceRequest, i) =>
-              serviceRequest.user_data.phone !== phone && i < limit
+              true || (serviceRequest.user_data.phone !== phone && i < limit)
           )
           .map((it, i) => (
             <TouchableOpacity
               key={i}
               onPress={(e) => navigation.navigate("ViewServiceRequest", it)}
             >
-              <AnnonceItem item={it} />
+              <AnnonceItem item={it} me={phone === it.user_data.phone} />
             </TouchableOpacity>
           ))}
     </View>

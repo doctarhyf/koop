@@ -34,14 +34,13 @@ export default function AnnonceItem({ item, me, showProfile }) {
       )}
 
       <View style={[styles.flex1]}>
-        {!me && (
-          <Text>
-            <Text style={[styles.textBlue, styles.fontBold]}>
-              {item.user_data.ville}
-            </Text>
-            - {item.user_data.display_name}
+        <Text>
+          <Text style={[styles.textBlue, styles.fontBold]}>
+            {item.user_data.ville}
           </Text>
-        )}
+          - {me ? "Moi" : item.user_data.display_name}
+        </Text>
+
         <Text style={[{ fontWeight: "bold", flex: 1 }]}>{item.label}</Text>
 
         <Text style={[styles.textGray]}>{item.timeAgo}</Text>
