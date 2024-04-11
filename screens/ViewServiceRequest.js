@@ -274,15 +274,15 @@ export default function ViewServiceRequest({ navigation, route }) {
         <View style={[st.gray_bg, { padding: 12 }]}>
           {[
             {
-              icon: <Entypo name="eye" size={48} color="black" />,
+              icon: <Entypo name="eye" size={36} color="black" />,
               label: "Views",
             },
             {
-              icon: <AntDesign name="tags" size={48} color="black" />,
+              icon: <AntDesign name="tags" size={36} color="black" />,
               label: "Interested",
             },
             {
-              icon: <FontAwesome name="comments" size={48} color="black" />,
+              icon: <FontAwesome name="comments" size={36} color="black" />,
               label: "Comments",
               onPress: () => navigation.navigate("Comments"),
             },
