@@ -8,6 +8,7 @@ import {
   onTagPress,
   TouchableOpacity,
   ActivityIndicator,
+  FlatList,
 } from "react-native";
 import { Image } from "expo-image";
 import styles from "../helpers/styles";
@@ -19,29 +20,15 @@ import { TABLE_NAMES } from "../utils/supabase";
 import useFetch from "../hooks/useFetch";
 import { VILLES } from "../helpers/flow";
 import { ParseCreatedAt } from "../helpers/funcs";
-
-function Tag({ label = "My tag" }) {
-  return (
-    <TouchableOpacity onPress={(e) => onTagPress}>
-      <View style={[styles.flexRow, st.tag]}>
-        <Text>{label}</Text>
-        <View style={[{ width: 10 }]}></View>
-        <Icon name={"times"} size={18} style={{ color: "white" }} />
-      </View>
-    </TouchableOpacity>
-  );
-}
+import TagsSelector from "../components/TagsSelector";
 
 export default function Search({ navigation }) {
   const [q, setq] = useState("");
+  const [selected_tags, set_selected_tags] = useState([]);
   const [loadingItems, items, error] = useFetch(
     "https://konext.vercel.app/api/sreq"
   );
   const [itemsf, setitemsf] = useState(null);
-
-  const onTagPress = (e) => {
-    console.log(e);
-  };
 
   useEffect(() => {
     if (items && items.map) {
@@ -64,6 +51,16 @@ export default function Search({ navigation }) {
     setitemsf(f);
   };
 
+  const onTagsUpdate = (tags) => {
+    console.error(tags);
+    set_selected_tags(tags);
+    if (tags.length === 0) {
+      setitemsf(items);
+      return;
+    }
+    setitemsf(items.filter((it) => tags.includes(it.user_data.ville)));
+  };
+
   return (
     <View>
       <TextInput
@@ -72,14 +69,8 @@ export default function Search({ navigation }) {
         onChangeText={onSearch}
         placeholder="Search ..."
       />
-      <ScrollView
-        horizontal
-        style={[styles.paddingSmall, { paddingRight: 12 }]}
-      >
-        {VILLES.map((it, i) => (
-          <Tag key={i} label={it} onTagPress={onTagPress} />
-        ))}
-      </ScrollView>
+
+      <TagsSelector onTagsUpdate={onTagsUpdate} data={VILLES} />
 
       <ActivityIndicator animating={loadingItems} color={KOOP_BLUE} />
       <ScrollView>
@@ -103,6 +94,7 @@ export default function Search({ navigation }) {
                       {it.desc}
                     </Text>
                   )}
+                  <Text>{it.user_data.ville}</Text>
                   <Text style={[{ fontSize: 12 }, styles.textGray]}>
                     {ParseCreatedAt(it.created_at).full}
                   </Text>
@@ -114,13 +106,3 @@ export default function Search({ navigation }) {
     </View>
   );
 }
-
-const st = StyleSheet.create({
-  tag: {
-    backgroundColor: "lightgrey",
-    borderRadius: 12,
-    marginHorizontal: 4,
-    padding: 4,
-    paddingHorizontal: 10,
-  },
-});
