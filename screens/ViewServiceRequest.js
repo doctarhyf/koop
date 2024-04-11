@@ -319,6 +319,7 @@ export default function ViewServiceRequest({ navigation, route }) {
                 navigation.navigate("Comments", {
                   item_id: serviceRequest.id,
                   item_type: "sreq",
+                  comments_count: serviceRequest.comments_count,
                 }),
             },
           ].map((it, i) => (

@@ -7,20 +7,26 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   FlatList,
+  RefreshControl,
 } from "react-native";
 import { useFetch2 } from "../hooks/useFetch";
 import { Image } from "expo-image";
+import { KOOP_BLUE } from "../helpers/colors";
+import styles from "../helpers/styles";
 
 export default function Comments({ route, navigation }) {
-  const { item_id, item_type } = route.params;
+  const { item_id, item_type, comments_count } = route.params;
   const apiPath = `https://konext.vercel.app/api/comments?item_id=${item_id}&item_type=${item_type}`;
   const [loading, comments, error, reload] = useFetch2(apiPath);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: `Comments (${(comments && comments.length) || 0})`,
+      title: `Comments (${comments_count})`,
+      headerRight: () => (
+        <ActivityIndicator animating={loading} color={KOOP_BLUE} />
+      ),
     });
-  }, [route, comments]);
+  }, [route, loading]);
 
   const keyExtractor = (item) => item.id;
 
@@ -53,12 +59,22 @@ export default function Comments({ route, navigation }) {
   );
 
   return (
-    <FlatList
-      style={[{ padding: 12 }]}
-      data={comments}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-    />
+    <View style={[styles.flex1]}>
+      {/*  {loading && (
+        <ActivityIndicator
+          animating={loading}
+          color={KOOP_BLUE}
+          style={[styles.paddingLarge]}
+        />
+      )} */}
+      <FlatList
+        refreshControl={<RefreshControl onRefresh={(e) => reload()} />}
+        style={[{ padding: 12 }, styles.flex1]}
+        data={comments}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+      />
+    </View>
   );
 }
 
