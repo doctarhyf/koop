@@ -1,11 +1,15 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import styles from "../helpers/styles";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as FUNCS from "../helpers/funcs";
 import { Image } from "expo-image";
+import UserContext from "../context/UserContext";
 
-export default function AnnonceItem({ item, me, showProfile }) {
+export default function AnnonceItem({ item, showProfile }) {
+  const { user, setuser } = useContext(UserContext);
+  const me = user.phone === item.user_data.phone;
+
   return (
     <View
       style={[

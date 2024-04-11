@@ -345,7 +345,7 @@ export default function Look({ navigation }) {
   ];
 
   const onViewAll = (type) => {
-    navigation.navigate("ViewAll", type);
+    navigation.navigate("Search", type);
   };
 
   const onRefresh = (e) => {
