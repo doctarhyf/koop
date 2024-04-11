@@ -255,7 +255,7 @@ export default function ViewServiceRequest({ navigation, route }) {
           ]}
         >
           {ACTION_BUTTONS.map((it, i) => (
-            <TouchableOpacity onPress={(e) => onAction(it)}>
+            <TouchableOpacity key={i} onPress={(e) => onAction(it)}>
               <View style={[styles.justifyCenter, styles.alignCenter]}>
                 <Text>{it.label}</Text>
                 {it.icon}
