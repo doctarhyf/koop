@@ -85,11 +85,26 @@ export default function ViewServiceRequest({ navigation, route }) {
       item_id: serviceRequest.id,
       posted_by_id: user.id,
       comment: comment,
+      item_type: "sreq",
     };
 
     const r = await API.postComment(commentBody);
 
-    alert(JSON.stringify(r));
+    if (r[0] && r[0].id) {
+      setcomment("");
+      Alert.alert("Comment posted", "The comment has been posted", [
+        {
+          text: "OK",
+          onPress: () =>
+            navigation.navigate("Comments", {
+              item_id: commentBody.item_id,
+              item_type: commentBody.item_type,
+            }),
+        },
+      ]);
+    } else {
+      Alert.alert("Comment post error", JSON.stringify(r));
+    }
     setloading(false);
   };
 
@@ -300,7 +315,11 @@ export default function ViewServiceRequest({ navigation, route }) {
             {
               icon: <FontAwesome name="comments" size={36} color="black" />,
               label: "Comments",
-              onPress: () => navigation.navigate("Comments"),
+              onPress: () =>
+                navigation.navigate("Comments", {
+                  item_id: serviceRequest.id,
+                  item_type: "sreq",
+                }),
             },
           ].map((it, i) => (
             <TouchableOpacity onPress={(e) => it.onPress && it.onPress()}>
@@ -315,7 +334,7 @@ export default function ViewServiceRequest({ navigation, route }) {
                       fontSize: 24,
                     }}
                   >
-                    0
+                    {i === 2 ? serviceRequest.comments_count : 0}
                   </Text>
                 </View>
               </View>

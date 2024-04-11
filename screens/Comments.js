@@ -1,103 +1,70 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Text,
   View,
   ScrollView,
   StyleSheet,
-  Image,
   ActivityIndicator,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
-import styles from "../helpers/styles";
-import useItemsLoader from "../hooks/useItemsLoader";
-import { TABLE_NAMES } from "../utils/supabase";
-import { KOOP_BLUE } from "../helpers/colors";
-import { loadAllItems, loadItem } from "../utils/db";
-import { ParseCreatedAt } from "../helpers/funcs";
+import { useFetch2 } from "../hooks/useFetch";
+import { Image } from "expo-image";
 
 export default function Comments({ route, navigation }) {
-  const { params } = route;
-  const item = params;
-  const [loading, setloading] = useState(false);
-  const [comments, setcomments] = useState([]);
+  const { item_id, item_type } = route.params;
+  const apiPath = `https://konext.vercel.app/api/comments?item_id=${item_id}&item_type=${item_type}`;
+  const [loading, comments, error, reload] = useFetch2(apiPath);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setloading(true);
-      try {
-        const response = await fetch(
-          `https://konext.vercel.app/api/items/comments?id=${item.id}`
-        );
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: `Comments (${(comments && comments.length) || 0})`,
+    });
+  }, [route, comments]);
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+  const keyExtractor = (item) => item.id;
 
-        const data = await response.json();
-        setcomments(data);
-        setloading(false);
-        console.log("Data fetched successfully:", data);
-        // Handle the fetched data
-      } catch (error) {
-        setloading(false);
-        console.error("There was a problem with the request:", error);
-        // Handle errors
-      }
-    };
-
-    fetchData();
-  }, []);
+  const renderItem = (comment) => (
+    <View
+      style={[
+        st.cmt_cont,
+        {
+          borderBottomWidth: 1,
+          borderBottomColor: "#dddddd",
+          paddingVertical: 8,
+        },
+      ]}
+    >
+      <Image
+        transition={1000}
+        source={comment.item.user_data.profile || require("../assets/rhyf.png")}
+        style={[{ width: 60, height: 60, borderRadius: 30 }]}
+      />
+      <View style={[{ flex: 1 }]}>
+        <Text style={[{ color: "#666666" }]}>
+          {comment.item.user_data.display_name}
+        </Text>
+        <Text style={[{ fontWeight: "bold", fontSize: 16, flex: 1 }]}>
+          {comment.item.comment}
+        </Text>
+        <Text style={[{ color: "#aaaaaa" }]}>{comment.item.timeAgo}</Text>
+      </View>
+    </View>
+  );
 
   return (
-    <ScrollView style={[{ padding: 12 }]}>
-      {loading && <ActivityIndicator animating={loading} color={KOOP_BLUE} />}
-      {comments.length === 0 && !loading && (
-        <Text style={[styles.textCenter]}>No comments for now</Text>
-      )}
-      {/*  {errorLoadingComments && (
-        <Text style={[styles.textCenter]}>Error loading comments</Text>
-      )} */}
-      {!loading &&
-        comments.length > 0 &&
-        comments.map((comment, i) => (
-          <View key={i} style={[st.comment]}>
-            <View
-              style={[
-                styles.flexRow,
-                styles.alignCenter,
-                styles.justifyBetween,
-              ]}
-            >
-              <Image
-                source={
-                  { uri: comment.posted_by_profile } ||
-                  require("../assets/rhyf.png")
-                }
-                style={[
-                  {
-                    width: 40,
-                    height: 40,
-                    borderRadius: 20,
-                    overflow: "hidden",
-                  },
-                ]}
-              />
-              <Text>{comment.posted_by_display_name}</Text>
-            </View>
-            <Text>{comment.comment}</Text>
-            <Text style={[styles.textGray, styles.marginTopSmall]}>
-              {ParseCreatedAt(comment.created_at).full}
-            </Text>
-          </View>
-        ))}
-    </ScrollView>
+    <FlatList
+      style={[{ padding: 12 }]}
+      data={comments}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+    />
   );
 }
 
 const st = StyleSheet.create({
-  comment: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-    paddingVertical: 12,
+  cmt_cont: {
+    flexDirection: "row",
+    gap: 8,
   },
 });
