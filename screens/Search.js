@@ -114,7 +114,9 @@ export default function Search({ navigation }) {
 
       <TagsSelector onTagsUpdate={onTagsUpdate} data={VILLES} />
 
-      <ActivityIndicator animating={loadingItems} color={KOOP_BLUE} />
+      {loadingItems && (
+        <ActivityIndicator animating={loadingItems} color={KOOP_BLUE} />
+      )}
 
       {itemsf.length > 0 && (
         <FlatList
