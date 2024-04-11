@@ -25,7 +25,7 @@ import AnnonceItem from "../components/AnnonceItem";
 
 export default function Search({ navigation }) {
   const [q, setq] = useState("");
-  const [selected_tags, set_selected_tags] = useState([]);
+  const [selected_villes, set_selected_villes] = useState([]);
   const [loadingItems, items, error] = useFetch(
     "https://konext.vercel.app/api/sreq"
   );
@@ -40,25 +40,52 @@ export default function Search({ navigation }) {
   const onSearch = (txt) => {
     setq(txt);
 
-    if (txt.trim() === "") {
-      setitemsf(
-        items.filter((it) => selected_tags.includes(it.user_data.ville))
+    const emptySearch = txt.trim() === "";
+    const villesSelected = selected_villes.length > 0;
+    let filteredByVille = [...items];
+
+    if (villesSelected) {
+      filteredByVille = items.filter((it) =>
+        selected_villes.includes(it.user_data.ville)
       );
+    }
+
+    if (emptySearch) {
+      setitemsf([...filteredByVille]);
       return;
     }
 
     setitemsf(
-      items.filter(
-        (it) =>
-          selected_tags.includes(it.user_data.ville) &&
-          it.label.toLowerCase().includes(txt.toLowerCase())
+      filteredByVille.filter((it) =>
+        it.label.toLowerCase().includes(txt.toLowerCase())
       )
     );
+
+    /*  let original_items = [...items];
+    let filtered_items;
+    const ville_selected = selected_tags.length > 0;
+
+    if (ville_selected) {
+      filtered_items = original_items.filter((it) =>
+        selected_tags.includes(it.user_data.ville)
+      );
+    }
+
+    if (txt.trim() === "") {
+      setitemsf(filtered_items);
+      return;
+    }
+
+    setitemsf(
+      filtered_items.filter((it) =>
+        it.label.toLowerCase().includes(txt.toLowerCase())
+      )
+    ); */
   };
 
   const onTagsUpdate = (tags) => {
     console.error(tags);
-    set_selected_tags(tags);
+    set_selected_villes(tags);
     if (tags.length === 0) {
       setitemsf(items);
       return;
@@ -89,12 +116,20 @@ export default function Search({ navigation }) {
 
       <ActivityIndicator animating={loadingItems} color={KOOP_BLUE} />
 
-      <FlatList
-        style={[{ margin: 12, flex: 1 }]}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        data={itemsf}
-      />
+      {itemsf.length > 0 && (
+        <FlatList
+          style={[{ margin: 12, flex: 1 }]}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          data={itemsf}
+        />
+      )}
+
+      {itemsf.length === 0 && (
+        <Text style={[styles.textCenter, styles.paddingLarge]}>
+          No items found
+        </Text>
+      )}
     </View>
   );
 }
