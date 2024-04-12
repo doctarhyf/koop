@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Text,
   TextInput,
@@ -22,8 +22,10 @@ import { VILLES } from "../helpers/flow";
 import { ParseCreatedAt } from "../helpers/funcs";
 import TagsSelector from "../components/TagsSelector";
 import AnnonceItem from "../components/AnnonceItem";
+import UserContext from "../context/UserContext";
 
 export default function Search({ navigation }) {
+  const { user, setuser } = useContext(UserContext);
   const [q, setq] = useState("");
   const [selected_villes, set_selected_villes] = useState([]);
   const [loadingItems, items, error] = useFetch(
@@ -76,7 +78,11 @@ export default function Search({ navigation }) {
     <TouchableOpacity
       onPress={(e) => navigation.navigate("ViewServiceRequest", item.item)}
     >
-      <AnnonceItem item={item.item} showProfile />
+      <AnnonceItem
+        item={item.item}
+        itsMyItem={item.item.user_data.id === user.id}
+        showProfile
+      />
     </TouchableOpacity>
   );
 
