@@ -6,6 +6,7 @@ import {
   ScrollView,
   Switch,
   Alert,
+  KeyboardAvoidingView,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useContext, useEffect, useState } from "react";
@@ -27,6 +28,7 @@ function ServiceRequest({ navigation, route }) {
     images: [],
     label: "this is a label",
     desc: "this is a desc ...",
+    links: "",
   });
   const { user, setuser } = useContext(UserContext);
   const [loading, setloading] = useState(false);
@@ -68,7 +70,7 @@ function ServiceRequest({ navigation, route }) {
       setloading(true);
 
       const res = await API.insertServiceRequest(user, finalData);
-      // alert(JSON.stringify(res));
+      //alert(JSON.stringify(res));
       const posted = res.id;
       if (posted) {
         Alert.alert(
@@ -81,7 +83,7 @@ function ServiceRequest({ navigation, route }) {
             {
               text: "Voir mes Annonces",
 
-              onPress: () => navigation.replace("MyItems", res),
+              onPress: () => navigation.replace("MyItems"),
             },
           ]
         );
@@ -99,6 +101,10 @@ function ServiceRequest({ navigation, route }) {
 
   const onImagePressed = (dt) => {
     alert(dt);
+  };
+
+  const onLinksAdd = (links) => {
+    setServData((prev) => ({ ...prev, links: links }));
   };
 
   return (
@@ -170,20 +176,10 @@ function ServiceRequest({ navigation, route }) {
 
         {hasMoreData && (
           <View>
-            {/*  <View>
-              <Text>Descriptions</Text>
-              <TextInput
-                value={servData.desc || ""}
-                onChangeText={(txt) =>
-                  setServData((prev) => ({ ...prev, desc: txt }))
-                }
-                multiline
-                numberOfLines={5}
-                placeholder="Ajouter beaucouplus de details sur ce que vous recherchez comme services ..."
-                style={[styles.ti, { paddingVertical: 12 }]}
-                textAlignVertical="top"
-              />
-            </View> */}
+            <View>
+              <Text>Add Links</Text>
+              <LinksBox onLinksAdd={onLinksAdd} />
+            </View>
 
             <View>
               <Text>Add Pictures</Text>
@@ -193,27 +189,11 @@ function ServiceRequest({ navigation, route }) {
                 onImagePressed={onImagePressed}
               />
             </View>
-
-            <View>
-              <Text>Add Links</Text>
-              <LinksBox />
-            </View>
           </View>
         )}
 
         <View style={[styles.paddingLarge]}>
-          <LoadingButton
-            text={"POST"}
-            handlePress={onPost}
-            loading={loading}
-            /* icon={
-            <MaterialCommunityIcons
-              name="send-circle-outline"
-              size={24}
-              color={KOOP_BLUE}
-            />
-          } */
-          />
+          <LoadingButton text={"POST"} handlePress={onPost} loading={loading} />
         </View>
       </View>
     </ScrollView>

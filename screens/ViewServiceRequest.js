@@ -190,6 +190,10 @@ export default function ViewServiceRequest({ navigation, route }) {
     ]);
   };
 
+  const onLinkPress = (link) => {
+    Linking.openURL(link);
+  };
+
   return (
     <ScrollView>
       <View style={[styles.paddingMid]}>
@@ -284,7 +288,11 @@ export default function ViewServiceRequest({ navigation, route }) {
           <View>
             <View>
               <View style={[styles.flexRow, { gap: 8 }, styles.alignCenter]}>
-                <Fontisto name="photograph" size={ICON_SIZE} color="black" />
+                <Fontisto
+                  name="photograph"
+                  size={ICON_SIZE / 2}
+                  color="black"
+                />
                 <Text>Photos</Text>
               </View>
               <ImagesViewer
@@ -295,15 +303,20 @@ export default function ViewServiceRequest({ navigation, route }) {
 
             <View>
               <View style={[styles.flexRow, { gap: 8 }, styles.alignCenter]}>
-                <Entypo name="link" size={ICON_SIZE} color="black" />
+                <Entypo name="link" size={ICON_SIZE / 2} color="black" />
                 <Text>Links</Text>
               </View>
               <View>
-                <Text>Link 1</Text>
-                <Text>Link 1</Text>
-                <Text>Link 1</Text>
-                <Text>Link 1</Text>
-                <Text>Link 1</Text>
+                {serviceRequest.links.split(";").map((lk, i) => (
+                  <TouchableOpacity onPress={(e) => onLinkPress(lk)}>
+                    <Text
+                      style={[{ marginVertical: 8, color: KOOP_BLUE_DARK }]}
+                      numberOfLines={1}
+                    >
+                      {i + 1}. {lk}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
               </View>
             </View>
 
