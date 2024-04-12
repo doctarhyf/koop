@@ -17,6 +17,7 @@ import SimpleTextButton from "../components/SimpleTextButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LoadingButton from "../components/LoadingButton";
 import UserContext from "../context/UserContext";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function Shop({ route, navigation }) {
   const { user, setuser } = useContext(UserContext);
@@ -80,7 +81,7 @@ export default function Shop({ route, navigation }) {
   return (
     <ScrollView style={[styles.bgWhite, styles.flex1]}>
       <View>
-        <ImageBackground
+        {/*  <ImageBackground
           source={{
             uri:
               shop_profile ||
@@ -95,36 +96,23 @@ export default function Shop({ route, navigation }) {
               st.cont,
               styles.borderTopRadiusLarge,
             ]}
-          >
-            <MenuButton
-              btn={{
-                id: 0,
-                label: "SEND MESSAGE",
-                icon: require("../assets/icons/mail.png"),
-              }}
-              handleOnPress={(e) => {
-                navigation.navigate("SendMessage", shop);
-              }}
-            />
-          </View>
-        </ImageBackground>
+          ></View>
+        </ImageBackground> */}
+
+        <View>
+          <Image
+            source={
+              shop_profile ||
+              "https://i.ytimg.com/vi/D4EKydVVvHk/hqdefault.jpg?v=64668f72"
+            }
+            style={{ width: "100%", height: 180 }}
+            transition={1000}
+          />
+        </View>
+
         <View style={styles.paddingMid}>
           <Text style={[styles.textBlue]}>About</Text>
           <Text>{shop_desc}</Text>
-
-          {/* {shop_desc ? (
-            <View style={[st.tagscont]}>
-              {shop_desc.split(";").map((t, i) => (
-                <Text style={[st.tag]} key={i}>
-                  {t}
-                </Text>
-              ))}
-            </View>
-          ) : (
-            <Text style={[{ fontStyle: "italic", color: "#ddd" }]}>
-              About {shop_name}
-            </Text>
-          )} */}
 
           {shop_add && (
             <View>
@@ -154,7 +142,37 @@ export default function Shop({ route, navigation }) {
               )
           )}
 
-          <LoadingButton
+          <MenuButton
+            btn={{
+              id: 0,
+              label: "SEND MESSAGE",
+              icon: require("../assets/icons/mail.png"),
+            }}
+            handleOnPress={(e) => {
+              navigation.navigate("SendMessage", shop);
+            }}
+          />
+
+          <MenuButton
+            btn={{
+              id: 0,
+              label: "TOUTES LES ANNONCES",
+            }}
+            icon={<FontAwesome5 name="bolt" size={28} color="brown" />}
+            handleOnPress={showAnnonces}
+          />
+
+          <MenuButton
+            btn={{
+              id: 0,
+              label: "TOUS LES COMMENTAIRES",
+            }}
+            icon={<FontAwesome name="comments" size={28} color="lime" />}
+            iconColor={KOOP_BLUE}
+            handleOnPress={showCommentaires}
+          />
+
+          {/* <LoadingButton
             icon={
               <MaterialCommunityIcons
                 name="flash-alert"
@@ -170,7 +188,7 @@ export default function Shop({ route, navigation }) {
             icon={<FontAwesome name="comments" size={24} color="black" />}
             text={"COMMENTAIRES"}
             handlePress={showCommentaires}
-          />
+          /> */}
         </View>
       </View>
     </ScrollView>

@@ -36,23 +36,10 @@ export default TabPersonalInfo = ({ user, handleInfoPress, navigation }) => {
       value: display_name,
       icon: "user-circle-o",
       placeholder: "Website",
-      editable: true,
+      editable: false,
       label: "Display Name",
     },
-    /*  phone: {
-      value: phone,
-      icon: "phone",
-      placeholder: "Phone Number",
-      editable: false,
-      label: "Business Name",
-    },
-    pin: {
-      value: pin,
-      icon: "lock",
-      placeholder: "PIN",
-      editable: true,
-      label: "PIN",
-    }, */
+
     dob: {
       value: dob,
       icon: "calendar",

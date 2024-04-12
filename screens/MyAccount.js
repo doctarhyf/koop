@@ -82,17 +82,28 @@ const HeaderShopInfo = ({ user, setuser, handleBGUpdatePress }) => {
         style={[st.fsbg]}
         transition={1000}
       />
-      <View style={[{ padding: 10 }, styles.justifyCenter, styles.alignCenter]}>
-        <Text style={[st.shopfronttitle, styles.textWhite, styles.textCenter]}>
-          {user.shop_name.toUpperCase() || "MY SHOP"}
-        </Text>
-      </View>
 
-      <ProfileUploader
-        onProfilePicUri={onProfilePicUri}
-        currentURI={user.shop_profile}
-        setUpdatingProfile={setUpdatingProfile}
-      />
+      <View
+        style={[st.sn, { flexDirection: "row", gap: 8 }, styles.alignCenter]}
+      >
+        <Image
+          source={user.profile}
+          style={{ width: 60, height: 60, borderRadius: 30 }}
+        />
+        <View>
+          <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+            {user.shop_name.toUpperCase() || "MY SHOP"}
+          </Text>
+          <Text>@{user.display_name}</Text>
+        </View>
+      </View>
+      <View style={{ position: "absolute", top: 0, right: 0, margin: 12 }}>
+        <ProfileUploader
+          onProfilePicUri={onProfilePicUri}
+          currentURI={user.shop_profile}
+          setUpdatingProfile={setUpdatingProfile}
+        />
+      </View>
       <ActivityIndicator animating={updatingProfile} color={KOOP_BLUE} />
     </View>
   );
@@ -202,6 +213,11 @@ export default function MyAccount({ navigation }) {
               <Text style={[styles.textLarge, styles.textWhite]}>
                 {user.display_name}
               </Text>
+              <Text
+                style={[{ fontWeight: "bold", fontSize: 14, color: "#666666" }]}
+              >
+                {user.shop_name}
+              </Text>
               <Text style={[styles.textBold, { fontSize: 18 }]}>
                 {user.phone}
               </Text>
@@ -280,6 +296,14 @@ export default function MyAccount({ navigation }) {
 }
 
 const st = StyleSheet.create({
+  sn: {
+    backgroundColor: KOOP_BLUE_TRANSLUCIDE,
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    padding: 12,
+  },
   active: {
     backgroundColor: KOOP_GREEN,
     padding: 4,

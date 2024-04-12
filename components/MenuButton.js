@@ -1,7 +1,7 @@
 import { TouchableOpacity, View, Text } from "react-native";
 import styles from "../helpers/styles";
 import { Image } from "expo-image";
-export default MenuButton = ({ handleOnPress, btn, textSmall }) => {
+export default MenuButton = ({ handleOnPress, btn, textSmall, icon }) => {
   /* example
   btn = {
     id:0,
@@ -19,9 +19,14 @@ export default MenuButton = ({ handleOnPress, btn, textSmall }) => {
           styles.paddingSmall,
           styles.roundedMd,
           styles.borderBlue,
+          { gap: 8 },
         ]}
       >
-        <Image style={styles.btnIcon} source={btn.icon} transition={1000} />
+        {icon ? (
+          <View style={{ marginRight: 8 }}>{icon}</View>
+        ) : (
+          <Image style={[styles.btnIcon]} source={btn.icon} transition={1000} />
+        )}
         <Text style={styles.textBlueDark}>{btn.label}</Text>
       </View>
     </TouchableOpacity>
