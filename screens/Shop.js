@@ -160,7 +160,7 @@ export default function Shop({ route, navigation }) {
               id: 0,
               label: "TOUTES LES ANNONCES",
             }}
-            icon={<FontAwesome5 name="bolt" size={28} color="brown" />}
+            icon={<FontAwesome5 name="bolt" size={28} color="black" />}
             handleOnPress={showAnnonces}
           />
 
@@ -169,7 +169,7 @@ export default function Shop({ route, navigation }) {
               id: 0,
               label: "TOUS LES COMMENTAIRES",
             }}
-            icon={<FontAwesome name="comments" size={28} color="lime" />}
+            icon={<FontAwesome name="comments" size={28} color="black" />}
             iconColor={KOOP_BLUE}
             handleOnPress={showCommentaires}
           />
