@@ -28,43 +28,6 @@ import ImagesViewer from "../components/ImagesViewer";
 import { Entypo } from "@expo/vector-icons";
 import CommentBox from "../components/CommentBox";
 
-const ICON_SIZE = 36;
-const ACTION = {
-  SEND_MESSAGE: "send_message",
-  INTERESTED: "interested",
-  CALL_NOW: "call_now",
-  VIEW_SHOP: "view_shop",
-};
-
-const ACTION_BUTTONS = [
-  {
-    label: "Interrested",
-    action: ACTION.INTERESTED,
-    icon: <Ionicons name="pricetags" size={24} color={KOOP_BLUE} />,
-  },
-  {
-    label: "Message",
-    action: ACTION.SEND_MESSAGE,
-    icon: (
-      <MaterialCommunityIcons
-        name="message-text-outline"
-        size={24}
-        color={KOOP_BLUE}
-      />
-    ),
-  },
-  {
-    label: "Call now",
-    action: ACTION.CALL_NOW,
-    icon: <Feather name="phone-call" size={24} color={KOOP_BLUE} />,
-  },
-  {
-    label: "Voir le shop",
-    action: ACTION.VIEW_SHOP,
-    icon: <Feather name="home" size={24} color={KOOP_BLUE} />,
-  },
-];
-
 export default function ViewServiceRequest({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
   const serviceRequest = route.params;
@@ -74,6 +37,43 @@ export default function ViewServiceRequest({ navigation, route }) {
   let me = serviceRequest.user_id === user.id;
   if (serviceRequest.other) me = false;
   const [loading, setloading] = useState(false);
+
+  const ICON_SIZE = 36;
+  const ACTION = {
+    SEND_MESSAGE: "send_message",
+    INTERESTED: "interested",
+    CALL_NOW: "call_now",
+    VIEW_SHOP: "view_shop",
+  };
+
+  const ACTION_BUTTONS = [
+    {
+      label: "Interrested",
+      action: ACTION.INTERESTED,
+      icon: <Ionicons name="pricetags" size={24} color={KOOP_BLUE} />,
+    },
+    {
+      label: "Message",
+      action: ACTION.SEND_MESSAGE,
+      icon: (
+        <MaterialCommunityIcons
+          name="message-text-outline"
+          size={24}
+          color={KOOP_BLUE}
+        />
+      ),
+    },
+    {
+      label: "Call now",
+      action: ACTION.CALL_NOW,
+      icon: <Feather name="phone-call" size={24} color={KOOP_BLUE} />,
+    },
+    {
+      label: "Voir le shop",
+      action: ACTION.VIEW_SHOP,
+      icon: <Feather name="home" size={24} color={KOOP_BLUE} />,
+    },
+  ];
 
   const STATS_BUTTONS = [
     {
