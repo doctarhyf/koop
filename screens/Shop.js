@@ -27,6 +27,9 @@ export default function Shop({ route, navigation }) {
   let { params } = route;
   const shop = params;
   const {
+    profile,
+    display_name,
+    phone,
     shop_profile,
     shop_name,
     shop_tags,
@@ -101,7 +104,11 @@ export default function Shop({ route, navigation }) {
               width: "100%",
             }}
           >
-            <ProfileBadge profile={""} display_name={""} phone={""} />
+            <ProfileBadge
+              profile={profile}
+              display_name={display_name}
+              phone={phone}
+            />
           </View>
         </View>
 
