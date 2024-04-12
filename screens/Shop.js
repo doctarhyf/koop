@@ -18,6 +18,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import LoadingButton from "../components/LoadingButton";
 import UserContext from "../context/UserContext";
 import { FontAwesome5 } from "@expo/vector-icons";
+import CommentBox from "../components/CommentBox";
 
 export default function Shop({ route, navigation }) {
   const { user, setuser } = useContext(UserContext);
@@ -75,7 +76,7 @@ export default function Shop({ route, navigation }) {
   };
 
   const showCommentaires = (e) => {
-    navigation.navigate("Comments", { item_id: user.id, item_type: "shop" });
+    navigation.navigate("Comments", { item_id: shop_id, item_type: "shop" });
   };
 
   return (
@@ -172,23 +173,12 @@ export default function Shop({ route, navigation }) {
             handleOnPress={showCommentaires}
           />
 
-          {/* <LoadingButton
-            icon={
-              <MaterialCommunityIcons
-                name="flash-alert"
-                size={24}
-                color="black"
-              />
-            }
-            text={"TOUTES LES ANONCES"}
-            handlePress={showAnnonces}
+          <CommentBox
+            navigation={navigation}
+            item_id={shop_id}
+            posted_by_id={user.id}
+            item_type="shop"
           />
-
-          <LoadingButton
-            icon={<FontAwesome name="comments" size={24} color="black" />}
-            text={"COMMENTAIRES"}
-            handlePress={showCommentaires}
-          /> */}
         </View>
       </View>
     </ScrollView>
