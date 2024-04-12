@@ -19,6 +19,7 @@ import LoadingButton from "../components/LoadingButton";
 import UserContext from "../context/UserContext";
 import { FontAwesome5 } from "@expo/vector-icons";
 import CommentBox from "../components/CommentBox";
+import ProfileBadge from "../components/ProfileBadge";
 
 export default function Shop({ route, navigation }) {
   const { user, setuser } = useContext(UserContext);
@@ -82,33 +83,26 @@ export default function Shop({ route, navigation }) {
   return (
     <ScrollView style={[styles.bgWhite, styles.flex1]}>
       <View>
-        {/*  <ImageBackground
-          source={{
-            uri:
-              shop_profile ||
-              "https://i.ytimg.com/vi/D4EKydVVvHk/hqdefault.jpg?v=64668f72",
-          }}
-          style={[st.img, styles.justifyEnd]}
-        >
-          <View
-            style={[
-              styles.paddingMid,
-              styles.bgWhite,
-              st.cont,
-              styles.borderTopRadiusLarge,
-            ]}
-          ></View>
-        </ImageBackground> */}
-
         <View>
           <Image
             source={
               shop_profile ||
               "https://i.ytimg.com/vi/D4EKydVVvHk/hqdefault.jpg?v=64668f72"
             }
-            style={{ width: "100%", height: 180 }}
+            style={{ width: "100%", height: 220 }}
             transition={1000}
           />
+
+          <View
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: "100%",
+            }}
+          >
+            <ProfileBadge user={user} />
+          </View>
         </View>
 
         <View style={styles.paddingMid}>
@@ -172,7 +166,7 @@ export default function Shop({ route, navigation }) {
             iconColor={KOOP_BLUE}
             handleOnPress={showCommentaires}
           />
-
+          <View style={{ height: 40 }} />
           <CommentBox
             navigation={navigation}
             item_id={shop_id}
