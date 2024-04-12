@@ -264,7 +264,7 @@ const FeaturedAd = ({ navigation }) => {
   return (
     <View>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>PROMO</Text>
+        <Text style={[styles.mbLarge, styles.mtLarge]}>ESPACE PUB</Text>
       </View>
       {loading ? (
         <ActivityIndicator animating={loading} size={32} color={KOOP_BLUE} />
@@ -326,7 +326,7 @@ export default function Look({ navigation }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Details",
+      title: "Welcom to KOOP",
       headerRight: () => (
         <TouchableOpacity
           onPress={(e) => navigation.navigate("ServiceRequest")}
