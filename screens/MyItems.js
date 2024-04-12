@@ -85,7 +85,7 @@ export default function MyItems({ navigation, route }) {
     if (viewingOtherShopID && viewingOtherShopID !== user.id) {
       item.other = true;
     }
-    navigation.navigate("ViewServiceRequest", item);
+    navigation.push("ViewServiceRequest", item);
   };
 
   const handleItemMyLongPress = (item) => {
