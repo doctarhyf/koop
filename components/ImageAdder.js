@@ -12,6 +12,7 @@ import {
 import { KOOP_BLUE_DARK, KOOP_BLUE_LIGHT } from "../helpers/colors";
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
+import { Camera } from "expo-camera";
 
 const IMG_SIZE = 260;
 const MEDIA_TYPE_CAMERA = 0;
@@ -37,7 +38,16 @@ export default function ImageAdder({
   };
 
   const pickImageAsync = async (mediaType) => {
-    closeBottomSheet();
+    const { status } = await Camera.requestCameraPermissionsAsync();
+
+    if (status !== "granted") {
+      Alert.alert(
+        "Camera permission",
+        "We need your permission to access the camera"
+      );
+      return;
+    }
+
     let result;
 
     if (mediaType === MEDIA_TYPE_CAMERA) {
@@ -52,6 +62,7 @@ export default function ImageAdder({
       });
     }
 
+    closeBottomSheet();
     if (!result.canceled) {
       const { uri } = result.assets[0];
       let newimages = [...images, uri];

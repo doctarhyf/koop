@@ -74,7 +74,6 @@ export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {
             styles.bgBlue,
           ]}
         >
-          {/* <Text style={[styles.textCenter, styles.textWhite]}>MENU</Text> */}
           <Pressable onPress={(e) => closeMenu()}>
             <Image
               source={require("../assets/koop.png")}
@@ -112,29 +111,6 @@ export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {
               </TouchableOpacity>
             </View>
           ))}
-
-          {/*  <View style={[st.spacer]}></View>
-
-        <TouchableOpacity onPress={(e) => onPressBtn({ id: -1 })}>
-          <View
-            style={[styles.flexRow, styles.alignCenter, styles.paddingSmall]}
-          >
-            <Image
-              source={require("../assets/icons/signout.png")}
-              style={[
-                {
-                  marginRight: 12,
-                  width: 40,
-                  height: 40,
-                  borderRadius: 40,
-                },
-                styles.overflowHidden,
-              ]}
-            />
-
-            <Text>SIGN OUT</Text>
-          </View>
-        </TouchableOpacity> */}
         </View>
       </TouchableWithoutFeedback>
     </Modal>
