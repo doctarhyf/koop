@@ -65,27 +65,6 @@ const ACTION_BUTTONS = [
   },
 ];
 
-const STATS_BUTTONS = [
-  {
-    icon: <Entypo name="eye" size={ICON_SIZE} color="black" />,
-    label: "Views",
-  },
-  {
-    icon: <AntDesign name="tags" size={ICON_SIZE} color="black" />,
-    label: "Interested",
-  },
-  {
-    icon: <FontAwesome name="comments" size={ICON_SIZE} color="black" />,
-    label: "Comments",
-    onPress: () =>
-      navigation.navigate("Comments", {
-        item_id: serviceRequest.id,
-        item_type: "sreq",
-        comments_count: serviceRequest.comments_count,
-      }),
-  },
-];
-
 export default function ViewServiceRequest({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
   const serviceRequest = route.params;
@@ -95,6 +74,27 @@ export default function ViewServiceRequest({ navigation, route }) {
   let me = serviceRequest.user_id === user.id;
   if (serviceRequest.other) me = false;
   const [loading, setloading] = useState(false);
+
+  const STATS_BUTTONS = [
+    {
+      icon: <Entypo name="eye" size={ICON_SIZE} color="black" />,
+      label: "Views",
+    },
+    {
+      icon: <AntDesign name="tags" size={ICON_SIZE} color="black" />,
+      label: "Interested",
+    },
+    {
+      icon: <FontAwesome name="comments" size={ICON_SIZE} color="black" />,
+      label: "Comments",
+      onPress: () =>
+        navigation.navigate("Comments", {
+          item_id: serviceRequest.id,
+          item_type: "sreq",
+          comments_count: serviceRequest.comments_count,
+        }),
+    },
+  ];
 
   useLayoutEffect(() => {
     navigation.setOptions({
