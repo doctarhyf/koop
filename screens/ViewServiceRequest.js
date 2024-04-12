@@ -307,16 +307,17 @@ export default function ViewServiceRequest({ navigation, route }) {
                 <Text>Links</Text>
               </View>
               <View>
-                {serviceRequest.links.split(";").map((lk, i) => (
-                  <TouchableOpacity onPress={(e) => onLinkPress(lk)}>
-                    <Text
-                      style={[{ marginVertical: 8, color: KOOP_BLUE_DARK }]}
-                      numberOfLines={1}
-                    >
-                      {i + 1}. {lk}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                {serviceRequest.links &&
+                  serviceRequest.links.split(";").map((lk, i) => (
+                    <TouchableOpacity onPress={(e) => onLinkPress(lk)}>
+                      <Text
+                        style={[{ marginVertical: 8, color: KOOP_BLUE_DARK }]}
+                        numberOfLines={1}
+                      >
+                        {i + 1}. {lk}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
               </View>
             </View>
 

@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Alert,
+  Linking,
 } from "react-native";
 import { Image } from "expo-image";
 import styles from "../helpers/styles";
@@ -238,7 +239,26 @@ const ServiceRequests = ({ navigation, onViewAll, refreshing }) => {
 };
 
 const FeaturedAd = ({ navigation }) => {
-  const SUGGESTS_COUNT = 3;
+  const SAMPLE_PROMO_DATA = [
+    {
+      label: "ElectroHub",
+      desc: "Your one-stop destination for cutting-edge electronics, from smartphones to smart home gadgets.",
+      url: "https://www.instagram.com/doctarhyf/",
+    },
+    {
+      label: "Sportify",
+      desc: "Gear up for victory with our premium selection of sports equipment and athletic wear.",
+      url: "https://soundcloud.com/slimrecords-ent/sets/l-f-d-y-ep",
+    },
+    {
+      label: "FashionFusion",
+      desc: "Unleash your style with our trendy clothing collection, blending fashion with comfort seamlessly.",
+      url: "https://www.youtube.com/watch?v=vPSqPP23RsA",
+    },
+  ];
+
+  const SUGGESTS_COUNT = SAMPLE_PROMO_DATA.length;
+
   const [images, setimages] = useState([]);
   const [loading, setloading] = useState(false);
 
@@ -271,7 +291,10 @@ const FeaturedAd = ({ navigation }) => {
       ) : (
         <ScrollView>
           {images.map((it, i) => (
-            <TouchableOpacity key={i} onPress={(e) => console.log(e)}>
+            <TouchableOpacity
+              key={i}
+              onPress={(e) => Linking.openURL(SAMPLE_PROMO_DATA[i].url)}
+            >
               <View
                 style={[
                   {
@@ -307,9 +330,9 @@ const FeaturedAd = ({ navigation }) => {
                   />
                 </View>
                 <View style={[{ padding: 12 }]}>
-                  <Text>Suggestion</Text>
+                  <Text>{SAMPLE_PROMO_DATA[i].label}</Text>
                   <Text style={[styles.textGray]}>
-                    {it.url.substring(0, 100) + " ..."}
+                    {SAMPLE_PROMO_DATA[i].desc}
                   </Text>
                 </View>
               </View>
