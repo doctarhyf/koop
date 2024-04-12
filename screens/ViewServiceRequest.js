@@ -282,17 +282,6 @@ export default function ViewServiceRequest({ navigation, route }) {
 
         {showMore && (
           <View>
-            <View style={[styles.flexRow, { gap: 8 }, styles.alignCenter]}>
-              <Entypo name="link" size={ICON_SIZE} color="black" />
-              <Text>Links</Text>
-            </View>
-            <View>
-              <Text>Link 1</Text>
-              <Text>Link 1</Text>
-              <Text>Link 1</Text>
-              <Text>Link 1</Text>
-              <Text>Link 1</Text>
-            </View>
             <View>
               <View style={[styles.flexRow, { gap: 8 }, styles.alignCenter]}>
                 <Fontisto name="photograph" size={ICON_SIZE} color="black" />
@@ -302,6 +291,20 @@ export default function ViewServiceRequest({ navigation, route }) {
                 images={serviceRequest.images}
                 navigation={navigation}
               />
+            </View>
+
+            <View>
+              <View style={[styles.flexRow, { gap: 8 }, styles.alignCenter]}>
+                <Entypo name="link" size={ICON_SIZE} color="black" />
+                <Text>Links</Text>
+              </View>
+              <View>
+                <Text>Link 1</Text>
+                <Text>Link 1</Text>
+                <Text>Link 1</Text>
+                <Text>Link 1</Text>
+                <Text>Link 1</Text>
+              </View>
             </View>
 
             <View style={[st.gray_bg, { padding: 12 }]}>

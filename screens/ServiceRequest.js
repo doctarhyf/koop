@@ -21,6 +21,7 @@ import UserContext from "../context/UserContext";
 import LoadingButton from "../components/LoadingButton";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import INeed from "../components/INeed";
+import LinksBox from "../components/LinksBox";
 function ServiceRequest({ navigation, route }) {
   const [servData, setServData] = useState({
     images: [],
@@ -169,24 +170,34 @@ function ServiceRequest({ navigation, route }) {
 
         {hasMoreData && (
           <View>
-            <Text>Descriptions</Text>
-            <TextInput
-              value={servData.desc || ""}
-              onChangeText={(txt) =>
-                setServData((prev) => ({ ...prev, desc: txt }))
-              }
-              multiline
-              numberOfLines={5}
-              placeholder="Ajouter beaucouplus de details sur ce que vous recherchez comme services ..."
-              style={[styles.ti, { paddingVertical: 12 }]}
-              textAlignVertical="top"
-            />
-            <Text>Pictures</Text>
-            <ImageAdder
-              navigation={navigation}
-              onImageAdded={onImageAdded}
-              onImagePressed={onImagePressed}
-            />
+            {/*  <View>
+              <Text>Descriptions</Text>
+              <TextInput
+                value={servData.desc || ""}
+                onChangeText={(txt) =>
+                  setServData((prev) => ({ ...prev, desc: txt }))
+                }
+                multiline
+                numberOfLines={5}
+                placeholder="Ajouter beaucouplus de details sur ce que vous recherchez comme services ..."
+                style={[styles.ti, { paddingVertical: 12 }]}
+                textAlignVertical="top"
+              />
+            </View> */}
+
+            <View>
+              <Text>Add Pictures</Text>
+              <ImageAdder
+                navigation={navigation}
+                onImageAdded={onImageAdded}
+                onImagePressed={onImagePressed}
+              />
+            </View>
+
+            <View>
+              <Text>Add Links</Text>
+              <LinksBox />
+            </View>
           </View>
         )}
 
