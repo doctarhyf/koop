@@ -101,7 +101,7 @@ export default function Shop({ route, navigation }) {
               width: "100%",
             }}
           >
-            <ProfileBadge user={user} />
+            <ProfileBadge profile={""} display_name={""} phone={""} />
           </View>
         </View>
 

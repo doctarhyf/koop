@@ -4,7 +4,7 @@ import { Image } from "expo-image";
 import styles from "../helpers/styles";
 import { LinearGradient } from "expo-linear-gradient";
 
-export default function ProfileBadge({ user }) {
+export default function ProfileBadge({ profile, display_name, phone }) {
   return (
     <View style={[styles.flexRow, { gap: 8, padding: 12 }, styles.alignCenter]}>
       <LinearGradient
@@ -12,13 +12,13 @@ export default function ProfileBadge({ user }) {
         style={st.gradient}
       />
       <Image
-        source={user.profile}
+        source={profile}
         style={{ width: 60, height: 60, borderRadius: 30 }}
         transition={1000}
       />
       <View>
-        <Text style={{ fontWeight: "bold" }}>{user.display_name}</Text>
-        <Text style={{ color: "#000000aa" }}>{user.phone}</Text>
+        <Text style={{ fontWeight: "bold" }}>{display_name}</Text>
+        <Text style={{ color: "#000000aa" }}>{phone}</Text>
       </View>
     </View>
   );
