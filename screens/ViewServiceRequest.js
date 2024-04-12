@@ -12,7 +12,7 @@ import {
 import React, { useContext, useLayoutEffect, useState } from "react";
 import SimpleTextButton from "../components/SimpleTextButton";
 import styles from "../helpers/styles";
-import { Ionicons } from "@expo/vector-icons";
+import { Fontisto, Ionicons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
@@ -28,6 +28,7 @@ import ImagesViewer from "../components/ImagesViewer";
 import { Entypo } from "@expo/vector-icons";
 import CommentBox from "../components/CommentBox";
 
+const ICON_SIZE = 36;
 const ACTION = {
   SEND_MESSAGE: "send_message",
   INTERESTED: "interested",
@@ -61,6 +62,27 @@ const ACTION_BUTTONS = [
     label: "Voir le shop",
     action: ACTION.VIEW_SHOP,
     icon: <Feather name="home" size={24} color={KOOP_BLUE} />,
+  },
+];
+
+const STATS_BUTTONS = [
+  {
+    icon: <Entypo name="eye" size={ICON_SIZE} color="black" />,
+    label: "Views",
+  },
+  {
+    icon: <AntDesign name="tags" size={ICON_SIZE} color="black" />,
+    label: "Interested",
+  },
+  {
+    icon: <FontAwesome name="comments" size={ICON_SIZE} color="black" />,
+    label: "Comments",
+    onPress: () =>
+      navigation.navigate("Comments", {
+        item_id: serviceRequest.id,
+        item_type: "sreq",
+        comments_count: serviceRequest.comments_count,
+      }),
   },
 ];
 
@@ -218,35 +240,6 @@ export default function ViewServiceRequest({ navigation, route }) {
           {serviceRequest.label}
         </Text>
 
-        <View
-          style={[
-            styles.paddingMid,
-            styles.flexRow,
-            { gap: 8 },
-            styles.justifyCenter,
-            styles.alignCenter,
-          ]}
-        >
-          <Text>View more details</Text>
-          <Switch
-            trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
-            thumbColor={showMore ? KOOP_BLUE : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitch}
-            value={showMore}
-          />
-        </View>
-
-        {showMore && (
-          <View>
-            <Text>{serviceRequest.desc}</Text>
-            <ImagesViewer
-              images={serviceRequest.images}
-              navigation={navigation}
-            />
-          </View>
-        )}
-
         {!me && (
           <View
             style={[
@@ -268,46 +261,74 @@ export default function ViewServiceRequest({ navigation, route }) {
           </View>
         )}
 
-        <View style={[st.gray_bg, { padding: 12 }]}>
-          {[
-            {
-              icon: <Entypo name="eye" size={36} color="black" />,
-              label: "Views",
-            },
-            {
-              icon: <AntDesign name="tags" size={36} color="black" />,
-              label: "Interested",
-            },
-            {
-              icon: <FontAwesome name="comments" size={36} color="black" />,
-              label: "Comments",
-              onPress: () =>
-                navigation.navigate("Comments", {
-                  item_id: serviceRequest.id,
-                  item_type: "sreq",
-                  comments_count: serviceRequest.comments_count,
-                }),
-            },
-          ].map((it, i) => (
-            <TouchableOpacity onPress={(e) => it.onPress && it.onPress()}>
-              <View style={[styles.flexRow, styles.alignCenter, { gap: 8 }]}>
-                {it.icon}
-                <View>
-                  <Text style={[]}>{it.label}</Text>
-                  <Text
-                    style={{
-                      fontWeight: "bold",
-                      color: KOOP_BLUE_DARK,
-                      fontSize: 24,
-                    }}
-                  >
-                    {i === 2 ? serviceRequest.comments_count : 0}
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))}
+        <View
+          style={[
+            styles.paddingMid,
+            styles.flexRow,
+            { gap: 8 },
+            styles.justifyCenter,
+            styles.alignCenter,
+          ]}
+        >
+          <Text>View more details</Text>
+          <Switch
+            trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
+            thumbColor={showMore ? KOOP_BLUE : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={showMore}
+          />
         </View>
+
+        {showMore && (
+          <View>
+            <View style={[styles.flexRow, { gap: 8 }, styles.alignCenter]}>
+              <Entypo name="link" size={ICON_SIZE} color="black" />
+              <Text>Links</Text>
+            </View>
+            <View>
+              <Text>Link 1</Text>
+              <Text>Link 1</Text>
+              <Text>Link 1</Text>
+              <Text>Link 1</Text>
+              <Text>Link 1</Text>
+            </View>
+            <View>
+              <View style={[styles.flexRow, { gap: 8 }, styles.alignCenter]}>
+                <Fontisto name="photograph" size={ICON_SIZE} color="black" />
+                <Text>Photos</Text>
+              </View>
+              <ImagesViewer
+                images={serviceRequest.images}
+                navigation={navigation}
+              />
+            </View>
+
+            <View style={[st.gray_bg, { padding: 12 }]}>
+              {STATS_BUTTONS.map((it, i) => (
+                <TouchableOpacity onPress={(e) => it.onPress && it.onPress()}>
+                  <View
+                    style={[styles.flexRow, styles.alignCenter, { gap: 8 }]}
+                  >
+                    {it.icon}
+                    <View>
+                      <Text style={[]}>{it.label}</Text>
+                      <Text
+                        style={{
+                          fontWeight: "bold",
+                          color: KOOP_BLUE_DARK,
+                          fontSize: 24,
+                        }}
+                      >
+                        {i === 2 ? serviceRequest.comments_count : 0}
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        )}
 
         {!me && (
           <CommentBox
