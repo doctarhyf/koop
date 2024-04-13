@@ -28,6 +28,7 @@ import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import ShopSetup from "./ShopSetup";
 import CustomAlert from "../components/CustomAlert";
 import { VILLES } from "../helpers/flow";
+import { Camera } from "expo-camera";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -75,7 +76,16 @@ function ProfileSetup({ navigation, route }) {
   };
 
   const pickImageAsync = async (mediaType) => {
-    closeBottomSheet();
+    const { status } = await Camera.requestCameraPermissionsAsync();
+
+    if (status !== "granted") {
+      Alert.alert(
+        "Camera permission",
+        "We need your permission to access the camera"
+      );
+      return;
+    }
+
     let result;
 
     if (mediaType === MEDIA_TYPE_CAMERA) {
@@ -89,6 +99,8 @@ function ProfileSetup({ navigation, route }) {
         quality: 1,
       });
     }
+
+    closeBottomSheet();
 
     if (!result.canceled) {
       const { uri } = result.assets[0];

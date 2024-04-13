@@ -10,6 +10,7 @@ import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 import { KOOP_BUCKET_NAME, supabase } from "../utils/supabase";
 import UserContext from "../context/UserContext";
+import { Camera } from "expo-camera";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -36,8 +37,18 @@ export default function ProfileUploader({
   };
 
   const pickImageAsync = async (mediaType) => {
+    const { status } = await Camera.requestCameraPermissionsAsync();
+
+    if (status !== "granted") {
+      Alert.alert(
+        "Camera permission",
+        "We need your permission to access the camera"
+      );
+      return;
+    }
+
     setUpdatingProfile(true);
-    closeBottomSheet();
+
     let result;
 
     if (mediaType === MEDIA_TYPE_CAMERA) {
@@ -54,6 +65,7 @@ export default function ProfileUploader({
       });
     }
 
+    closeBottomSheet();
     if (!result.canceled) {
       const { uri } = result.assets[0];
 

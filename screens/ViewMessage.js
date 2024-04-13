@@ -17,6 +17,7 @@ import { KOOP_BLUE, KOOP_GREEN } from "../helpers/colors";
 import * as API from "../utils/api";
 import UserContext from "../context/UserContext";
 import { ParseCreatedAt } from "../helpers/funcs";
+import { supabase } from "../utils/supabase";
 
 export default function ViewMessage({ route, navigation }) {
   const { user, setuser } = useContext(UserContext);
@@ -78,6 +79,24 @@ export default function ViewMessage({ route, navigation }) {
     );
   };
 
+  useEffect(() => {
+    const channels = supabase
+      .channel("custom-insert-channel")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "koop_messages" },
+        (payload) => {
+          console.log("Change received!", payload);
+          Vibration.vibrate(250);
+          const newmsg = payload.new;
+          newmsg.me = newmsg.from_id === user.id;
+
+          setmessages((prev) => [...prev, newmsg]);
+        }
+      )
+      .subscribe();
+  }, []);
+
   const onSendMessage = async () => {
     setloading(true);
 
@@ -87,19 +106,7 @@ export default function ViewMessage({ route, navigation }) {
       content: newMessage,
     });
 
-    Vibration.vibrate(250);
     setNewMessage("");
-
-    const newMessages = [
-      ...messages,
-      {
-        from_id: res.from_id,
-        to_id: res.to_id,
-        content: res.content,
-        me: true,
-      },
-    ];
-    setmessages(newMessages);
 
     setloading(false);
   };

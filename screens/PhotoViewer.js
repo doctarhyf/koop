@@ -1,8 +1,8 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import styles from "../helpers/styles";
 import { View } from "react-native";
-import { height } from "deprecated-react-native-prop-types/DeprecatedImagePropType";
 import { Image } from "expo-image";
+
 export default function PhotoViewer({ route, navigation }) {
   const { params } = route;
 

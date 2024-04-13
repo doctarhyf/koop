@@ -28,6 +28,7 @@ import useFetch from "../hooks/useFetch";
 import UserContext from "../context/UserContext";
 import { FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { supabase } from "../utils/supabase";
 
 const MESSAGE_TYPE = {
   INBOX: "inbox",

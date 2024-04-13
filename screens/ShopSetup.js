@@ -37,6 +37,7 @@ import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import InfoEdit from "./InfoEdit";
 import Initializing from "./Initializing";
+import { Camera } from "expo-camera";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -92,7 +93,16 @@ function ShopSetup({ navigation, route }) {
   };
 
   const pickImageAsync = async (mediaType) => {
-    closeBottomSheet();
+    const { status } = await Camera.requestCameraPermissionsAsync();
+
+    if (status !== "granted") {
+      Alert.alert(
+        "Camera permission",
+        "We need your permission to access the camera"
+      );
+      return;
+    }
+
     let result;
 
     if (mediaType === MEDIA_TYPE_CAMERA) {
@@ -107,6 +117,7 @@ function ShopSetup({ navigation, route }) {
       });
     }
 
+    closeBottomSheet();
     if (!result.canceled) {
       const { uri } = result.assets[0];
 
