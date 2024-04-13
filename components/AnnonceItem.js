@@ -25,17 +25,6 @@ export default function AnnonceItem({ item, itsMyItem, showProfile }) {
         },
       ]}
     >
-      {/*  {showProfile ? (
-        <Image
-          source={item.user_data.profile}
-          style={[
-            { width: 60, height: 60, borderRadius: 30, overflow: "hidden" },
-          ]}
-        />
-      ) : (
-        <FontAwesome5 name="bolt" size={24} color="green" />
-      )} */}
-
       <Image
         placeholder={"Loading ..."}
         source={
