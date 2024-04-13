@@ -21,9 +21,7 @@ export default function SendMessage({ route, navigation }) {
   const [loading, setloading] = useState(false);
 
   const { shop_name, shop_id, from_id, to_id, name } = route.params;
-  const [message, setmessage] = useState(
-    `Hello, ${shop_name}, I would like to know more about ${name} please!`
-  );
+  const [message, setmessage] = useState("");
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -73,6 +71,7 @@ export default function SendMessage({ route, navigation }) {
         onChangeText={(txt) => setmessage(txt)}
         multiline={true}
         numberOfLines={5}
+        placeholder="Write your message here ..."
       />
       <TextButton
         label={"View Shop"}

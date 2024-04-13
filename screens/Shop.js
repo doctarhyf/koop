@@ -151,7 +151,11 @@ export default function Shop({ route, navigation }) {
               icon: require("../assets/icons/mail.png"),
             }}
             handleOnPress={(e) => {
-              navigation.navigate("SendMessage", shop);
+              navigation.navigate("SendMessage", {
+                from_id: user.id,
+                to_id: shop_id,
+                shop_name: shop_name,
+              });
             }}
           />
 

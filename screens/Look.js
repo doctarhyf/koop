@@ -28,72 +28,28 @@ import TextButton from "../components/TextButton";
 import useItemsLoader from "../hooks/useItemsLoader";
 import { TABLE_NAMES } from "../utils/supabase";
 import useFetch, { useFetch2 } from "../hooks/useFetch";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { KOOP_BLUE } from "../helpers/colors";
 import AnnonceItem from "../components/AnnonceItem";
 import { useFocusEffect } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 
-/* const FeaturedItems = ({ navigation, me, onViewAll }) => {
-  const [loading, items, error] = useFetch(
-    "https://konext.vercel.app/api/items",
-    true
-  );
-
-  const onViewItem = (item) => {
-    navigation.navigate("ServiceInfo", item);
-  };
-
+const ViewAll = (e) => {
   return (
-    <View>
-      <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>{`POPULAR ITEMS`}</Text>
-        <TouchableOpacity onPress={(e) => onViewAll(FUNCS.VIEW_ALL_TYPE.ITEMS)}>
-          <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
-        </TouchableOpacity>
-      </View>
-
-      {loading ? (
-        <ActivityIndicator animating={loading} color={KOOP_BLUE} />
-      ) : (
-        <View>
-          <ScrollView horizontal>
-            {items &&
-              items.map &&
-              items.map((item, item_idx) => (
-                <TouchableOpacity
-                  key={item_idx}
-                  onPress={(e) => onViewItem(item)}
-                >
-                  <ImageBackground
-                    style={[
-                      styles.bgBlue,
-                      styles.roundedSmall,
-                      styles.marginH,
-                      st.imgbg,
-                      styles.justifyEnd,
-                      styles.overflowHidden,
-                    ]}
-                    source={{
-                      uri: item.photos[0], //"https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg",
-                    }}
-                  >
-                    <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
-                      <Text style={styles.textWhite}>{item.name}</Text>
-                      <Text style={[styles.textGreen]}>{item.shop_name}</Text>
-                      <Text style={[styles.textGray, { fontSize: 12 }]}>
-                        + 40 items
-                      </Text>
-                    </View>
-                  </ImageBackground>
-                </TouchableOpacity>
-              ))}
-          </ScrollView>
-        </View>
-      )}
+    <View style={[styles.flexRow, { gap: 8 }, styles.alignCenter]}>
+      <Text style={[styles.textBlue]}>View All</Text>
+      <AntDesign name="rightcircle" size={18} color={KOOP_BLUE} />
     </View>
   );
-}; */
+};
+
+const SectionTitle = ({ text }) => {
+  return (
+    <Text style={[styles.mbLarge, styles.mtLarge, { fontWeight: "bold" }]}>
+      {text}
+    </Text>
+  );
+};
 
 const FeaturedShops = ({ navigation, onViewAll, refreshing }) => {
   const { user, setuser } = useContext(UserContext);
@@ -140,9 +96,9 @@ const FeaturedShops = ({ navigation, onViewAll, refreshing }) => {
   return (
     <View>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>POPULAR SHOPS</Text>
+        <SectionTitle text={"POPULAR SHOPS"} />
         <TouchableOpacity onPress={(e) => onViewAll(FUNCS.VIEW_ALL_TYPE.SHOPS)}>
-          <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
+          <ViewAll />
         </TouchableOpacity>
       </View>
       {loading ? (
@@ -214,11 +170,11 @@ const ServiceRequests = ({ navigation, onViewAll, refreshing }) => {
   return (
     <View style={[{ marginTop: 12 }]}>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>ANNONCES</Text>
+        <SectionTitle text={"DERNIERES ANNONCES"} />
         <TouchableOpacity
           onPress={(e) => onViewAll(FUNCS.VIEW_ALL_TYPE.SERVICE_REQUESTS)}
         >
-          <Text style={[styles.textSmall, styles.textBlue]}>View all</Text>
+          <ViewAll />
         </TouchableOpacity>
       </View>
       {loadingsreq && (
@@ -289,7 +245,7 @@ const FeaturedAd = ({ navigation }) => {
   return (
     <View>
       <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <Text style={[styles.mbLarge, styles.mtLarge]}>ESPACE PUB</Text>
+        <SectionTitle text={"ESPACE PUB"} />
       </View>
       {loading ? (
         <ActivityIndicator animating={loading} size={32} color={KOOP_BLUE} />
@@ -316,7 +272,7 @@ const FeaturedAd = ({ navigation }) => {
                     {
                       height: 200,
 
-                      backgroundColor: "red",
+                      backgroundColor: KOOP_BLUE,
                       overflow: "hidden",
                     },
                   ]}

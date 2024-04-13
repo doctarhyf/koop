@@ -25,7 +25,7 @@ export default function AnnonceItem({ item, itsMyItem, showProfile }) {
         },
       ]}
     >
-      {showProfile ? (
+      {/*  {showProfile ? (
         <Image
           source={item.user_data.profile}
           style={[
@@ -34,20 +34,40 @@ export default function AnnonceItem({ item, itsMyItem, showProfile }) {
         />
       ) : (
         <FontAwesome5 name="bolt" size={24} color="green" />
-      )}
+      )} */}
 
-      <View style={[styles.flex1]}>
-        <Text>
-          <Text style={[styles.textBlue, styles.fontBold]}>
+      <Image
+        source={
+          item.images && item.images.length > 0
+            ? item.images[0]
+            : item.user_data.profile
+        }
+        style={[
+          { width: 60, height: 60, borderRadius: 12, overflow: "hidden" },
+        ]}
+      />
+
+      <View style={[styles.flex1, { gap: 8 }]}>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <Text
+            style={[
+              { color: "purple", fontWeight: "bold", fontSize: 12 },
+              styles.fontBold,
+            ]}
+          >
             {item.user_data.ville}
           </Text>
-          -{" "}
-          {me
-            ? `${item.user_data.display_name} (Me)`
-            : item.user_data.display_name}
-        </Text>
+          <Text>-</Text>
+          <Text style={[{ color: "grey", fontSize: 12 }]}>
+            {me
+              ? `${item.user_data.display_name} (Me)`
+              : item.user_data.display_name}
+          </Text>
+        </View>
 
-        <Text style={[{ fontWeight: "bold", flex: 1 }]}>{item.label}</Text>
+        <Text style={[{ fontWeight: "bold", flex: 1, fontSize: 16 }]}>
+          {item.label}
+        </Text>
 
         <Text style={[styles.textGray]}>{item.timeAgo}</Text>
       </View>
