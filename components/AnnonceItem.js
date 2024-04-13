@@ -37,13 +37,20 @@ export default function AnnonceItem({ item, itsMyItem, showProfile }) {
       )} */}
 
       <Image
+        placeholder={"Loading ..."}
         source={
           item.images && item.images.length > 0
             ? item.images[0]
             : item.user_data.profile
         }
         style={[
-          { width: 60, height: 60, borderRadius: 12, overflow: "hidden" },
+          {
+            width: 60,
+            height: 60,
+            borderRadius: 8,
+            overflow: "hidden",
+            alignSelf: "flex-start",
+          },
         ]}
       />
 

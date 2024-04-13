@@ -74,14 +74,11 @@ function ServiceRequest({ navigation, route }) {
       const posted = res.id;
       if (posted) {
         Alert.alert(
-          "Request posted!",
-          "Votre demande a ete postee avec success.Aller a la page My Products & services?",
+          "Annonce postee!",
+          "Votre annonce a ete postee avec success.",
           [
             {
-              text: "Cool",
-            },
-            {
-              text: "Voir mes Annonces",
+              text: "Cool!",
 
               onPress: () => navigation.replace("MyItems"),
             },
