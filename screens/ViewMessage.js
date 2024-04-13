@@ -33,7 +33,7 @@ export default function ViewMessage({ route, navigation }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: contact.shop_name + " " + contact.id,
+      title: contact.display_name,
       headerRight: () => (
         <TouchableOpacity onPress={(e) => console.log(e)}>
           <Image
