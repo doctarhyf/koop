@@ -162,7 +162,12 @@ const FeaturedShops = ({ navigation, onViewAll, refreshing }) => {
                       styles.bgBlue,
                       styles.roundedMd,
                       styles.marginH,
-                      { width: 200, height: 140 },
+                      {
+                        width: 200,
+                        height: 140,
+                        borderWidth: 4,
+                        borderColor: user.id === shop.id ? KOOP_BLUE : "white",
+                      },
                       styles.justifyEnd,
                       styles.overflowHidden,
                     ]}
