@@ -163,15 +163,15 @@ export default function ViewServiceRequest({ navigation, route }) {
         style: "destructive",
         onPress: async () => {
           setloading(true);
-          const res = await API.deleteItem(
-            TABLE_NAMES.KOOP_SERVICES_REQUEST,
-            "id",
-            item.id
-          );
+          const res = await API.removeServReq(item.id);
 
           setloading(false);
 
-          if (res.error === null) {
+          // alert(JSON.stringify(res));
+
+          if (res.error) {
+            Alert.alert("Error deleting", JSON.stringify(error));
+          } else {
             Alert.alert(
               "Announce deleted!",
               "Your announce has been deleted successfuly!",
@@ -182,8 +182,6 @@ export default function ViewServiceRequest({ navigation, route }) {
                 },
               ]
             );
-          } else {
-            Alert.alert("Error deleting", JSON.stringify(error));
           }
         },
       },
@@ -309,7 +307,7 @@ export default function ViewServiceRequest({ navigation, route }) {
               <View>
                 {serviceRequest.links &&
                   serviceRequest.links.split(";").map((lk, i) => (
-                    <TouchableOpacity onPress={(e) => onLinkPress(lk)}>
+                    <TouchableOpacity key={i} onPress={(e) => onLinkPress(lk)}>
                       <Text
                         style={[{ marginVertical: 8, color: KOOP_BLUE_DARK }]}
                         numberOfLines={1}

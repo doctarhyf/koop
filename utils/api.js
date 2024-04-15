@@ -220,6 +220,25 @@ export async function insertServiceRequest(user, itemData) {
   }
 }
 
+export async function removeServReq(item_id) {
+  try {
+    const response = await fetch(
+      `${API_ENDPOINT}/sreq/remove?item_id=${item_id}`
+    );
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (error) {
+    // Handle errors
+    errorMessage = `There was a problem with the fetch operation: ${JSON.stringify(
+      error
+    )}`;
+    console.error(errorMessage);
+    return { error: true, message: errorMessage };
+  }
+}
+
 export async function deleteItem(tableName, rowName, rowVal) {
   let res = supabase.from(tableName).delete().eq(rowName, rowVal);
   console.error(
