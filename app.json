@@ -15,6 +15,12 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
         }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
+        }
       ]
     ],
 
@@ -26,7 +32,10 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.doctarhyf.koop"
+      "bundleIdentifier": "com.doctarhyf.koop",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to take item pictures."
+      }
     },
     "android": {
       "adaptiveIcon": {
