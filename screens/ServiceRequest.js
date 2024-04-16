@@ -23,6 +23,7 @@ import LoadingButton from "../components/LoadingButton";
 import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import INeed from "../components/INeed";
 import LinksBox from "../components/LinksBox";
+import SimpleTextButton from "../components/SimpleTextButton";
 function ServiceRequest({ navigation, route }) {
   const [servData, setServData] = useState({
     images: [],
@@ -38,58 +39,75 @@ function ServiceRequest({ navigation, route }) {
     setHasMoreData((previousState) => !previousState);
 
   const onPost = async () => {
-    //alert(JSON.stringify(servData));
-    setloading(true);
-    const { label, images, desc } = servData;
+    Alert.alert(
+      "Post item?",
+      "Are you sure there's no any mistakes? proceed with posting?",
+      [
+        {
+          text: "Let me recheck",
+        },
+        {
+          text: "Procee with posting",
+          style: "destructive",
+          onPress: async () => {
+            setloading(true);
+            const { label, images, desc } = servData;
 
-    if ((label && label.trim().length === 0) || label.length.label < 10) {
-      Alert.alert(
-        `Label : "${label}" too short`,
-        "Label text must be over 10 caracters"
-      );
-      setloading(false);
-      return;
-    }
+            if (
+              (label && label.trim().length === 0) ||
+              label.length.label < 10
+            ) {
+              Alert.alert(
+                `Label : "${label}" too short`,
+                "Label text must be over 10 caracters"
+              );
+              setloading(false);
+              return;
+            }
 
-    if (
-      hasMoreData &&
-      ((desc && desc.trim().length === 0) || label.length.label < 10)
-    ) {
-      Alert.alert(
-        `Dascription text too short`,
-        "Description text must be over 10 caracters"
-      );
-      setloading(false);
-      return;
-    }
+            if (
+              hasMoreData &&
+              ((desc && desc.trim().length === 0) || label.length.label < 10)
+            ) {
+              Alert.alert(
+                `Dascription text too short`,
+                "Description text must be over 10 caracters"
+              );
+              setloading(false);
+              return;
+            }
 
-    const finalData = { ...servData };
-    finalData.user_id = user.id;
+            const finalData = { ...servData };
+            finalData.user_id = user.id;
 
-    try {
-      setloading(true);
+            try {
+              setloading(true);
 
-      const res = await API.insertServiceRequest(user, finalData);
-      //alert(JSON.stringify(res));
-      const posted = res.id;
-      if (posted) {
-        Alert.alert(
-          "Annonce postee!",
-          "Votre annonce a ete postee avec success.",
-          [
-            {
-              text: "Cool!",
+              const res = await API.insertServiceRequest(user, finalData);
+              //alert(JSON.stringify(res));
+              const posted = res.id;
+              if (posted) {
+                Alert.alert(
+                  "Annonce postee!",
+                  "Votre annonce a ete postee avec success.",
+                  [
+                    {
+                      text: "Super 😎!",
 
-              onPress: () => navigation.replace("MyItems"),
-            },
-          ]
-        );
-      }
-      setloading(false);
-    } catch (e) {
-      setloading(false);
-      alert("Error : " + JSON.stringify(e));
-    }
+                      onPress: () => navigation.navigate("Look"),
+                    },
+                  ]
+                );
+              }
+              setloading(false);
+            } catch (e) {
+              setloading(false);
+              alert("Error : " + JSON.stringify(e));
+            }
+          },
+        },
+      ]
+    );
   };
 
   const onImageAdded = (newimages) => {
@@ -102,6 +120,10 @@ function ServiceRequest({ navigation, route }) {
 
   const onLinksAdd = (links) => {
     setServData((prev) => ({ ...prev, links: links }));
+  };
+
+  const onPostAsAd = () => {
+    navigation.navigate("Subscriptions");
   };
 
   return (
@@ -191,6 +213,15 @@ function ServiceRequest({ navigation, route }) {
 
         <View style={[styles.paddingLarge]}>
           <LoadingButton text={"POST"} handlePress={onPost} loading={loading} />
+          <Text style={[st.subt]}>
+            Une annonce normale ne s'affiche que pour 24h
+          </Text>
+          <SimpleTextButton text={"POST as AD"} handlePress={onPostAsAd} />
+          <Text style={[st.subt]}>
+            Une annonce promo s'affichera au top des recherches pour plus de
+            visibilite, selon la duree que vous allez choisir selon votre budget
+            😎
+          </Text>
         </View>
       </View>
     </ScrollView>
@@ -203,6 +234,10 @@ const st = StyleSheet.create({
     padding: 8,
     borderRadius: 16,
     borderColor: "#ddd",
+  },
+  subt: {
+    color: "grey",
+    fontStyle: "italic",
   },
 });
 
