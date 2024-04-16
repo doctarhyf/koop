@@ -31,13 +31,15 @@ const POST_TYPE = [
     id: 0,
     type: "STANDARD",
     label: "Standard",
-    desc: "Une annonce normale ne s'affiche que pour 24h",
+    desc: ` · Une annonce normale ne s'affiche que pour 24h`,
   },
   {
     id: 1,
     type: "PREMIUM",
     label: "Premium",
-    desc: "Une annonce promo s'affichera au top des recherches pour plus de visibilite, selon la duree que vous allez choisir selon votre budget 😎",
+    desc: `· S'affichera au top des recherches pour plus de visibilite💯
+· Duree d'affichage selon votre budget 😎
+· Garantie d'atteindre le maximum d'audiance✅🙏`,
   },
 ];
 function ServiceRequest({ navigation, route }) {
