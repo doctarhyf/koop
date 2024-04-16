@@ -7,6 +7,7 @@ import {
   Switch,
   Alert,
   KeyboardAvoidingView,
+  TouchableOpacity,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useContext, useEffect, useState } from "react";
@@ -24,7 +25,23 @@ import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import INeed from "../components/INeed";
 import LinksBox from "../components/LinksBox";
 import SimpleTextButton from "../components/SimpleTextButton";
+
+const POST_TYPE = [
+  {
+    id: 0,
+    type: "STANDARD",
+    label: "Standard",
+    desc: "Une annonce normale ne s'affiche que pour 24h",
+  },
+  {
+    id: 1,
+    type: "PREMIUM",
+    label: "Premium",
+    desc: "Une annonce promo s'affichera au top des recherches pour plus de visibilite, selon la duree que vous allez choisir selon votre budget 😎",
+  },
+];
 function ServiceRequest({ navigation, route }) {
+  const [postType, setPostType] = useState(POST_TYPE[0]);
   const [servData, setServData] = useState({
     images: [],
     label: "this is a label",
@@ -50,6 +67,22 @@ function ServiceRequest({ navigation, route }) {
           text: "Procee with posting",
           style: "destructive",
           onPress: async () => {
+            if (postType.id === 1) {
+              Alert.alert(
+                "Annonce Premium",
+                "Vous devez disposer d'un abonnement premium pour lancer une annonce premium",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      navigation.navigate("Subscriptions");
+                    },
+                  },
+                ]
+              );
+              return;
+            }
+
             setloading(true);
             const { label, images, desc } = servData;
 
@@ -211,7 +244,55 @@ function ServiceRequest({ navigation, route }) {
           </View>
         )}
 
-        <View style={[styles.paddingLarge]}>
+        <View>
+          <View style={{ flexDirection: "row" }}>
+            {POST_TYPE.map((pt, i) => (
+              <TouchableOpacity onPress={(e) => setPostType(pt)}>
+                <View
+                  style={[
+                    {
+                      padding: 12,
+                      backgroundColor:
+                        i === postType.id ? "purple" : "#ffffff00",
+                      borderTopLeftRadius: 18,
+                      borderTopRightRadius: 18,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={{
+                      fontWeight: i === postType.id ? "bold" : "normal",
+                      color: i === postType.id ? "white" : "black",
+                    }}
+                  >
+                    {pt.label}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View
+            style={{
+              borderWidth: 2,
+              borderColor: "purple",
+              padding: 8,
+              borderBottomStartRadius: 18,
+              borderBottomEndRadius: 18,
+            }}
+          >
+            <View>
+              <Text style={[st.subt]}>{postType.desc}</Text>
+              <LoadingButton
+                text={"POST"}
+                handlePress={onPost}
+                loading={loading}
+              />
+            </View>
+          </View>
+        </View>
+
+        {/* <View style={[styles.paddingLarge]}>
           <LoadingButton text={"POST"} handlePress={onPost} loading={loading} />
           <Text style={[st.subt]}>
             Une annonce normale ne s'affiche que pour 24h
@@ -222,7 +303,7 @@ function ServiceRequest({ navigation, route }) {
             visibilite, selon la duree que vous allez choisir selon votre budget
             😎
           </Text>
-        </View>
+        </View> */}
       </View>
     </ScrollView>
   );
@@ -238,6 +319,9 @@ const st = StyleSheet.create({
   subt: {
     color: "grey",
     fontStyle: "italic",
+  },
+  posttbtn: {
+    padding: 12,
   },
 });
 
