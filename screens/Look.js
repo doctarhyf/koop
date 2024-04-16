@@ -134,8 +134,8 @@ const FeaturedShops = ({ navigation, onViewAll, refreshing }) => {
                     <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
                       <Text style={styles.textWhite}>{shop.shop_name}</Text>
                       {/*  <Text style={[styles.textGreen]}>{curShop.shop_name}</Text> */}
-                      <Text style={[styles.textGray, { fontSize: 12 }]}>
-                        {shop.items_count} items
+                      <Text style={[styles.textGreen, { fontSize: 12 }]}>
+                        {shop.items_count} announces
                       </Text>
                     </View>
                   </ImageBackground>
