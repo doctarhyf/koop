@@ -26,7 +26,7 @@ import INeed from "../components/INeed";
 import LinksBox from "../components/LinksBox";
 import SimpleTextButton from "../components/SimpleTextButton";
 
-const POST_TYPE = [
+const ANNOUNCE_TYPE = [
   {
     id: 0,
     type: "STANDARD",
@@ -43,7 +43,7 @@ const POST_TYPE = [
   },
 ];
 function ServiceRequest({ navigation, route }) {
-  const [postType, setPostType] = useState(POST_TYPE[0]);
+  const [announceType, setAnnounceType] = useState(ANNOUNCE_TYPE[0]);
   const [servData, setServData] = useState({
     images: [],
     label: "this is a label",
@@ -69,7 +69,7 @@ function ServiceRequest({ navigation, route }) {
           text: "Procee with posting",
           style: "destructive",
           onPress: async () => {
-            if (postType.id === 1) {
+            if (announceType.id === 1) {
               Alert.alert(
                 "Annonce Premium",
                 "Vous devez disposer d'un abonnement premium pour lancer une annonce premium",
@@ -248,14 +248,14 @@ function ServiceRequest({ navigation, route }) {
 
         <View>
           <View style={{ flexDirection: "row" }}>
-            {POST_TYPE.map((pt, i) => (
-              <TouchableOpacity onPress={(e) => setPostType(pt)}>
+            {ANNOUNCE_TYPE.map((pt, i) => (
+              <TouchableOpacity onPress={(e) => setAnnounceType(pt)}>
                 <View
                   style={[
                     {
                       padding: 12,
                       backgroundColor:
-                        i === postType.id ? "purple" : "#ffffff00",
+                        i === announceType.id ? "purple" : "#ffffff00",
                       borderTopLeftRadius: 18,
                       borderTopRightRadius: 18,
                     },
@@ -263,8 +263,8 @@ function ServiceRequest({ navigation, route }) {
                 >
                   <Text
                     style={{
-                      fontWeight: i === postType.id ? "bold" : "normal",
-                      color: i === postType.id ? "white" : "black",
+                      fontWeight: i === announceType.id ? "bold" : "normal",
+                      color: i === announceType.id ? "white" : "black",
                     }}
                   >
                     {pt.label}
@@ -284,7 +284,7 @@ function ServiceRequest({ navigation, route }) {
             }}
           >
             <View>
-              <Text style={[st.subt]}>{postType.desc}</Text>
+              <Text style={[st.subt]}>{announceType.desc}</Text>
               <LoadingButton
                 text={"POST"}
                 handlePress={onPost}
