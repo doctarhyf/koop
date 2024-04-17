@@ -45,7 +45,7 @@ export default function Shop({ route, navigation }) {
     to_id,
   } = shop;
 
-  alert(JSON.stringify(params));
+  //alert(JSON.stringify(params));
 
   const CONTACTS = [
     {
