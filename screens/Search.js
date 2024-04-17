@@ -24,8 +24,14 @@ import TagsSelector from "../components/TagsSelector";
 import AnnonceItem from "../components/AnnonceItem";
 import UserContext from "../context/UserContext";
 
+const SEARCHING_MODE = {
+  SHOPS: 0,
+  SERVICE_REQUESTS: 1,
+};
+
 export default function Search({ navigation }) {
   const { user, setuser } = useContext(UserContext);
+  const [mode, setmode] = useState(SEARCHING_MODE.SERVICE_REQUESTS);
   const [q, setq] = useState("");
   const [selected_villes, set_selected_villes] = useState([]);
   const [loadingItems, items, error] = useFetch(
@@ -78,6 +84,7 @@ export default function Search({ navigation }) {
     <TouchableOpacity
       onPress={(e) => navigation.navigate("ViewServiceRequest", item.item)}
     >
+      {/* if mode is shop change item */}
       <AnnonceItem
         item={item.item}
         itsMyItem={item.item.user_data.id === user.id}
