@@ -33,7 +33,7 @@ export default function Search({ navigation }) {
   const { user, setuser } = useContext(UserContext);
   const [mode, setmode] = useState(SEARCHING_MODE.SERVICE_REQUESTS);
   const [q, setq] = useState("");
-  const [selected_villes, set_selected_villes] = useState([]);
+  const [selected_tags, set_selected_tags] = useState([]);
   const [loadingItems, items, error] = useFetch(
     "https://konext.vercel.app/api/sreq"
   );
@@ -49,22 +49,24 @@ export default function Search({ navigation }) {
     setq(txt);
 
     const emptySearch = txt.trim() === "";
-    const villesSelected = selected_villes.length > 0;
-    let filteredByVille = [...items];
+    const tagsAreSelected = selected_tags.length > 0;
+    let filteredBySelectedTags = [...items];
 
-    if (villesSelected) {
-      filteredByVille = items.filter((it) =>
-        selected_villes.includes(it.user_data.ville)
+    if (tagsAreSelected) {
+      filteredBySelectedTags = items.filter((it) =>
+        //if mode is shop -> change logic
+        selected_tags.includes(it.user_data.ville)
       );
     }
 
     if (emptySearch) {
-      setitemsf([...filteredByVille]);
+      setitemsf([...filteredBySelectedTags]);
       return;
     }
 
     setitemsf(
-      filteredByVille.filter((it) =>
+      filteredBySelectedTags.filter((it) =>
+        //if mode is shop -> change logic
         it.label.toLowerCase().includes(txt.toLowerCase())
       )
     );
@@ -72,7 +74,7 @@ export default function Search({ navigation }) {
 
   const onTagsUpdate = (tags) => {
     console.error(tags);
-    set_selected_villes(tags);
+    set_selected_tags(tags);
     if (tags.length === 0) {
       setitemsf(items);
       return;
