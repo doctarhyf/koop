@@ -80,14 +80,14 @@ export default function Search({ navigation }) {
     setitemsf(items.filter((it) => tags.includes(it.user_data.ville)));
   };
 
-  const renderItem = (item) => (
+  const renderItem = (data) => (
     <TouchableOpacity
-      onPress={(e) => navigation.navigate("ViewServiceRequest", item.item)}
+      onPress={(e) => navigation.navigate("ViewServiceRequest", data.item)}
     >
       {/* if mode is shop change item */}
       <AnnonceItem
-        item={item.item}
-        itsMyItem={item.item.user_data.id === user.id}
+        item={data.item}
+        itsMyItem={data.item.user_data.id === user.id}
         showProfile
       />
     </TouchableOpacity>
