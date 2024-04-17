@@ -29,13 +29,17 @@ export default function ViewMessage({ route, navigation }) {
 
   const [newMessage, setNewMessage] = useState("");
 
-  //alert(JSON.stringify(contact_data));
+  //alert(JSON.stringify(contact_data.item[1]));
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: contact.display_name,
       headerRight: () => (
-        <TouchableOpacity onPress={(e) => console.log(e)}>
+        <TouchableOpacity
+          onPress={
+            (e) => null //navigation.navigate("Shop", { shop: contact_data.item[1] })
+          }
+        >
           <Image
             style={{
               width: 30,
