@@ -18,25 +18,7 @@ import styles from "../helpers/styles";
 import MenuButton from "../components/MenuButton";
 import CustomAlert from "../components/CustomAlert";
 import { useFetch2 } from "../hooks/useFetch";
-
-const SUBS = [
-  {
-    type: "Free",
-    price: "",
-    desc: "Pour une experiance de base, sans aucun perks",
-  },
-  {
-    type: "Monthly",
-    price: "$4,99 / month",
-    desc: "Pour un abonnement mensuel",
-  },
-  {
-    type: "Yearly",
-    price: "$50 / year",
-    oldprice: "$59.88 / year",
-    desc: "Pour un abonnement annuel",
-  },
-];
+import * as LocalAuthentication from "expo-local-authentication";
 
 const PAYMENT_METHODS = [
   { icon: require("../assets/icons/visa.png"), label: "VISA" },
@@ -46,6 +28,7 @@ const PAYMENT_METHODS = [
 ];
 
 export default function PremiumSubscriptions({ navigation, route }) {
+  const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
   const [selectedSub, setselectedSub] = React.useState(0);
   const [selectedPayment, setselectedPayment] = React.useState(0);
   const [show, setshow] = useState(false);
@@ -53,15 +36,40 @@ export default function PremiumSubscriptions({ navigation, route }) {
     "https://konext.vercel.app/api/sreq/subbund?type=sreq"
   );
 
-  const handleOnPress = (e) => {
-    if (show === false) {
-      setTimeout(() => {
-        navigation.navigate("PaymentResult");
-        setshow(false);
-      }, 2500);
-    }
+  useEffect(() => {
+    checkBiometricAvailability();
+  }, []);
 
-    setshow((prev) => !prev);
+  const checkBiometricAvailability = async () => {
+    const compatible = await LocalAuthentication.hasHardwareAsync();
+    setIsBiometricAvailable(compatible);
+
+    // alert(`Biometric compatible ${compatible}`);
+  };
+
+  const authenticate = async () => {
+    const result = await LocalAuthentication.authenticateAsync({
+      promptMessage: "Authenticate with Face ID",
+      // disableDeviceFallback: true, // Only allow Face ID, not fallback to passcode
+      fallbackLabel: "Enter Passcode cool", // Custom fallback label
+    });
+    if (result.success) {
+      // alert("Authentication successful!");
+      if (show === false) {
+        setTimeout(() => {
+          navigation.navigate("PaymentResult");
+          setshow(false);
+        }, 2500);
+      }
+
+      setshow((prev) => !prev);
+    } else {
+      alert("Authentication failed!");
+    }
+  };
+
+  const handleOnPress = (e) => {
+    authenticate();
   };
 
   return loading ? (
