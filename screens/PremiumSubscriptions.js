@@ -57,7 +57,7 @@ export default function PremiumSubscriptions({ navigation, route }) {
       // alert("Authentication successful!");
       if (show === false) {
         setTimeout(() => {
-          navigation.navigate("PaymentResult");
+          navigation.replace("PaymentResult");
           setshow(false);
         }, 2500);
       }

@@ -44,7 +44,7 @@ export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {
   const onPressBtn = async (btn) => {
     const { id } = btn;
 
-    alert(id);
+    //alert(id);
 
     closeMenu();
 
