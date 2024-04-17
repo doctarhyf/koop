@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Pressable,
   Alert,
+  Vibration,
 } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
@@ -17,6 +18,8 @@ export default function About() {
   const appName = name.toUpperCase();
 
   const showAbout = () => {
+    Vibration.vibrate(250);
+
     const cont = `Code & Design by
     Franvale MK A.K.A @doctarhyf
     E-mail: drrhyf@gmail.com
