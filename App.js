@@ -44,6 +44,7 @@ import ViewServiceRequest from "./screens/ViewServiceRequest";
 import registerNNPushToken from "native-notify";
 import FirstPage from "./screens/FirstPage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import PremiumSubscriptions from "./screens/PremiumSubscriptions";
 
 const SCREENS = [
   { name: "Login", comp: Login, options: { headerShown: false } },
@@ -92,6 +93,7 @@ const SCREENS = [
   { name: "ViewServiceRequest", comp: ViewServiceRequest },
   { name: "PaymentResult", comp: PaymentResult },
   { name: "FirstPage", comp: FirstPage },
+  { name: "PremiumSubscriptions", comp: PremiumSubscriptions },
 ];
 
 const Stack = createNativeStackNavigator();

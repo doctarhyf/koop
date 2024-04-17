@@ -77,7 +77,7 @@ function ServiceRequest({ navigation, route }) {
                   {
                     text: "OK",
                     onPress: () => {
-                      navigation.navigate("Subscriptions");
+                      navigation.navigate("PremiumSubscriptions");
                     },
                   },
                 ]
