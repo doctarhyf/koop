@@ -23,6 +23,7 @@ import { ParseCreatedAt } from "../helpers/funcs";
 import TagsSelector from "../components/TagsSelector";
 import AnnonceItem from "../components/AnnonceItem";
 import UserContext from "../context/UserContext";
+import ShopItem from "../components/ShopItem";
 
 const SEARCHING_MODE = {
   SHOPS: "koop_shops",
@@ -96,21 +97,23 @@ export default function Search({ navigation, route }) {
     }
   };
 
-  const renderItem = (data) => (
-    <TouchableOpacity
-      onPress={(e) => navigation.navigate("ViewServiceRequest", data.item)}
-    >
-      {type === SEARCHING_MODE.SERVICE_REQUESTS ? (
+  const renderItem = (data) =>
+    type === SEARCHING_MODE.SERVICE_REQUESTS ? (
+      <TouchableOpacity
+        onPress={(e) => navigation.navigate("ViewServiceRequest", data.item)}
+      >
         <AnnonceItem
           item={data.item}
           itsMyItem={data.item.user_data.id === user.id}
           showProfile
         />
-      ) : (
-        <Text>Shop Item</Text>
-      )}
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    ) : (
+      <ShopItem
+        shoop={data.item}
+        itsMyItem={false} //data.item.user_data.id === user.id}
+      />
+    );
 
   const keyExtractor = (item) => item.index;
 
