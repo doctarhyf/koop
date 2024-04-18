@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
 export default function ShopItem({ navigation, shop, favedShops, onFaveShop }) {
   const onShopBtnPress = (i) => {
@@ -48,9 +49,21 @@ export default function ShopItem({ navigation, shop, favedShops, onFaveShop }) {
         <Text style={{ fontWeight: "bold", fontSize: 16 }}>
           {shop.shop_name}
         </Text>
-        <Text style={{ color: "#999999" }}>
-          @{shop.display_name} - 8 com - 12 items
-        </Text>
+        <Text style={{ color: "#999999" }}>@{shop.display_name}</Text>
+
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          {[shop.items_count, shop.comments_count].map((dt, i) => (
+            <View key={i} style={{ flexDirection: "row", gap: 4 }}>
+              {i === 0 ? (
+                <FontAwesome5 name="bolt" size={18} color="#333" />
+              ) : (
+                <FontAwesome name="comments" size={18} color="#333" />
+              )}
+              <Text style={{ color: "#333" }}>{dt}</Text>
+            </View>
+          ))}
+        </View>
+
         <View
           style={{
             flexDirection: "row",
