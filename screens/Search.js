@@ -44,10 +44,8 @@ export default function Search({ navigation, route }) {
       : "https://konext.vercel.app/api/shops"
   );
   const tags =
-    SEARCHING_MODE.SERVICE_REQUESTS === type ? VILLES : ["Show only favorites"];
+    SEARCHING_MODE.SERVICE_REQUESTS === type ? VILLES : ["Favorites"];
   const [itemsf, setitemsf] = useState(null);
-
-  // alert(type);
 
   useEffect(() => {
     loadFavedShops();
@@ -126,18 +124,19 @@ export default function Search({ navigation, route }) {
     setitemsf(finalData);
   };
 
-  const onTagsUpdate = (tags) => {
-    console.error(tags);
-    set_selected_tags(tags);
-    if (tags.length === 0) {
+  const onTagsUpdate = (updatedTags) => {
+    //console.error(tags);
+    set_selected_tags(updatedTags);
+    if (updatedTags.length === 0) {
       setitemsf(items);
       return;
     }
 
     if (type === SEARCHING_MODE.SERVICE_REQUESTS) {
-      setitemsf(items.filter((it) => tags.includes(it.user_data.ville)));
+      setitemsf(items.filter((it) => updatedTags.includes(it.user_data.ville)));
     } else if (type === SEARCHING_MODE.SHOPS) {
-      setitemsf(items.filter((it) => favedShops.includes(it.id)));
+      if (updatedTags[0] === tags[0])
+        setitemsf(items.filter((it) => favedShops.includes(it.id)));
     }
   };
 

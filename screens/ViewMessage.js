@@ -97,6 +97,8 @@ export default function ViewMessage({ route, navigation }) {
         }
       )
       .subscribe();
+
+    return () => channels.remove();
   }, []);
 
   const onSendMessage = async () => {
