@@ -76,12 +76,14 @@ export default function Search({ navigation, route }) {
       return;
     }
 
-    setitemsf(
-      filteredBySelectedTags.filter((it) =>
-        //if mode is shop -> change logic
-        it.label.toLowerCase().includes(txt.toLowerCase())
-      )
-    );
+    if (type === SEARCHING_MODE.SERVICE_REQUESTS) {
+      setitemsf(
+        filteredBySelectedTags.filter((it) =>
+          //if mode is shop -> change logic
+          it.label.toLowerCase().includes(txt.toLowerCase())
+        )
+      );
+    }
   };
 
   const onTagsUpdate = (tags) => {
@@ -110,7 +112,8 @@ export default function Search({ navigation, route }) {
       </TouchableOpacity>
     ) : (
       <ShopItem
-        shoop={data.item}
+        navigation={navigation}
+        shop={data.item}
         itsMyItem={false} //data.item.user_data.id === user.id}
       />
     );
