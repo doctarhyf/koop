@@ -25,19 +25,28 @@ import AnnonceItem from "../components/AnnonceItem";
 import UserContext from "../context/UserContext";
 
 const SEARCHING_MODE = {
-  SHOPS: 0,
-  SERVICE_REQUESTS: 1,
+  SHOPS: "koop_shops",
+  SERVICE_REQUESTS: "koop_sreqs",
 };
 
-export default function Search({ navigation }) {
+export default function Search({ navigation, route }) {
+  const type = route.params;
   const { user, setuser } = useContext(UserContext);
   const [mode, setmode] = useState(SEARCHING_MODE.SERVICE_REQUESTS);
   const [q, setq] = useState("");
   const [selected_tags, set_selected_tags] = useState([]);
   const [loadingItems, items, error] = useFetch(
-    "https://konext.vercel.app/api/sreq"
+    SEARCHING_MODE.SERVICE_REQUESTS === type
+      ? "https://konext.vercel.app/api/sreq"
+      : "https://konext.vercel.app/api/shops"
   );
+  const tags =
+    SEARCHING_MODE.SERVICE_REQUESTS === type
+      ? VILLES
+      : ["meilleures", "fiables"];
   const [itemsf, setitemsf] = useState(null);
+
+  // alert(type);
 
   useEffect(() => {
     if (items && items.map) {
@@ -53,10 +62,12 @@ export default function Search({ navigation }) {
     let filteredBySelectedTags = [...items];
 
     if (tagsAreSelected) {
-      filteredBySelectedTags = items.filter((it) =>
-        //if mode is shop -> change logic
-        selected_tags.includes(it.user_data.ville)
-      );
+      if (type === SEARCHING_MODE.SERVICE_REQUESTS) {
+        filteredBySelectedTags = items.filter((it) =>
+          //if mode is shop -> change logic
+          selected_tags.includes(it.user_data.ville)
+        );
+      }
     }
 
     if (emptySearch) {
@@ -79,19 +90,25 @@ export default function Search({ navigation }) {
       setitemsf(items);
       return;
     }
-    setitemsf(items.filter((it) => tags.includes(it.user_data.ville)));
+
+    if (type === SEARCHING_MODE.SERVICE_REQUESTS) {
+      setitemsf(items.filter((it) => tags.includes(it.user_data.ville)));
+    }
   };
 
   const renderItem = (data) => (
     <TouchableOpacity
       onPress={(e) => navigation.navigate("ViewServiceRequest", data.item)}
     >
-      {/* if mode is shop change item */}
-      <AnnonceItem
-        item={data.item}
-        itsMyItem={data.item.user_data.id === user.id}
-        showProfile
-      />
+      {type === SEARCHING_MODE.SERVICE_REQUESTS ? (
+        <AnnonceItem
+          item={data.item}
+          itsMyItem={data.item.user_data.id === user.id}
+          showProfile
+        />
+      ) : (
+        <Text>Shop Item</Text>
+      )}
     </TouchableOpacity>
   );
 
@@ -106,7 +123,7 @@ export default function Search({ navigation }) {
         placeholder="Search ..."
       />
 
-      <TagsSelector onTagsUpdate={onTagsUpdate} data={VILLES} />
+      <TagsSelector onTagsUpdate={onTagsUpdate} data={tags} />
 
       {loadingItems && (
         <ActivityIndicator animating={loadingItems} color={KOOP_BLUE} />
