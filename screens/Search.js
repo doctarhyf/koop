@@ -116,19 +116,22 @@ export default function Search({ navigation, route }) {
     }
 
     //perform search ...
+    let finalData = [];
     if (type === SEARCHING_MODE.SERVICE_REQUESTS) {
-      filteredBySelectedTags.filter((it) =>
+      finalData = filteredBySelectedTags.filter((it) =>
         it.label.toLowerCase().includes(txt.toLowerCase())
       );
     } else if (type === SEARCHING_MODE.SHOPS) {
-      filteredBySelectedTags.filter((it) =>
+      finalData = filteredBySelectedTags.filter((it) =>
         it.shop_name.toLowerCase().includes(txt.toLowerCase())
       );
     }
-    setitemsf(filteredBySelectedTags);
+    setitemsf(finalData);
   };
 
   const onTagsUpdate = (tags) => {
+    alert(Object.keys(items[0]));
+
     console.error(tags);
     set_selected_tags(tags);
     if (tags.length === 0) {
@@ -138,6 +141,8 @@ export default function Search({ navigation, route }) {
 
     if (type === SEARCHING_MODE.SERVICE_REQUESTS) {
       setitemsf(items.filter((it) => tags.includes(it.user_data.ville)));
+    } else if (type === SEARCHING_MODE.SHOPS) {
+      setitemsf(items.filter((it) => tags.includes(it.ville)));
     }
   };
 
@@ -173,7 +178,9 @@ export default function Search({ navigation, route }) {
         placeholder="Search ..."
       />
 
-      <TagsSelector onTagsUpdate={onTagsUpdate} data={tags} />
+      {SEARCHING_MODE.SHOPS !== type && (
+        <TagsSelector onTagsUpdate={onTagsUpdate} data={tags} />
+      )}
 
       {loadingItems && (
         <ActivityIndicator animating={loadingItems} color={KOOP_BLUE} />
