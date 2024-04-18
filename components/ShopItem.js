@@ -1,15 +1,21 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function ShopItem({ navigation, shop }) {
+export default function ShopItem({ navigation, shop, favedShops, onFaveShop }) {
   const onShopBtnPress = (i) => {
     if (i === 0) {
       navigation.navigate("Shop", shop);
     } else {
-      alert(`Added "${shop.shop_name}" to favorite!`);
+      //alert(`Added "${shop.shop_name}" to favorite!`);
+      const { id } = shop;
+
+      onFaveShop(id);
     }
   };
+
+  const isFaved = favedShops && favedShops.includes(shop.id);
 
   return (
     <View
@@ -61,10 +67,14 @@ export default function ShopItem({ navigation, shop }) {
                 style={{
                   textAlign: "center",
                   padding: 8,
-                  backgroundColor: i === 0 ? "#dddddd" : "purple",
-                  color: i === 0 ? "black" : "white",
+                  backgroundColor:
+                    i === 0 ? "#dddddd" : isFaved ? "purple" : "#ddd",
+                  color: i === 0 ? "black" : isFaved ? "white" : "purple",
                   borderRadius: 8,
                   overflow: "hidden",
+                  borderWidth: 1,
+                  borderColor:
+                    i === 1 ? (isFaved ? "#0000" : "purple") : "#0000",
                 }}
                 key={i}
               >

@@ -24,6 +24,7 @@ import TagsSelector from "../components/TagsSelector";
 import AnnonceItem from "../components/AnnonceItem";
 import UserContext from "../context/UserContext";
 import ShopItem from "../components/ShopItem";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SEARCHING_MODE = {
   SHOPS: "koop_shops",
@@ -36,6 +37,7 @@ export default function Search({ navigation, route }) {
   const [mode, setmode] = useState(SEARCHING_MODE.SERVICE_REQUESTS);
   const [q, setq] = useState("");
   const [selected_tags, set_selected_tags] = useState([]);
+  const [favedShops, setfavedShops] = useState([]);
   const [loadingItems, items, error] = useFetch(
     SEARCHING_MODE.SERVICE_REQUESTS === type
       ? "https://konext.vercel.app/api/sreq"
@@ -50,10 +52,42 @@ export default function Search({ navigation, route }) {
   // alert(type);
 
   useEffect(() => {
+    loadFavedShops();
     if (items && items.map) {
       setitemsf([...items]);
     }
   }, [items]);
+
+  useEffect(() => {
+    //alert(favedShops);
+    async function updateFaved() {
+      await AsyncStorage.setItem("favedShops", JSON.stringify(favedShops));
+      alert(favedShops);
+    }
+    updateFaved();
+  }, [favedShops]);
+
+  const loadFavedShops = async () => {
+    let faved = await AsyncStorage.getItem("favedShops");
+
+    if (faved === null) {
+      faved = JSON.stringify([]);
+      await AsyncStorage.setItem("favedShops", faved);
+    }
+
+    setfavedShops(JSON.parse(faved));
+  };
+
+  const onFaveShop = async (id) => {
+    const isFaved = favedShops.includes(id);
+
+    if (isFaved) {
+      setfavedShops((prev) => prev.filter((it) => it !== id));
+    } else {
+      setfavedShops((prev) => [...prev, id]);
+    }
+    //alert(`Faving ${id}. isFaved ${isFaved}`);
+  };
 
   const onSearch = (txt) => {
     setq(txt);
@@ -112,6 +146,8 @@ export default function Search({ navigation, route }) {
       </TouchableOpacity>
     ) : (
       <ShopItem
+        onFaveShop={onFaveShop}
+        favedShops={favedShops}
         navigation={navigation}
         shop={data.item}
         itsMyItem={false} //data.item.user_data.id === user.id}
