@@ -62,7 +62,7 @@ export default function Search({ navigation, route }) {
     //alert(favedShops);
     async function updateFaved() {
       await AsyncStorage.setItem("favedShops", JSON.stringify(favedShops));
-      alert(favedShops);
+      //alert(favedShops);
     }
     updateFaved();
   }, [favedShops]);
@@ -102,6 +102,11 @@ export default function Search({ navigation, route }) {
           //if mode is shop -> change logic
           selected_tags.includes(it.user_data.ville)
         );
+      } else if (type === SEARCHING_MODE.SHOPS) {
+        filteredBySelectedTags = items.filter((it) =>
+          //if mode is shop -> change logic
+          selected_tags.includes(it.ville)
+        );
       }
     }
 
@@ -110,14 +115,17 @@ export default function Search({ navigation, route }) {
       return;
     }
 
+    //perform search ...
     if (type === SEARCHING_MODE.SERVICE_REQUESTS) {
-      setitemsf(
-        filteredBySelectedTags.filter((it) =>
-          //if mode is shop -> change logic
-          it.label.toLowerCase().includes(txt.toLowerCase())
-        )
+      filteredBySelectedTags.filter((it) =>
+        it.label.toLowerCase().includes(txt.toLowerCase())
+      );
+    } else if (type === SEARCHING_MODE.SHOPS) {
+      filteredBySelectedTags.filter((it) =>
+        it.shop_name.toLowerCase().includes(txt.toLowerCase())
       );
     }
+    setitemsf(filteredBySelectedTags);
   };
 
   const onTagsUpdate = (tags) => {
