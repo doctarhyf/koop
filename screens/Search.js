@@ -41,10 +41,10 @@ export default function Search({ navigation, route }) {
       ? "https://konext.vercel.app/api/sreq"
       : "https://konext.vercel.app/api/shops"
   );
-  const tags =
+  const tags = VILLES; /* 
     SEARCHING_MODE.SERVICE_REQUESTS === type
       ? VILLES
-      : ["meilleures", "fiables"];
+      : ["meilleures", "fiables"];*/
   const [itemsf, setitemsf] = useState(null);
 
   // alert(type);
