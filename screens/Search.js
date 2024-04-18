@@ -43,10 +43,8 @@ export default function Search({ navigation, route }) {
       ? "https://konext.vercel.app/api/sreq"
       : "https://konext.vercel.app/api/shops"
   );
-  const tags = VILLES; /* 
-    SEARCHING_MODE.SERVICE_REQUESTS === type
-      ? VILLES
-      : ["meilleures", "fiables"];*/
+  const tags =
+    SEARCHING_MODE.SERVICE_REQUESTS === type ? VILLES : ["Show only favorites"];
   const [itemsf, setitemsf] = useState(null);
 
   // alert(type);
@@ -62,7 +60,7 @@ export default function Search({ navigation, route }) {
     //alert(favedShops);
     async function updateFaved() {
       await AsyncStorage.setItem("favedShops", JSON.stringify(favedShops));
-      //alert(favedShops);
+      onTagsUpdate(favedShops);
     }
     updateFaved();
   }, [favedShops]);
@@ -86,7 +84,6 @@ export default function Search({ navigation, route }) {
     } else {
       setfavedShops((prev) => [...prev, id]);
     }
-    //alert(`Faving ${id}. isFaved ${isFaved}`);
   };
 
   const onSearch = (txt) => {
@@ -103,9 +100,9 @@ export default function Search({ navigation, route }) {
           selected_tags.includes(it.user_data.ville)
         );
       } else if (type === SEARCHING_MODE.SHOPS) {
-        filteredBySelectedTags = items.filter((it) =>
-          //if mode is shop -> change logic
-          selected_tags.includes(it.ville)
+        filteredBySelectedTags = items.filter(
+          (it) => favedShops.includes(it.id)
+          //selected_tags.includes(it.ville)
         );
       }
     }
@@ -130,8 +127,6 @@ export default function Search({ navigation, route }) {
   };
 
   const onTagsUpdate = (tags) => {
-    alert(Object.keys(items[0]));
-
     console.error(tags);
     set_selected_tags(tags);
     if (tags.length === 0) {
@@ -142,7 +137,7 @@ export default function Search({ navigation, route }) {
     if (type === SEARCHING_MODE.SERVICE_REQUESTS) {
       setitemsf(items.filter((it) => tags.includes(it.user_data.ville)));
     } else if (type === SEARCHING_MODE.SHOPS) {
-      setitemsf(items.filter((it) => tags.includes(it.ville)));
+      setitemsf(items.filter((it) => favedShops.includes(it.id)));
     }
   };
 
@@ -178,9 +173,7 @@ export default function Search({ navigation, route }) {
         placeholder="Search ..."
       />
 
-      {SEARCHING_MODE.SHOPS !== type && (
-        <TagsSelector onTagsUpdate={onTagsUpdate} data={tags} />
-      )}
+      <TagsSelector onTagsUpdate={onTagsUpdate} data={tags} />
 
       {loadingItems && (
         <ActivityIndicator animating={loadingItems} color={KOOP_BLUE} />
