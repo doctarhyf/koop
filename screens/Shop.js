@@ -154,6 +154,7 @@ export default function Shop({ route, navigation }) {
             }}
             handleOnPress={(e) => {
               navigation.navigate("SendMessage", {
+                ...shop,
                 from_id: user.id,
                 to_id: shop_id,
                 shop_name: shop_name,
