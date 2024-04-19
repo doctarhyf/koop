@@ -25,7 +25,7 @@ const MAIN_MENU_ITEMS = [
   { icon: require("../assets/icons/chat.png"), label: "Inbox" },
   { icon: require("../assets/icons/post.png"), label: "Mes Annonces" },
   { icon: require("../assets/icons/settings.png"), label: "Settings" },
-  { icon: require("../assets/icons/lab.png"), label: "Test" },
+  // { icon: require("../assets/icons/lab.png"), label: "Test" },
 ];
 
 const MAIN_MENU_ROUTES = {
