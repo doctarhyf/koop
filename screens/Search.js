@@ -59,7 +59,7 @@ export default function Search({ navigation, route }) {
       onTagsUpdate(favedShops);
     }
     updateFaved();
-    alert(favedShops);
+    //alert(favedShops);
   }, [favedShops]);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export default function Search({ navigation, route }) {
     }
 
     setfavedShops(JSON.parse(faved));
-    alert(`Loaded favedShops ${faved}`);
+    // alert(`Loaded favedShops ${faved}`);
   };
 
   const onFaveShop = async (id) => {

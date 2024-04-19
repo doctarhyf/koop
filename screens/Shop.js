@@ -11,7 +11,7 @@ import { Image } from "expo-image";
 import MenuButton from "../components/MenuButton";
 import styles from "../helpers/styles";
 import { useContext, useLayoutEffect, useState } from "react";
-import { FontAwesome } from "@expo/vector-icons";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 import { KOOP_BLUE } from "../helpers/colors";
 import SimpleTextButton from "../components/SimpleTextButton";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -150,8 +150,8 @@ export default function Shop({ route, navigation }) {
             btn={{
               id: 0,
               label: "SEND MESSAGE",
-              icon: require("../assets/icons/mail.png"),
             }}
+            icon={<Entypo name="new-message" size={28} color="black" />}
             handleOnPress={(e) => {
               navigation.navigate("SendMessage", {
                 ...shop,
