@@ -72,7 +72,7 @@ export default function ViewMessage({ route, navigation }) {
           >
             {content}{" "}
             <Text style={[{ fontSize: 12, color: me ? "white" : "#999999" }]}>
-              {ParseCreatedAt(created_at).shortTime}
+              {message.timeAgo}
             </Text>
           </Text>
           <Text style={[{ flexGrow: 1 }]}></Text>
@@ -98,7 +98,7 @@ export default function ViewMessage({ route, navigation }) {
       )
       .subscribe();
 
-    return () => channels.remove();
+    //return () => channels.remove();
   }, []);
 
   const onSendMessage = async () => {

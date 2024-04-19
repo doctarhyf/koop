@@ -169,17 +169,6 @@ export default function Search({ navigation, route }) {
 
   return (
     <View style={{ flex: 1 }}>
-      {/*  <Button
-        title="Toggle Mode"
-        onPress={(e) =>
-          setmode((prev) =>
-            prev === SEARCHING_MODE.SERVICE_REQUESTS
-              ? SEARCHING_MODE.SHOPS
-              : SEARCHING_MODE.SERVICE_REQUESTS
-          )
-        }
-      /> */}
-
       <TextInput
         style={[styles.ti, { marginHorizontal: 18, marginTop: 18 }]}
         value={q}

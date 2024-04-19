@@ -49,7 +49,7 @@ const ContactItem = ({ contact_data, handleContactPress }) => {
     <TouchableOpacity onPress={(e) => handleContactPress(contact_data)}>
       <View style={[st.contactContainer, styles.flex1]}>
         <Image source={{ uri: profile }} style={st.contactProfile} />
-        <View style={[{ flexGrow: 1 }]}>
+        <View style={[{ flexGrow: 1, flex: 1 }]}>
           <View
             style={[
               {
@@ -73,7 +73,7 @@ const ContactItem = ({ contact_data, handleContactPress }) => {
                 },
               ]}
             >
-              {last_message_date}
+              {last_message.timeAgo}
             </Text>
           </View>
           <Text numberOfLines={2} style={[styles.textGray]}>
@@ -88,7 +88,8 @@ const ContactItem = ({ contact_data, handleContactPress }) => {
 export default function Inbox({ navigation, route }) {
   const { user, setuser } = useContext(UserContext);
 
-  const api = `https://konext.vercel.app/api/messages?user_id=${user.id}&page=1&count=50`;
+  const api = `https://konext.vercel.app/api/messages?user_id=${user.id}&page=1&count=100`;
+  console.error(`Loading messages \n`, api);
   const [loadingRawMessages, rawmessages, error, reloadMessages] =
     useFetch(api);
   const nomsg = "You have no messages for now";

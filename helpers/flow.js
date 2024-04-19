@@ -23,9 +23,14 @@ export const MAIN_MENU_BUTTONS = [
     icon: require("../assets/icons/provide.png"),
   },
   {
-    label: "ANNONCES",
+    label: "TOUTES LES ANNONCES",
     route: "Look",
     icon: require("../assets/icons/megaphone.png"),
+  },
+  {
+    label: "MES MESSAGES",
+    route: "Inbox",
+    icon: require("../assets/icons/chat.png"),
   },
   {
     label: "OTHER SERVICES",
