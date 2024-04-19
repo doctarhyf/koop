@@ -359,9 +359,9 @@ export default function Look({ navigation }) {
         }
       >
         <View>
-          <TouchableOpacity onPress={(e) => navigation.replace("Search")}>
+          {/*   <TouchableOpacity onPress={(e) => navigation.replace("Search")}>
             <Text style={st_search}>Rechercher koop ...</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <View style={st_feat_cont}>
             <FeaturedShops
