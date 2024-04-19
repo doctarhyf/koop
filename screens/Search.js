@@ -33,17 +33,17 @@ const SEARCHING_MODE = {
 export default function Search({ navigation, route }) {
   const searchType = route.params;
   const { user, setuser } = useContext(UserContext);
-  const [mode, setmode] = useState(searchType); //SEARCHING_MODE.SERVICE_REQUESTS);
+  // const [searchType, setmode] = useState(searchType); //SEARCHING_MODE.SERVICE_REQUESTS);
   const [q, setq] = useState("");
   const [selected_tags, set_selected_tags] = useState([]);
   const [favedShops, setfavedShops] = useState([]);
   const [loadingItems, items, error, reload] = useFetch2(
-    SEARCHING_MODE.SERVICE_REQUESTS === mode
+    SEARCHING_MODE.SERVICE_REQUESTS === searchType
       ? "https://konext.vercel.app/api/sreq"
       : "https://konext.vercel.app/api/shops"
   );
   const tags =
-    SEARCHING_MODE.SERVICE_REQUESTS === mode ? VILLES : ["Favorites"];
+    SEARCHING_MODE.SERVICE_REQUESTS === searchType ? VILLES : ["Favorites"];
   const [itemsf, setitemsf] = useState(null);
 
   useEffect(() => {
@@ -51,14 +51,6 @@ export default function Search({ navigation, route }) {
       setitemsf([...items]);
     }
   }, [items]);
-
-  useEffect(() => {
-    reload(
-      SEARCHING_MODE.SERVICE_REQUESTS === mode
-        ? "https://konext.vercel.app/api/sreq"
-        : "https://konext.vercel.app/api/shops"
-    );
-  }, [mode]);
 
   useEffect(() => {
     //alert(favedShops);
@@ -104,12 +96,12 @@ export default function Search({ navigation, route }) {
     let filteredBySelectedTags = [...items];
 
     if (tagsAreSelected) {
-      if (mode === SEARCHING_MODE.SERVICE_REQUESTS) {
+      if (searchType === SEARCHING_MODE.SERVICE_REQUESTS) {
         filteredBySelectedTags = items.filter((it) =>
           //if mode is shop -> change logic
           selected_tags.includes(it.user_data.ville)
         );
-      } else if (mode === SEARCHING_MODE.SHOPS) {
+      } else if (searchType === SEARCHING_MODE.SHOPS) {
         filteredBySelectedTags = items.filter(
           (it) => favedShops.includes(it.id)
           //selected_tags.includes(it.ville)
@@ -124,11 +116,11 @@ export default function Search({ navigation, route }) {
 
     //perform search ...
     let finalData = [];
-    if (mode === SEARCHING_MODE.SERVICE_REQUESTS) {
+    if (searchType === SEARCHING_MODE.SERVICE_REQUESTS) {
       finalData = filteredBySelectedTags.filter((it) =>
         it.label.toLowerCase().includes(txt.toLowerCase())
       );
-    } else if (mode === SEARCHING_MODE.SHOPS) {
+    } else if (searchType === SEARCHING_MODE.SHOPS) {
       finalData = filteredBySelectedTags.filter((it) =>
         it.shop_name.toLowerCase().includes(txt.toLowerCase())
       );
@@ -144,16 +136,16 @@ export default function Search({ navigation, route }) {
       return;
     }
 
-    if (mode === SEARCHING_MODE.SERVICE_REQUESTS) {
+    if (searchType === SEARCHING_MODE.SERVICE_REQUESTS) {
       setitemsf(items.filter((it) => updatedTags.includes(it.user_data.ville)));
-    } else if (mode === SEARCHING_MODE.SHOPS) {
+    } else if (searchType === SEARCHING_MODE.SHOPS) {
       if (updatedTags[0] === tags[0])
         setitemsf(items.filter((it) => favedShops.includes(it.id)));
     }
   };
 
   const renderItem = (data) =>
-    mode === SEARCHING_MODE.SERVICE_REQUESTS ? (
+    searchType === SEARCHING_MODE.SERVICE_REQUESTS ? (
       <TouchableOpacity
         onPress={(e) => navigation.navigate("ViewServiceRequest", data.item)}
       >
