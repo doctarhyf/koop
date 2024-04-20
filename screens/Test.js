@@ -1,32 +1,39 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, Button, Alert } from "react-native";
+import { View, Text, Button, Alert, TextInput } from "react-native";
 import * as LocalAuthentication from "expo-local-authentication";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { supabase } from "../utils/supabase";
 
 export default function Test() {
-  const [data, setdata] = useState([]);
+  const [phone, setphone] = useState("+243980967780");
 
-  const loadStorage = async () => {
-    const dt = await AsyncStorage.getItem("data");
-    alert(JSON.parse(dt).length);
+  const getOTP = async () => {
+    /* let { data, error } = await supabase.auth.signUp({
+      phone: phone,
+      password: "some-password",
+    });
+
+    */
+
+    /* let { data, error } = await supabase.auth.verifyOtp({
+      phone: "+243980967780",
+      token: "810170",
+      type: "sms",
+    }); */
+
+    console.error("data => ", data);
+    console.error("error => ", error);
+    alert(JSON.stringify(data));
   };
-
-  const saveNew = async () => {
-    setdata((prev) => [...prev, Math.random()]);
-  };
-
-  useEffect(() => {
-    async function s() {
-      await AsyncStorage.setItem("data", JSON.stringify(data));
-    }
-
-    s();
-  }, [data]);
 
   return (
     <View>
-      <Button onPress={(e) => loadStorage()} title="Load" />
-      <Button onPress={(e) => saveNew()} title="Save" />
+      <TextInput
+        placeholder="phone"
+        value={phone}
+        onChangeText={(txt) => setphone(txt)}
+      />
+      <Button title="Get OTP" onPress={getOTP} />
     </View>
   );
 }
