@@ -61,7 +61,7 @@ const RandomProfessionComponent = () => {
         padding: 12,
       }}
     >
-      <Text style={{ fontSize: 24, color: textColor }}>
+      <Text style={{ fontSize: 18, color: textColor }}>
         {randomProfession} ...
       </Text>
     </View>
@@ -74,14 +74,14 @@ export default function INeed() {
       <Text
         style={[
           {
-            fontSize: 28,
+            fontSize: 18,
             textAlign: "center",
             marginVertical: 18,
             fontWeight: "bold",
           },
         ]}
       >
-        J'ai besoin de/Je suis/Je cherche ...
+        Je cherche / Je vends / Je fais
       </Text>
       <RandomProfessionComponent />
     </View>

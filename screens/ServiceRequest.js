@@ -46,8 +46,8 @@ function ServiceRequest({ navigation, route }) {
   const [announceType, setAnnounceType] = useState(ANNOUNCE_TYPE[0]);
   const [servData, setServData] = useState({
     images: [],
-    label: "this is a label",
-    desc: "this is a desc ...",
+    label: "",
+    desc: "",
     links: "",
   });
   const { user, setuser } = useContext(UserContext);
@@ -187,10 +187,10 @@ function ServiceRequest({ navigation, route }) {
           multiline={true}
           style={[
             st.ti,
-            { marginVertical: 12, textAlignVertical: "center" },
+            { marginVertical: 12, fontSize: 18, textAlignVertical: "center" },
             styles.paddingSmall,
           ]}
-          placeholder="ex: 1 menuisier pour finir une charpente ..."
+          placeholder="Veuillez decrire votre annonce ex:Besoin d'un MacBook pro ..."
           value={servData.label || ""}
           onChangeText={(txt) =>
             setServData((prev) => ({ ...prev, label: txt }))
