@@ -58,6 +58,15 @@ function ServiceRequest({ navigation, route }) {
     setHasMoreData((previousState) => !previousState);
 
   const onPost = async () => {
+    // alert(servData.label);
+
+    if (servData.label.trim() === "") {
+      Alert.alert(
+        "Decription",
+        "Veuillez entrer une description de votre annonce ..."
+      );
+      return;
+    }
     Alert.alert(
       "Post item?",
       "Are you sure there's no any mistakes? proceed with posting?",
