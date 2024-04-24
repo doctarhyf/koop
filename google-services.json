@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "389449807073",
+    "project_id": "koop-380e6",
+    "storage_bucket": "koop-380e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389449807073:android:39f687467446084a3673a0",
+        "android_client_info": {
+          "package_name": "com.doctarhyf.koop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnAqoPr4WePnx8Gp_n4miAZ-C20PWIfso"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
