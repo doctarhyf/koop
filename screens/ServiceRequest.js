@@ -52,10 +52,18 @@ function ServiceRequest({ navigation, route }) {
   });
   const { user, setuser } = useContext(UserContext);
   const [loading, setloading] = useState(false);
-
+const [emptyLabel, setEmptyLabel] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(false);
   const toggleHasMoreData = () =>
     setHasMoreData((previousState) => !previousState);
+    
+    useEffect(()=> {
+    
+    const error = servData && servData.label === '';
+    	setEmptyLabel(error)
+    
+    
+    }, [servData])
 
   const onPost = async () => {
     // alert(servData.label);
@@ -65,6 +73,8 @@ function ServiceRequest({ navigation, route }) {
         "Decription",
         "Veuillez entrer une description de votre annonce ..."
       );
+      
+      
       return;
     }
     Alert.alert(
@@ -192,14 +202,15 @@ function ServiceRequest({ navigation, route }) {
           Lancer une nouvelle annonce, un article ou une demande de service
         </Text>
         <INeed />
+        <Text style={[{ marginVertical:12 }]} >Description de votre annonce </Text>
         <TextInput
           multiline={true}
           style={[
             st.ti,
-            { marginVertical: 12, fontSize: 18, textAlignVertical: "center" },
+            { marginVertical: 12, fontSize: 18, textAlignVertical: "center", borderColor: emptyLabel ? 'red' : 'gray' },
             styles.paddingSmall,
           ]}
-          placeholder="Veuillez decrire votre annonce ex:Besoin d'un MacBook pro ..."
+          placeholder="ex:Besoin d'un MacBook pro ..."
           value={servData.label || ""}
           onChangeText={(txt) =>
             setServData((prev) => ({ ...prev, label: txt }))
