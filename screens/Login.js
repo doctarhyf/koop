@@ -1,28 +1,23 @@
-import { useState, useEffect, useContext } from "react";
+import { Image } from "expo-image";
+import { useContext, useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
   ActivityIndicator,
   Alert,
-  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
   Vibration,
+  View,
 } from "react-native";
-import { Image } from "expo-image";
-import { blurhash } from "../utils/const";
 import { KOOP_BLUE, WHITE } from "../helpers/colors";
-import { DIAPO_PICS, BIG_FONT_SIZE, IMG_SIZE } from "../helpers/flow";
+import { BIG_FONT_SIZE, IMG_SIZE } from "../helpers/flow";
+import { blurhash } from "../utils/const";
 
-import * as FUNCS from "../helpers/funcs";
-import { SliderBox } from "react-native-image-slider-box";
-import { TABLE_NAMES, supabase } from "../utils/supabase";
-import { getItemByRowEqVal, getUser } from "../utils/db";
-import * as API from "../utils/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Notifications from "expo-notifications";
+import * as FUNCS from "../helpers/funcs";
+import * as API from "../utils/api";
 
 import UserContext from "../context/UserContext";
 import ProfileSetup from "./ProfileSetup";
@@ -164,7 +159,7 @@ export default function Home({ navigation }) {
             + 1 millions de services et des professionels au bout de vos doigts
           </Text>
 
-          <SliderBox autoplay circleLoop images={images} />
+          {/* <SliderBox autoplay circleLoop images={images} /> */}
         </View>
 
         {!loading && (
