@@ -1,0 +1,11 @@
+// install eas-cli
+npm install -g eas-cli
+
+// login
+eas login
+
+// build configure
+eas build:configure
+
+// build preview for android
+eas build --platform android --profile <profile-name>
