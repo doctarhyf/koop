@@ -10,6 +10,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@coder-shubh/react-native-image-slider": "^1.0.5",
     "@expo/metro-runtime": "~3.2.1",
     "@expo/vector-icons": "^14.0.2",
     "@mindinventory/react-native-stagger-view": "^1.2.1",
@@ -52,7 +53,7 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "15.2.0",
     "react-native-url-polyfill": "^2.0.0",
-    "react-native-vector-icons": "^10.0.3",
+    "react-native-vector-icons": "^10.1.0",
     "react-native-web": "~0.19.6",
     "react-native-webview": "13.8.6",
     "tailwind-rn": "^4.2.0"

@@ -11,7 +11,8 @@ import {
   Vibration,
   View,
 } from "react-native";
-import { KOOP_BLUE, WHITE } from "../helpers/colors";
+import ImageSlider from "@coder-shubh/react-native-image-slider";
+import { KOOP_BLUE, KOOP_BLUE_DARK, WHITE } from "../helpers/colors";
 import { BIG_FONT_SIZE, IMG_SIZE } from "../helpers/flow";
 import { blurhash } from "../utils/const";
 
@@ -144,6 +145,10 @@ export default function Home({ navigation }) {
     setcreds((old) => ({ ...old, [type]: val }));
   }
 
+  const pix = new Array(6).fill(
+    "https://cdn.pixabay.com/photo/2022/12/01/04/42/man-7628305_640.jpg"
+  );
+
   return (
     <ScrollView style={[{ backgroundColor: KOOP_BLUE }]}>
       <View style={[styles.container]}>
@@ -160,6 +165,22 @@ export default function Home({ navigation }) {
           </Text>
 
           {/* <SliderBox autoplay circleLoop images={images} /> */}
+
+          <ImageSlider
+            images={images}
+            imageHeight={250}
+            dotSize={10}
+            dotColor="white"
+            activeDotColor={KOOP_BLUE_DARK}
+            showNavigationButtons={false}
+            showIndicatorDots={true}
+            imageLabel={false}
+            label=""
+            extrapolate="clamp"
+            autoSlideInterval={5000}
+            containerStyle={{ marginBottom: 20 }}
+            radius={5}
+          />
         </View>
 
         {!loading && (
