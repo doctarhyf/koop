@@ -145,10 +145,6 @@ export default function Home({ navigation }) {
     setcreds((old) => ({ ...old, [type]: val }));
   }
 
-  const pix = new Array(6).fill(
-    "https://cdn.pixabay.com/photo/2022/12/01/04/42/man-7628305_640.jpg"
-  );
-
   return (
     <ScrollView style={[{ backgroundColor: KOOP_BLUE }]}>
       <View style={[styles.container]}>
