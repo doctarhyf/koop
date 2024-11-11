@@ -1,50 +1,47 @@
 // In App.js in a new project
 
-import React, { useContext, useState, useEffect } from "react";
-import "./ignoreWarning";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "./screens/Login";
-import Home from "./screens/Home";
-import Provide from "./screens/Provide";
-import Look from "./screens/Look";
-import Other from "./screens/Other";
-import Shop from "./screens/Shop";
-import Request from "./screens/Request";
-import { KOOP_BLUE } from "./helpers/colors";
+import registerNNPushToken from "native-notify";
+import React, { useState } from "react";
 import { RootSiblingParent } from "react-native-root-siblings";
-import Popular from "./screens/Popular";
-import MyAccount from "./screens/MyAccount";
+import "./ignoreWarning";
+import About from "./screens/About";
+import ChangePIN from "./screens/ChangePIN";
+import Comments from "./screens/Comments";
+import ContactUs from "./screens/ContactUs";
+import Explore from "./screens/Explore";
+import FirstPage from "./screens/FirstPage";
+import Home from "./screens/Home";
 import Inbox from "./screens/Inbox";
-import MyItems from "./screens/MyItems";
 import InfoEdit from "./screens/InfoEdit";
-import Settings from "./screens/Settings";
-import Subscriptions from "./screens/Subscriptions";
-import { supabase } from "./utils/supabase";
+import Initializing from "./screens/Initializing";
 import Localisation from "./screens/Localisation";
-import ServiceInfo from "./screens/ServiceInfo";
+import Login from "./screens/Login";
+import Look from "./screens/Look";
+import MyAccount from "./screens/MyAccount";
+import MyItems from "./screens/MyItems";
+import Other from "./screens/Other";
+import PaymentResult from "./screens/PaymentResult";
+import PhotoViewer from "./screens/PhotoViewer";
+import Popular from "./screens/Popular";
+import PremiumSubscriptions from "./screens/PremiumSubscriptions";
+import ProfileSetup from "./screens/ProfileSetup";
+import Provide from "./screens/Provide";
+import Request from "./screens/Request";
 import Search from "./screens/Search";
+import SendMessage from "./screens/SendMessage";
+import ServiceInfo from "./screens/ServiceInfo";
+import ServiceRequest from "./screens/ServiceRequest";
+import Settings from "./screens/Settings";
+import Shop from "./screens/Shop";
+import ShopSetup from "./screens/ShopSetup";
+import Subscriptions from "./screens/Subscriptions";
 import Test from "./screens/Test";
 import TOS from "./screens/TOS";
-import PhotoViewer from "./screens/PhotoViewer";
-import Initializing from "./screens/Initializing";
-import ProfileSetup from "./screens/ProfileSetup";
-import Comments from "./screens/Comments";
 import ViewAll from "./screens/ViewAll";
-import SendMessage from "./screens/SendMessage";
 import ViewMessage from "./screens/ViewMessage";
-import Explore from "./screens/Explore";
-import About from "./screens/About";
-import ContactUs from "./screens/ContactUs";
-import ChangePIN from "./screens/ChangePIN";
-import ShopSetup from "./screens/ShopSetup";
-import ServiceRequest from "./screens/ServiceRequest";
-import PaymentResult from "./screens/PaymentResult";
 import ViewServiceRequest from "./screens/ViewServiceRequest";
-import registerNNPushToken from "native-notify";
-import FirstPage from "./screens/FirstPage";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import PremiumSubscriptions from "./screens/PremiumSubscriptions";
 
 const SCREENS = [
   { name: "Login", comp: Login, options: { headerShown: false } },
@@ -101,6 +98,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   registerNNPushToken(20602, "b4XsCQJJ9vzPICDZTpbPuy");
 
+  const tabs = false;
   const [user, setuser] = useState(null);
 
   return (
