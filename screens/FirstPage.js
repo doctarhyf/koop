@@ -1,4 +1,5 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useEffect, useLayoutEffect } from "react";
 import styles from "../helpers/styles";
 import { KOOP_BLUE } from "../helpers/colors";
@@ -47,7 +48,7 @@ export default function FirstPage({ navigation, route }) {
         <View style={[styles.flex1]}></View>
         <Text style={[styles.textCenter, styles.marginLarge, styles.textWhite]}>
           Avant de continuer avec KOOP vous devez accepter nos{" "}
-          <TouchableOpacity onPress={(e) => navigation.navigate("TOS")}>
+          <TouchableOpacity onPress={(e) => navigation.navigate("TOS", undefined, { pop: true })}>
             <Text style={[{ color: "#0000ff" }]}>Termes et conditions</Text>
           </TouchableOpacity>
           d'utilisation

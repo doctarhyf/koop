@@ -18,8 +18,7 @@ import {
   KOOP_BLUE_LIGHT,
   KOOP_BLUE_TRANSLUCIDE,
 } from "../helpers/colors";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { editable } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
+import Icon from "@expo/vector-icons/FontAwesome";
 
 export default TabShopInfo = ({ user, handleInfoPress, navigation }) => {
   //console.error("user data => ", user);
@@ -167,7 +166,7 @@ export default TabShopInfo = ({ user, handleInfoPress, navigation }) => {
           label: "CHANGE SUBSCRIPTION",
           icon: require("../assets/icons/subscription.png"),
         }}
-        handleOnPress={(e) => navigation.navigate("Subscriptions")}
+        handleOnPress={(e) => navigation.navigate("Subscriptions", undefined, { pop: true })}
       />
     </>
   );

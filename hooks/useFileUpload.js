@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import * as FileSystem from "expo-file-system";
+import { readFileBase64 } from "../utils/files";
 import { decode } from "base64-arraybuffer";
 import { KOOP_BUCKET_NAME, supabase } from "../utils/supabase";
 
@@ -18,9 +18,7 @@ const useFileUpload = (
     console.error(`Uploading file : ${uri}`);
 
     setuploading(true);
-    const base64 = await FileSystem.readAsStringAsync(uri, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
+    const base64 = await readFileBase64(uri);
 
     console.log(`Uploading ... ${uri}`);
     const { data, error } = await supabase.storage
@@ -44,9 +42,7 @@ const useFileUpload = (
   useEffect(() => {
     if (localURI && localURI.length > 0) {
       const uploadFile = async (uri) => {
-        const base64 = await FileSystem.readAsStringAsync(uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
+        const base64 = await readFileBase64(uri);
 
         console.log(`Uploading ... ${uri}`);
         const { data, error } = await supabase.storage

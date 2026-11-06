@@ -37,7 +37,6 @@ import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import InfoEdit from "./InfoEdit";
 import Initializing from "./Initializing";
-import { Camera } from "expo-camera";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -93,7 +92,7 @@ function ShopSetup({ navigation, route }) {
   };
 
   const pickImageAsync = async (mediaType) => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
     if (status !== "granted") {
       Alert.alert(
@@ -196,7 +195,7 @@ function ShopSetup({ navigation, route }) {
 
     // alert("initializing ... \n" + JSON.stringify(finalProfData));
 
-    navigation.navigate(Initializing.ROUTE, finalProfData);
+    navigation.navigate(Initializing.ROUTE, finalProfData, { pop: true });
   };
 
   const onUpdateProfileData = (type, val) => {
@@ -212,7 +211,7 @@ function ShopSetup({ navigation, route }) {
       label: "Shop Tags",
     };
 
-    navigation.navigate(InfoEdit.ROUTE, ["shop_tags", cur_shop_tags, true]);
+    navigation.navigate(InfoEdit.ROUTE, ["shop_tags", cur_shop_tags, true], { pop: true });
   };
 
   return (

@@ -10,9 +10,8 @@ import {
   Alert,
 } from "react-native";
 import { KOOP_BLUE_DARK, KOOP_BLUE_LIGHT } from "../helpers/colors";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "@expo/vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
-import { Camera } from "expo-camera";
 
 const IMG_SIZE = 260;
 const MEDIA_TYPE_CAMERA = 0;
@@ -38,7 +37,7 @@ export default function ImageAdder({
   };
 
   const pickImageAsync = async (mediaType) => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
     if (status !== "granted") {
       Alert.alert(

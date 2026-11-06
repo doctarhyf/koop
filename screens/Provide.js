@@ -32,17 +32,15 @@ import TextButton from "../components/TextButton";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
 import ImageAdder from "../components/ImageAdder";
-import { style } from "deprecated-react-native-prop-types/DeprecatedViewPropTypes";
 import MenuButton from "../components/MenuButton";
 import styles from "../helpers/styles";
 import { AntDesign } from "@expo/vector-icons";
 import * as SB from "../utils/db";
 import { TABLE_NAMES, supabase } from "../utils/supabase";
 import { decode } from "base64-arraybuffer";
-import * as FileSystem from "expo-file-system";
+import { readFileBase64 } from "../utils/files";
 import UserContext from "../context/UserContext";
 import { RadioButton } from "../components/RadioButton";
-import { Permissions } from "expo";
 
 const IMG_SIZE = 260;
 const MEDIA_TYPE_CAMERA = 0;
@@ -132,9 +130,7 @@ export default function Provide({ navigation, route }) {
       const imagePath = `user_${
         user.phone
       }/item_${i}_${new Date().getTime()}.jpg`;
-      const fileData = await FileSystem.readAsStringAsync(servdata.photos[i], {
-        encoding: FileSystem.EncodingType.Base64,
-      });
+      const fileData = await readFileBase64(servdata.photos[i]);
 
       promises.push(
         supabase.storage.from("koop").upload(imagePath, decode(fileData), {
@@ -199,7 +195,7 @@ export default function Provide({ navigation, route }) {
   const pickImageAsync = async (mediaType) => {
     closeBottomSheet();
 
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status === "granted") {
       // Permission granted, you can access camera now
       let result;
@@ -233,7 +229,7 @@ export default function Provide({ navigation, route }) {
   };
 
   const onImagePressed = (img) => {
-    navigation.navigate("PhotoViewer", img);
+    navigation.navigate("PhotoViewer", img, { pop: true });
   };
 
   const [selectedOption, setSelectedOption] = useState(null);
@@ -425,7 +421,7 @@ export default function Provide({ navigation, route }) {
         >
           Auppuyez sur 'Accepter et continuer' pour accepter les{" "}
         </Text>
-        <TouchableOpacity onPress={(e) => navigation.navigate("TOS")}>
+        <TouchableOpacity onPress={(e) => navigation.navigate("TOS", undefined, { pop: true })}>
           <Text style={[{ color: KOOP_BLUE }]}>
             Conditions d'utilisations de KOOP.
           </Text>

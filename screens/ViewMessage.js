@@ -36,7 +36,7 @@ export default function ViewMessage({ route, navigation }) {
       title: contact.display_name,
       headerRight: () => (
         <TouchableOpacity
-          onPress={(e) => navigation.navigate("Shop", contact_data.item[1][0])}
+          onPress={(e) => navigation.navigate("Shop", contact_data.item[1][0], { pop: true })}
         >
           <Image
             style={{

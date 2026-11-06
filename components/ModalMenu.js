@@ -56,13 +56,13 @@ export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {
     if (id === -1) {
       await AsyncStorage.removeItem("@KOOP:user", (e) => {
         console.error("async user data deleted!");
-        navigation.navigate("Login");
+        navigation.navigate("Login", undefined, { pop: true });
       });
 
       return;
     }
 
-    MAIN_MENU_ROUTES[id] ? navigation.navigate(MAIN_MENU_ROUTES[id]) : null;
+    MAIN_MENU_ROUTES[id] ? navigation.navigate(MAIN_MENU_ROUTES[id], undefined, { pop: true }) : null;
   };
 
   return (

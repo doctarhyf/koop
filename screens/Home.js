@@ -2,7 +2,6 @@ import { useContext, useEffect, useState, useLayoutEffect } from "react";
 import {
   View,
   Text,
-  SafeAreaView,
   StatusBar,
   TouchableOpacity,
   StyleSheet,
@@ -10,6 +9,7 @@ import {
   ActivityIndicator,
   ScrollView,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 import styles from "../helpers/styles";
 import MenuButton from "../components/MenuButton";
@@ -91,7 +91,7 @@ const Home = ({ navigation }) => {
       headerLeft: () => (
         <View>
           <TouchableOpacity
-            onPress={(e) => navigation.navigate("MyAccount", user)}
+            onPress={(e) => navigation.navigate("MyAccount", user, { pop: true })}
           >
             <Image
               source={user.profile}
@@ -121,11 +121,11 @@ const Home = ({ navigation }) => {
   }, [navigation, user]);
 
   function handleOnPress(btn) {
-    navigation.navigate(btn.route);
+    navigation.navigate(btn.route, undefined, { pop: true });
   }
 
   const gotoMyAccount = () => {
-    navigation.navigate("MyAccount", user);
+    navigation.navigate("MyAccount", user, { pop: true });
   };
 
   const onCloseInfoPane = async () => {
@@ -134,7 +134,7 @@ const Home = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={[styles.bgBlue, styles.flex1]}>
+    <SafeAreaView edges={["bottom", "left", "right"]} style={[styles.bgBlue, styles.flex1]}>
       <ScrollView>
         <View>
           {isInfoPaneVisible && (

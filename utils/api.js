@@ -1,6 +1,6 @@
 import { insertItem, uploadPic } from "./db";
 import { supabase, TABLE_NAMES } from "./supabase";
-import * as FileSystem from "expo-file-system";
+import { readFileBase64 } from "../utils/files";
 import { decode } from "base64-arraybuffer";
 import { SBFileUpload } from "../helpers/funcs";
 
@@ -182,9 +182,7 @@ export async function insertServiceRequest(user, itemData) {
       const imageServerPath = `user_${
         user.phone
       }/item_${i}_${new Date().getTime()}.jpg`;
-      const fileData = await FileSystem.readAsStringAsync(images[i], {
-        encoding: FileSystem.EncodingType.Base64,
-      });
+      const fileData = await readFileBase64(images[i]);
 
       promises.push(SBFileUpload(imageLocalURI, imageServerPath));
     }

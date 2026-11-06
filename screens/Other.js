@@ -43,7 +43,7 @@ export default function Other({ navigation }) {
     console.log(e.route);
 
     if (e.route === "GPS") {
-      navigation.navigate(e.route);
+      navigation.navigate(e.route, undefined, { pop: true });
     }
   };
 

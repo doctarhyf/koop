@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import registerNNPushToken from "native-notify";
 import React, { useState } from "react";
 import { RootSiblingParent } from "react-native-root-siblings";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import "./ignoreWarning";
 import About from "./screens/About";
 import ChangePIN from "./screens/ChangePIN";
@@ -102,21 +103,23 @@ export default function App() {
   const [user, setuser] = useState(null);
 
   return (
-    <UserContext.Provider value={{ user, setuser }}>
-      <RootSiblingParent>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName={"FirstPage"}>
-            {SCREENS.map((scr, i) => (
-              <Stack.Screen
-                key={i}
-                name={scr.name}
-                component={scr.comp}
-                options={scr.options}
-              />
-            ))}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </RootSiblingParent>
-    </UserContext.Provider>
+    <SafeAreaProvider>
+      <UserContext.Provider value={{ user, setuser }}>
+        <RootSiblingParent>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName={"FirstPage"}>
+              {SCREENS.map((scr, i) => (
+                <Stack.Screen
+                  key={i}
+                  name={scr.name}
+                  component={scr.comp}
+                  options={scr.options}
+                />
+              ))}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </RootSiblingParent>
+      </UserContext.Provider>
+    </SafeAreaProvider>
   );
 }

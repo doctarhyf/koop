@@ -147,7 +147,7 @@ export default function Search({ navigation, route }) {
   const renderItem = (data) =>
     searchType === SEARCHING_MODE.SERVICE_REQUESTS ? (
       <TouchableOpacity
-        onPress={(e) => navigation.navigate("ViewServiceRequest", data.item)}
+        onPress={(e) => navigation.navigate("ViewServiceRequest", data.item, { pop: true })}
       >
         <AnnonceItem
           item={data.item}

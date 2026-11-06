@@ -92,7 +92,7 @@ export default function ViewServiceRequest({ navigation, route }) {
           item_id: serviceRequest.id,
           item_type: "sreq",
           comments_count: serviceRequest.comments_count,
-        }),
+        }, { pop: true }),
     },
   ];
 
@@ -101,7 +101,7 @@ export default function ViewServiceRequest({ navigation, route }) {
       title: "Details",
       headerRight: () => (
         <TouchableOpacity
-          onPress={(e) => navigation.navigate("ServiceRequest")}
+          onPress={(e) => navigation.navigate("ServiceRequest", undefined, { pop: true })}
         >
           <FontAwesome name="send" size={24} color={KOOP_BLUE} />
         </TouchableOpacity>
@@ -131,7 +131,7 @@ export default function ViewServiceRequest({ navigation, route }) {
           to_id: to_id,
           name: name,
         };
-        navigation.navigate("SendMessage", data);
+        navigation.navigate("SendMessage", data, { pop: true });
         break;
 
       case ACTION.INTERESTED:
@@ -143,7 +143,7 @@ export default function ViewServiceRequest({ navigation, route }) {
         break;
 
       case ACTION.VIEW_SHOP:
-        navigation.navigate("Shop", postedBy);
+        navigation.navigate("Shop", postedBy, { pop: true });
         break;
 
       default:
@@ -206,7 +206,7 @@ export default function ViewServiceRequest({ navigation, route }) {
         >
           <TouchableOpacity
             onPress={(e) =>
-              navigation.navigate("PhotoViewer", postedBy.profile)
+              navigation.navigate("PhotoViewer", postedBy.profile, { pop: true })
             }
           >
             <Image

@@ -11,7 +11,7 @@ import {
   Vibration,
   View,
 } from "react-native";
-import ImageSlider from "@coder-shubh/react-native-image-slider";
+import ImageSlider from "../components/ImageSlider";
 import { KOOP_BLUE, KOOP_BLUE_DARK, WHITE } from "../helpers/colors";
 import { BIG_FONT_SIZE, IMG_SIZE } from "../helpers/flow";
 import { blurhash } from "../utils/const";
@@ -129,7 +129,7 @@ export default function Home({ navigation }) {
       console.log("found user => ", user);
       setLogginSuccess(true);
       setuser(JSON.parse(user));
-      navigation.navigate("Home", user);
+      navigation.navigate("Home", user, { pop: true });
     }
   };
 
@@ -168,11 +168,7 @@ export default function Home({ navigation }) {
             dotSize={10}
             dotColor="white"
             activeDotColor={KOOP_BLUE_DARK}
-            showNavigationButtons={false}
             showIndicatorDots={true}
-            imageLabel={false}
-            label=""
-            extrapolate="clamp"
             autoSlideInterval={5000}
             containerStyle={{ marginBottom: 20 }}
             radius={5}

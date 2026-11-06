@@ -119,7 +119,7 @@ export default function MyAccount({ navigation }) {
 
   const handleInfoPress = (data) => {
     if (data[0] === "prods") {
-      navigation.navigate("MyItems");
+      navigation.navigate("MyItems", undefined, { pop: true });
       return;
     }
 
@@ -129,7 +129,7 @@ export default function MyAccount({ navigation }) {
       return;
     }
 
-    navigation.navigate("InfoEdit", data);
+    navigation.navigate("InfoEdit", data, { pop: true });
   };
 
   const handleProfileChange = async (uri) => {
@@ -164,7 +164,7 @@ export default function MyAccount({ navigation }) {
             >
               <TouchableOpacity
                 onPress={(e) =>
-                  navigation.navigate("PhotoViewer", user.profile)
+                  navigation.navigate("PhotoViewer", user.profile, { pop: true })
                 }
                 onLongPress={handleProfileChange}
               >

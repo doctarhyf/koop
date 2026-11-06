@@ -82,7 +82,7 @@ const FeaturedShops = ({ navigation, onViewAll, refreshing }) => {
           {
             text: "My Account",
             onPress: () => {
-              navigation.navigate("MyAccount");
+              navigation.navigate("MyAccount", undefined, { pop: true });
             },
             style: "destructive",
           },
@@ -90,7 +90,7 @@ const FeaturedShops = ({ navigation, onViewAll, refreshing }) => {
       );
       return;
     }
-    navigation.navigate("Shop", shop);
+    navigation.navigate("Shop", shop, { pop: true });
   };
 
   return (
@@ -190,7 +190,7 @@ const ServiceRequests = ({ navigation, onViewAll, refreshing }) => {
           .map((it, i) => (
             <TouchableOpacity
               key={i}
-              onPress={(e) => navigation.navigate("ViewServiceRequest", it)}
+              onPress={(e) => navigation.navigate("ViewServiceRequest", it, { pop: true })}
             >
               <AnnonceItem item={it} itsMyItem={it.user_id === user.id} />
             </TouchableOpacity>
@@ -313,7 +313,7 @@ export default function Look({ navigation }) {
       title: "Welcom to KOOP",
       headerRight: () => (
         <TouchableOpacity
-          onPress={(e) => navigation.navigate("ServiceRequest")}
+          onPress={(e) => navigation.navigate("ServiceRequest", undefined, { pop: true })}
         >
           <FontAwesome name="send" size={24} color={KOOP_BLUE} />
         </TouchableOpacity>
@@ -340,7 +340,7 @@ export default function Look({ navigation }) {
   ];
 
   const onViewAll = (type) => {
-    navigation.navigate("Search", type);
+    navigation.navigate("Search", type, { pop: true });
   };
 
   const onRefresh = (e) => {

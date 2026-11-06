@@ -16,7 +16,7 @@ import * as FUNCS from "../helpers/funcs";
 import styles from "../helpers/styles";
 import TextButton from "../components/TextButton";
 const IMG_SIZE = 260;
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "@expo/vector-icons/FontAwesome";
 import { getItem, insertItem } from "../utils/db";
 import { TABLE_NAMES } from "../utils/supabase";
 import UserContext from "../context/UserContext";
@@ -71,7 +71,7 @@ export default function ServiceInfo({ navigation, route }) {
       to_id: shop_id,
     };
 
-    navigation.navigate("SendMessage", shop);
+    navigation.navigate("SendMessage", shop, { pop: true });
   };
 
   const onSendComment = async (e) => {
@@ -130,7 +130,7 @@ export default function ServiceInfo({ navigation, route }) {
           {item.photos.map((img, i) => (
             <TouchableOpacity
               key={i}
-              onPress={(e) => navigation.navigate("PhotoViewer", img)}
+              onPress={(e) => navigation.navigate("PhotoViewer", img, { pop: true })}
             >
               <View style={[st.imgcont]}>
                 <Image source={{ uri: img }} style={[st.img]} />
@@ -237,7 +237,7 @@ export default function ServiceInfo({ navigation, route }) {
           </View>
 
           <TouchableOpacity
-            onPress={(e) => navigation.navigate("Comments", item)}
+            onPress={(e) => navigation.navigate("Comments", item, { pop: true })}
           >
             <Text
               style={[styles.textBlue, styles.textCenter, styles.paddingSmall]}

@@ -8,7 +8,7 @@ export default function ImagesViewer({ images, navigation }) {
     <ScrollView horizontal>
       {images.map((img, i) => (
         <TouchableOpacity
-          onPress={(e) => navigation.navigate("PhotoViewer", img)}
+          onPress={(e) => navigation.navigate("PhotoViewer", img, { pop: true })}
         >
           <Image
             transition={1000}

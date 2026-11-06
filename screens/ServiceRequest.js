@@ -96,7 +96,7 @@ const [emptyLabel, setEmptyLabel] = useState(false);
                   {
                     text: "OK",
                     onPress: () => {
-                      navigation.navigate("PremiumSubscriptions");
+                      navigation.navigate("PremiumSubscriptions", undefined, { pop: true });
                     },
                   },
                 ]
@@ -148,7 +148,7 @@ const [emptyLabel, setEmptyLabel] = useState(false);
                     {
                       text: "Super 😎!",
 
-                      onPress: () => navigation.navigate("Look"),
+                      onPress: () => navigation.navigate("Look", undefined, { pop: true }),
                     },
                   ]
                 );
@@ -179,7 +179,7 @@ const [emptyLabel, setEmptyLabel] = useState(false);
   };
 
   const onPostAsAd = () => {
-    navigation.navigate("Subscriptions");
+    navigation.navigate("Subscriptions", undefined, { pop: true });
   };
 
   return (

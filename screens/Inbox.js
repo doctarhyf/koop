@@ -127,7 +127,7 @@ export default function Inbox({ navigation, route }) {
   const handleContactPress = (message_data) => {
     //alert(JSON.stringify(message_data));
 
-    navigation.navigate("ViewMessage", message_data);
+    navigation.navigate("ViewMessage", message_data, { pop: true });
   };
 
   const onRenderContact = (item) => (

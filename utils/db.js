@@ -1,6 +1,6 @@
 import { KOOP_BUCKET_NAME, TABLE_NAMES, supabase } from "./supabase";
 import { decode } from "base64-arraybuffer";
-import * as FileSystem from "expo-file-system";
+import { readFileBase64 } from "./files";
 
 export const UPDATE_SUCCESS = null;
 
@@ -189,9 +189,7 @@ export async function getPublicUrl(path, onSuccess) {
 }
 
 export async function uploadPic(uri, remotePath, mimeType, onSuccess, onError) {
-  const base64 = await FileSystem.readAsStringAsync(uri, {
-    encoding: FileSystem.EncodingType.Base64,
-  });
+  const base64 = await readFileBase64(uri);
 
   const { data, error } = await supabase.storage
     .from(KOOP_BUCKET_NAME)

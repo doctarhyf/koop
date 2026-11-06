@@ -18,8 +18,7 @@ import {
   KOOP_BLUE_LIGHT,
   KOOP_BLUE_TRANSLUCIDE,
 } from "../helpers/colors";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { editable } from "deprecated-react-native-prop-types/DeprecatedTextInputPropTypes";
+import Icon from "@expo/vector-icons/FontAwesome";
 
 export default TabPersonalInfo = ({ user, handleInfoPress, navigation }) => {
   const { full_name, display_name, phone, pin, dob, email, ville } = user;

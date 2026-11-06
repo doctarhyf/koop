@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "../helpers/styles";
 import { View, Image, TouchableOpacity, Text, StyleSheet } from "react-native";
 import Toast from "react-native-root-toast";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "@expo/vector-icons/FontAwesome";
 import { KOOP_BLUE, KOOP_GREEN } from "../helpers/colors";
 import { AntDesign } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";

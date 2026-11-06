@@ -20,7 +20,6 @@ import styles from "../helpers/styles";
 import { insertItem, uploadFile } from "../utils/db";
 import { TABLE_NAMES, supabase } from "../utils/supabase";
 import UserContext from "../context/UserContext";
-import * as FileSystem from "expo-file-system";
 import { decode } from "base64-arraybuffer";
 import { getPublicUrl } from "../utils/db";
 import useFileUpload from "../hooks/useFileUpload";

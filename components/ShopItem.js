@@ -7,7 +7,7 @@ import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 export default function ShopItem({ navigation, shop, favedShops, onFaveShop }) {
   const onShopBtnPress = (i) => {
     if (i === 0) {
-      navigation.navigate("Shop", shop);
+      navigation.navigate("Shop", shop, { pop: true });
     } else {
       //alert(`Added "${shop.shop_name}" to favorite!`);
       const { id } = shop;

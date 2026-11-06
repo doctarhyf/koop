@@ -52,9 +52,9 @@ export default function MyItems({ navigation, route }) {
           <TouchableOpacity
             onPress={(e) => {
               if (selectedTabID === TAB.MY_ITEMS) {
-                navigation.navigate("Provide");
+                navigation.navigate("Provide", undefined, { pop: true });
               } else {
-                navigation.navigate("ServiceRequest");
+                navigation.navigate("ServiceRequest", undefined, { pop: true });
               }
             }}
           >
@@ -132,7 +132,7 @@ export default function MyItems({ navigation, route }) {
       </TouchableOpacity>
     ) : (
       <TouchableOpacity
-        onPress={(e) => navigation.navigate("ServiceInfo", item.item)}
+        onPress={(e) => navigation.navigate("ServiceInfo", item.item, { pop: true })}
         onLongPress={handleItemMyLongPress}
       >
         <View

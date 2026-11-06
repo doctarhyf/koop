@@ -37,7 +37,7 @@ export default function Popular({ navigation }) {
   }, []);
 
   const onPopularPress = (it) => {
-    navigation.navigate("Shop", it);
+    navigation.navigate("Shop", it, { pop: true });
   };
 
   return (

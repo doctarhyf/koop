@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   SectionList,
   StatusBar,
   ImageBackground,
@@ -14,6 +13,7 @@ import {
   Platform,
   Alert,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import UserContext from "../context/UserContext";
 import { KOOP_BLUE } from "../helpers/colors";
 import { Entypo } from "@expo/vector-icons";
@@ -21,7 +21,6 @@ import { Octicons } from "@expo/vector-icons";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { IMG_SIZE } from "../helpers/flow";
-import { onPress } from "deprecated-react-native-prop-types/DeprecatedTextPropTypes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ICON_SIZE = 24;
@@ -102,15 +101,15 @@ export default Settings = ({ navigation, route }) => {
   const onSettingsPress = (settings) => {
     const { route } = settings;
 
-    if (route === "about") navigation.navigate("About");
+    if (route === "about") navigation.navigate("About", undefined, { pop: true });
 
-    if (route === "contact_us") navigation.navigate("ContactUs");
+    if (route === "contact_us") navigation.navigate("ContactUs", undefined, { pop: true });
 
     if (route === "change_pin")
-      navigation.navigate("ChangePIN", { user: user, setuser: setuser });
+      navigation.navigate("ChangePIN", { user: user, setuser: setuser }, { pop: true });
 
     if (route === "terms_and_cond")
-      navigation.navigate("TOS", { user: user, setuser: setuser });
+      navigation.navigate("TOS", { user: user, setuser: setuser }, { pop: true });
 
     if (route === "share_app") {
       shareLink();
@@ -137,7 +136,7 @@ export default Settings = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={[st.container, { flex: 1 }]}>
+    <SafeAreaView edges={["bottom", "left", "right"]} style={[st.container, { flex: 1 }]}>
       <ImageBackground
         style={[st.head]}
         source={require("../assets/icons/settings_2.png")}

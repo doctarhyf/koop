@@ -78,11 +78,11 @@ export default function Shop({ route, navigation }) {
 
   const showAnnonces = (e) => {
     //alert("Prods and servs");
-    navigation.navigate("MyItems", shop.id);
+    navigation.navigate("MyItems", shop.id, { pop: true });
   };
 
   const showCommentaires = (e) => {
-    navigation.navigate("Comments", { item_id: shop_id, item_type: "shop" });
+    navigation.navigate("Comments", { item_id: shop_id, item_type: "shop" }, { pop: true });
   };
 
   return (
@@ -158,7 +158,7 @@ export default function Shop({ route, navigation }) {
                 from_id: user.id,
                 to_id: shop_id,
                 shop_name: shop_name,
-              });
+              }, { pop: true });
             }}
           />
 

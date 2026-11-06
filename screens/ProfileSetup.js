@@ -28,7 +28,6 @@ import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import ShopSetup from "./ShopSetup";
 import CustomAlert from "../components/CustomAlert";
 import { VILLES } from "../helpers/flow";
-import { Camera } from "expo-camera";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -76,7 +75,7 @@ function ProfileSetup({ navigation, route }) {
   };
 
   const pickImageAsync = async (mediaType) => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
     if (status !== "granted") {
       Alert.alert(

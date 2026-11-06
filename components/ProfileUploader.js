@@ -6,11 +6,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { deleteOldProfile, getPublicUrl, uploadPic } from "../utils/db";
 
-import * as FileSystem from "expo-file-system";
+import { readFileBase64 } from "../utils/files";
 import { decode } from "base64-arraybuffer";
 import { KOOP_BUCKET_NAME, supabase } from "../utils/supabase";
 import UserContext from "../context/UserContext";
-import { Camera } from "expo-camera";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -37,7 +36,7 @@ export default function ProfileUploader({
   };
 
   const pickImageAsync = async (mediaType) => {
-    const { status } = await Camera.requestCameraPermissionsAsync();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
 
     if (status !== "granted") {
       Alert.alert(
@@ -53,13 +52,13 @@ export default function ProfileUploader({
 
     if (mediaType === MEDIA_TYPE_CAMERA) {
       result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ["images"],
         allowsEditing: true,
         quality: 1,
       });
     } else {
       result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        mediaTypes: ["images"],
         allowsEditing: true,
         quality: 1,
       });
@@ -73,9 +72,7 @@ export default function ProfileUploader({
 
       console.error("del cur uri => ", res);
 
-      const base64 = await FileSystem.readAsStringAsync(uri, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
+      const base64 = await readFileBase64(uri);
       const filePath = `user_${phone}/profile_${new Date().getTime()}.jpg`;
       const contentType = "image/jpg";
 

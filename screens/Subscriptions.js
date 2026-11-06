@@ -52,7 +52,7 @@ export default function Subscriptions({ navigation, route }) {
   const handleOnPress = (e) => {
     if (show === false) {
       setTimeout(() => {
-        navigation.navigate("PaymentResult");
+        navigation.navigate("PaymentResult", undefined, { pop: true });
         setshow(false);
       }, 2500);
     }

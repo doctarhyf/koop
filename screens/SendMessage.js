@@ -75,7 +75,7 @@ export default function SendMessage({ route, navigation }) {
       />
       <TextButton
         label={"View Shop"}
-        handlePress={(e) => navigation.navigate("Shop", route.params)}
+        handlePress={(e) => navigation.navigate("Shop", route.params, { pop: true })}
       />
     </View>
   );
