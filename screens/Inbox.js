@@ -95,6 +95,7 @@ export default function Inbox({ navigation, route }) {
   const nomsg = "You have no messages for now";
   const [messages, setmessages] = useState([]);
   const [loading, setloading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -135,7 +136,6 @@ export default function Inbox({ navigation, route }) {
   );
 
   const onExtractContactKey = (item) => item[0];
-  const [refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     reloadMessages();
   };

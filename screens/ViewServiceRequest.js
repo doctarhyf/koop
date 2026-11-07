@@ -170,7 +170,7 @@ export default function ViewServiceRequest({ navigation, route }) {
           // alert(JSON.stringify(res));
 
           if (res.error) {
-            Alert.alert("Error deleting", JSON.stringify(error));
+            Alert.alert("Error deleting", res.message);
           } else {
             Alert.alert(
               "Announce deleted!",

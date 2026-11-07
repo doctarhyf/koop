@@ -37,6 +37,7 @@ import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import InfoEdit from "./InfoEdit";
 import Initializing from "./Initializing";
+import MenuButton from "../components/MenuButton";
 
 const MEDIA_TYPE_CAMERA = 0;
 

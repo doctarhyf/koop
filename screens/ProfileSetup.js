@@ -28,6 +28,7 @@ import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import ShopSetup from "./ShopSetup";
 import CustomAlert from "../components/CustomAlert";
 import { VILLES } from "../helpers/flow";
+import MenuButton from "../components/MenuButton";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -259,7 +260,7 @@ function ProfileSetup({ navigation, route }) {
 
           <CustomAlert
             visible={showvilles}
-            onClose={(e) => setshow(false)}
+            onClose={(e) => setshowvilles(false)}
             message={"this is sample message"}
           >
             <View

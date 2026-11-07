@@ -93,7 +93,7 @@ function Initializing({ navigation, route }) {
       } else {
         Alert.alert(
           "Error adding user",
-          `Error: ${JSON.stringify(error)}\nRes: ${JSON.stringify(
+          `Res: ${JSON.stringify(
             insertedUsedData
           )}`,
           [
@@ -105,7 +105,7 @@ function Initializing({ navigation, route }) {
             },
           ]
         );
-        console.error("Error adding user : \n", insertedUsedData, error);
+        console.error("Error adding user : \n", insertedUsedData);
       }
     };
 

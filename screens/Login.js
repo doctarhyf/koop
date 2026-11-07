@@ -129,7 +129,7 @@ export default function Home({ navigation }) {
       console.log("found user => ", user);
       setLogginSuccess(true);
       setuser(JSON.parse(user));
-      navigation.navigate("Home", user, { pop: true });
+      navigation.replace("Home");
     }
   };
 

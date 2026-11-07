@@ -19,8 +19,9 @@ import {
   KOOP_BLUE_TRANSLUCIDE,
 } from "../helpers/colors";
 import Icon from "@expo/vector-icons/FontAwesome";
+import MenuButton from "./MenuButton";
 
-export default TabShopInfo = ({ user, handleInfoPress, navigation }) => {
+const TabShopInfo = ({ user, handleInfoPress, navigation }) => {
   //console.error("user data => ", user);
 
   const shopInfo = {
@@ -123,7 +124,7 @@ export default TabShopInfo = ({ user, handleInfoPress, navigation }) => {
               <View style={[{ width: 28 }]}>
                 {!data[1].social && (
                   <Icon
-                    name={data[1].icon || FA_ICONS.def}
+                    name={data[1].icon || "coffee"}
                     size={24}
                     style={{ color: KOOP_BLUE }}
                   />
@@ -229,3 +230,5 @@ const st = StyleSheet.create({
     borderColor: KOOP_BLUE_DARK,
   },
 });
+
+export default TabShopInfo;

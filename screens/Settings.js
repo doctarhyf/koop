@@ -75,7 +75,7 @@ const DATA = [
   },
 ];
 
-export default Settings = ({ navigation, route }) => {
+const Settings = ({ navigation, route }) => {
   const { user, setuser } = useContext(UserContext);
 
   const shareLink = async () => {
@@ -205,3 +205,5 @@ const st = StyleSheet.create({
   },
   it_text: { marginLeft: 12 },
 });
+
+export default Settings;

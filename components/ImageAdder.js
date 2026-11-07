@@ -12,6 +12,7 @@ import {
 import { KOOP_BLUE_DARK, KOOP_BLUE_LIGHT } from "../helpers/colors";
 import Icon from "@expo/vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
+import MenuButton from "./MenuButton";
 
 const IMG_SIZE = 260;
 const MEDIA_TYPE_CAMERA = 0;

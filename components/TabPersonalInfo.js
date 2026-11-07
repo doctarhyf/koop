@@ -20,7 +20,7 @@ import {
 } from "../helpers/colors";
 import Icon from "@expo/vector-icons/FontAwesome";
 
-export default TabPersonalInfo = ({ user, handleInfoPress, navigation }) => {
+const TabPersonalInfo = ({ user, handleInfoPress, navigation }) => {
   const { full_name, display_name, phone, pin, dob, email, ville } = user;
 
   const personalInfo = {
@@ -77,7 +77,7 @@ export default TabPersonalInfo = ({ user, handleInfoPress, navigation }) => {
             >
               <View style={[{ width: 28 }]}>
                 <Icon
-                  name={data[1].icon || FA_ICONS.def}
+                  name={data[1].icon || "coffee"}
                   size={24}
                   style={{ color: KOOP_BLUE }}
                 />
@@ -160,3 +160,5 @@ const st = StyleSheet.create({
     borderColor: KOOP_BLUE_DARK,
   },
 });
+
+export default TabPersonalInfo;

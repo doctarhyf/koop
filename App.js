@@ -6,6 +6,7 @@ import registerNNPushToken from "native-notify";
 import React, { useState } from "react";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import UserContext from "./context/UserContext";
 import "./ignoreWarning";
 import About from "./screens/About";
 import ChangePIN from "./screens/ChangePIN";

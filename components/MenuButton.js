@@ -1,7 +1,7 @@
 import { TouchableOpacity, View, Text } from "react-native";
 import styles from "../helpers/styles";
 import { Image } from "expo-image";
-export default MenuButton = ({ handleOnPress, btn, textSmall, icon }) => {
+const MenuButton = ({ handleOnPress, btn, textSmall, icon }) => {
   /* example
   btn = {
     id:0,
@@ -32,3 +32,5 @@ export default MenuButton = ({ handleOnPress, btn, textSmall, icon }) => {
     </TouchableOpacity>
   );
 };
+
+export default MenuButton;

@@ -42,6 +42,7 @@ export const login = async (phone, pin) => {
 };
 
 export const addViewsCount = async (user_id, item_id) => {
+  let errorMessage = null;
   try {
     let data = { user_id: user_id, item_id: item_id };
     const response = await fetch(`${API_ENDPOINT}/items/addviewscount`, {
@@ -57,7 +58,7 @@ export const addViewsCount = async (user_id, item_id) => {
       throw new Error(errorMessage);
     }
 
-    const data = await response.json();
+    data = await response.json();
     console.log(data);
     return data;
   } catch (error) {
@@ -69,6 +70,7 @@ export const addViewsCount = async (user_id, item_id) => {
 };
 
 export const likeItem = async (user_id, item_id) => {
+  let errorMessage = null;
   try {
     let data = { user_id: user_id, item_id: item_id };
     const response = await fetch(`${API_ENDPOINT}/items/likeitem`, {
@@ -84,7 +86,7 @@ export const likeItem = async (user_id, item_id) => {
       throw new Error(errorMessage);
     }
 
-    const data = await response.json();
+    data = await response.json();
     console.log(data);
     return data;
   } catch (error) {
@@ -96,6 +98,7 @@ export const likeItem = async (user_id, item_id) => {
 };
 
 export const sendMessage = async (message) => {
+  let errorMessage = null;
   try {
     const response = await fetch(`${API_ENDPOINT}/messages/send`, {
       method: "POST",
@@ -122,6 +125,7 @@ export const sendMessage = async (message) => {
 };
 
 const postItem = async (itemBody, apiPath) => {
+  let errorMessage = null;
   const API_FULL_PATH = `${API_ENDPOINT}${apiPath}`;
 
   console.error(
@@ -207,6 +211,7 @@ export async function insertServiceRequest(user, itemData) {
 }
 
 export async function removeServReq(item_id) {
+  let errorMessage = null;
   try {
     const response = await fetch(
       `${API_ENDPOINT}/sreq/remove?item_id=${item_id}`
