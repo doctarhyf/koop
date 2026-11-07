@@ -28,14 +28,12 @@ export const login = async (phone, pin) => {
       throw new Error(errorMessage);
     }
 
-    data = await response.json();
+    const data = await response.json();
     console.log(data);
     return data;
   } catch (error) {
     // Handle errors
-    errorMessage = `There was a problem with the fetch operation: ${JSON.stringify(
-      error
-    )}`;
+    errorMessage = `There was a problem with the fetch operation: ${error?.message ?? error}`;
     console.error(errorMessage);
     return { error: true, message: errorMessage };
   }
@@ -59,14 +57,12 @@ export const addViewsCount = async (user_id, item_id) => {
       throw new Error(errorMessage);
     }
 
-    data = await response.json();
+    const data = await response.json();
     console.log(data);
     return data;
   } catch (error) {
     // Handle errors
-    errorMessage = `There was a problem with the fetch operation: ${JSON.stringify(
-      error
-    )}`;
+    errorMessage = `There was a problem with the fetch operation: ${error?.message ?? error}`;
     console.error(errorMessage);
     return { error: true, message: errorMessage };
   }
@@ -88,14 +84,12 @@ export const likeItem = async (user_id, item_id) => {
       throw new Error(errorMessage);
     }
 
-    data = await response.json();
+    const data = await response.json();
     console.log(data);
     return data;
   } catch (error) {
     // Handle errors
-    errorMessage = `There was a problem with the fetch operation: ${JSON.stringify(
-      error
-    )}`;
+    errorMessage = `There was a problem with the fetch operation: ${error?.message ?? error}`;
     console.error(errorMessage);
     return { error: true, message: errorMessage };
   }
@@ -121,9 +115,7 @@ export const sendMessage = async (message) => {
     return message;
   } catch (error) {
     // Handle errors
-    errorMessage = `There was a problem with the fetch operation: ${JSON.stringify(
-      error
-    )}`;
+    errorMessage = `There was a problem with the fetch operation: ${error?.message ?? error}`;
     console.error(errorMessage);
     return { error: true, message: errorMessage };
   }
@@ -154,9 +146,7 @@ const postItem = async (itemBody, apiPath) => {
     return itemBody;
   } catch (error) {
     // Handle errors
-    errorMessage = `There was a problem with the post operation to "${API_FULL_PATH}" ${JSON.stringify(
-      error
-    )}`;
+    errorMessage = `There was a problem with the post operation to "${API_FULL_PATH}" ${error?.message ?? error}`;
     console.error(errorMessage);
     return { error: true, message: errorMessage };
   }
@@ -210,9 +200,7 @@ export async function insertServiceRequest(user, itemData) {
     return result;
   } catch (error) {
     // Handle errors
-    errorMessage = `There was a problem with the fetch operation: ${JSON.stringify(
-      error
-    )}`;
+    errorMessage = `There was a problem with the fetch operation: ${error?.message ?? error}`;
     console.error(errorMessage);
     return { error: true, message: errorMessage };
   }
@@ -229,9 +217,7 @@ export async function removeServReq(item_id) {
     return result;
   } catch (error) {
     // Handle errors
-    errorMessage = `There was a problem with the fetch operation: ${JSON.stringify(
-      error
-    )}`;
+    errorMessage = `There was a problem with the fetch operation: ${error?.message ?? error}`;
     console.error(errorMessage);
     return { error: true, message: errorMessage };
   }
