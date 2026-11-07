@@ -1,14 +1,6 @@
+import Text from "./ui/Text";
 import React, { useState, useEffect, useContext, useLayoutEffect } from "react";
-import {
-  Text,
-  Image,
-  TouchableOpacity,
-  View,
-  ScrollView,
-  Modal,
-  StyleSheet,
-  Alert,
-} from "react-native";
+import { Image, TouchableOpacity, View, ScrollView, Modal, StyleSheet, Alert } from "react-native";
 import { KOOP_BLUE_DARK, KOOP_BLUE_LIGHT } from "../helpers/colors";
 import Icon from "@expo/vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";

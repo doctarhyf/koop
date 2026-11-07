@@ -1,6 +1,7 @@
+import Text from "./ui/Text";
 import React, { useState, useEffect } from "react";
 import styles from "../helpers/styles";
-import { View, Image, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, Image, TouchableOpacity, StyleSheet } from "react-native";
 import Toast from "react-native-root-toast";
 import Icon from "@expo/vector-icons/FontAwesome";
 import { KOOP_BLUE, KOOP_GREEN } from "../helpers/colors";

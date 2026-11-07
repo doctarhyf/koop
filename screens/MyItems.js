@@ -1,23 +1,25 @@
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  RefreshControl,
   ActivityIndicator,
   Alert,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  View,
 } from "react-native";
 import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { AntDesign } from "@expo/vector-icons";
-import AnnonceItem from "../components/AnnonceItem";
-import { KOOP_BLUE } from "../helpers/colors";
-import useFetch, { useFetch2 } from "../hooks/useFetch";
-import UserContext from "../context/UserContext";
-import styles from "../helpers/styles";
-import { FontAwesome } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import AnnonceItem from "../components/AnnonceItem";
+import {
+  EmptyState,
+  IconButton,
+  ListSkeleton,
+  PressableScale,
+  Text,
+} from "../components/ui";
+import { useFetch2 } from "../hooks/useFetch";
+import UserContext from "../context/UserContext";
 import { ParseCreatedAt } from "../helpers/funcs";
+import { colors, radius, shadows, space, type } from "../theme";
 
 const TAB = {
   MY_ITEMS: 0,
@@ -47,19 +49,22 @@ export default function MyItems({ navigation, route }) {
 
       headerRight: () =>
         loadingdata ? (
-          <ActivityIndicator animating={loadingdata} color={KOOP_BLUE} />
+          <ActivityIndicator animating={loadingdata} color={colors.primary} />
         ) : (
-          <TouchableOpacity
-            onPress={(e) => {
+          <IconButton
+            name="plus"
+            size={36}
+            bg={colors.ink}
+            color="#fff"
+            border={false}
+            onPress={() => {
               if (selectedTabID === TAB.MY_ITEMS) {
                 navigation.navigate("Provide", undefined, { pop: true });
               } else {
                 navigation.navigate("ServiceRequest", undefined, { pop: true });
               }
             }}
-          >
-            <FontAwesome name="send" size={24} color={KOOP_BLUE} />
-          </TouchableOpacity>
+          />
         ),
     });
   }, [route, loadingdata]);
@@ -78,7 +83,7 @@ export default function MyItems({ navigation, route }) {
     console.error("Reloading api ... ", api);
   }, [selectedTabID]);
 
-  const extractKey = (item) => item.id;
+  const extractKey = (item, i) => String(item?.id ?? i);
 
   const handleAnnouncePress = (item) => {
     //Alert.alert(item.label, item.desc);
@@ -124,115 +129,83 @@ export default function MyItems({ navigation, route }) {
     }
 
     return selectedTabID === TAB.MY_SERVICES_REQUESTS ? (
-      <TouchableOpacity
-        onPress={(e) => handleAnnouncePress(item.item)}
-        onLongPress={(e) => onAnnonceLongPress(item.item)}
+      <PressableScale
+        scaleTo={0.985}
+        onPress={() => handleAnnouncePress(item.item)}
+        onLongPress={() => onAnnonceLongPress(item.item)}
       >
-        <AnnonceItem item={item.item} me />
-      </TouchableOpacity>
+        <AnnonceItem item={item.item} itsMyItem={!viewingOtherShopID || viewingOtherShopID === user.id} />
+      </PressableScale>
     ) : (
-      <TouchableOpacity
-        onPress={(e) => navigation.navigate("ServiceInfo", item.item, { pop: true })}
+      <PressableScale
+        scaleTo={0.985}
+        onPress={() => navigation.navigate("ServiceInfo", item.item, { pop: true })}
         onLongPress={handleItemMyLongPress}
+        style={[st.prod, shadows.xs]}
       >
-        <View
-          style={[
-            styles.flexRow,
-            styles.paddingSmall,
-            {
-              justifyContent: "space-between",
-              borderBottomColor: "#dddddd",
-              borderBottomWidth: 1,
-            },
-          ]}
-        >
-          <Image
-            transition={1000}
-            source={photos ? photos[0] : require("../assets/rhyf.png")}
-            style={[
-              {
-                width: 70,
-                height: 70,
-                marginRight: 12,
-                borderRadius: 35,
-                overflow: "hidden",
-              },
-            ]}
-          />
-
-          <View style={[{ flex: 1 }]}>
-            <View style={[styles.flexRow, { flexGrow: 0 }]}>
-              <Text style={[{ flexGrow: 1, fontWeight: "bold" }]}>{name}</Text>
-              <Text style={[styles.textGray]}>{date}</Text>
-            </View>
-            <Text
-              numberOfLines={3}
-              style={[styles.textGray, { flexShrink: 1 }]}
-            >
-              {desc}
-            </Text>
+        <Image
+          transition={300}
+          source={photos ? photos[0] : require("../assets/rhyf.png")}
+          style={st.prodImg}
+        />
+        <View style={{ flex: 1, gap: 4 }}>
+          <View style={{ flexDirection: "row", gap: 8 }}>
+            <Text style={[type.title, { flex: 1 }]} numberOfLines={1}>{name}</Text>
+            <Text style={[type.caption, { color: colors.textFaint }]}>{date}</Text>
           </View>
+          <Text numberOfLines={2} style={[type.small, { color: colors.textMuted }]}>{desc}</Text>
         </View>
-      </TouchableOpacity>
+      </PressableScale>
     );
   };
 
+  const isEmpty = !loadingdata && Array.isArray(itemsdata) && itemsdata.length === 0;
+
   return (
-    <View style={[{ flex: 1 }]}>
-      {false && (
-        <View style={[st.menu]}>
-          {["Mes Articles & Services", "Demandes et Recherches"].map(
-            (it, i) => (
-              <TouchableOpacity key={i} onPress={(e) => setSelectedTabID(i)}>
-                <Text style={[st.btn, selectedTabID === i ? st.active : null]}>
-                  {it}
-                </Text>
-              </TouchableOpacity>
-            )
-          )}
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      {loadingdata && (!itemsdata || itemsdata.length === 0) ? (
+        <View style={{ padding: space.lg }}>
+          <ListSkeleton rows={5} />
         </View>
-      )}
-      {!loadingdata && itemsdata && itemsdata.length === 0 && (
-        <View
-          style={[
-            styles.paddingLarge,
-            styles.flex1,
-            styles.justifyCenter,
-            styles.alignCenter,
+      ) : (
+        <FlatList
+          contentContainerStyle={[
+            { padding: space.lg, paddingBottom: space.xxxl },
+            isEmpty && { flex: 1, justifyContent: "center" },
           ]}
-        >
-          <Text>No items availabe</Text>
-        </View>
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
+          }
+          data={itemsdata}
+          keyExtractor={extractKey}
+          renderItem={renderItem}
+          ListEmptyComponent={
+            errordata ? (
+              <EmptyState icon="wifi-off" title="Connexion impossible" subtitle="Tirez pour réessayer." />
+            ) : (
+              <EmptyState
+                icon="layers"
+                title="Aucune annonce"
+                subtitle={viewingOtherShopID ? "Cette boutique n'a encore rien publié." : "Publiez votre première annonce en quelques secondes."}
+                action={viewingOtherShopID ? undefined : "Nouvelle annonce"}
+                onAction={() => navigation.navigate("ServiceRequest", undefined, { pop: true })}
+              />
+            )
+          }
+        />
       )}
-      {errordata && <Text>{JSON.stringify(errordata)}</Text>}
-      <FlatList
-        style={[{ padding: 12 }]}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        data={itemsdata}
-        keyExtractor={extractKey}
-        renderItem={renderItem}
-      />
     </View>
   );
 }
 
 const st = StyleSheet.create({
-  menu: {
+  prod: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 8,
+    gap: space.sm,
+    padding: space.sm,
+    marginBottom: space.sm,
+    borderRadius: radius.lg,
+    backgroundColor: colors.card,
   },
-  btn: {
-    padding: 12,
-
-    borderRadius: 18,
-    overflow: "hidden",
-  },
-  active: {
-    color: "#ffffff",
-    borderBottomColor: KOOP_BLUE,
-    backgroundColor: KOOP_BLUE,
-  },
+  prodImg: { width: 64, height: 64, borderRadius: radius.md },
 });

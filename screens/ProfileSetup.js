@@ -1,34 +1,26 @@
-import React, { useEffect, useContext, useLayoutEffect, useState } from "react";
+import { Feather } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
-  Text,
-  BackHandler,
   Alert,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Modal,
-  ImageBackground,
+  BackHandler,
   KeyboardAvoidingView,
-  Vibration,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
   Switch,
-  FlatList,
+  Vibration,
+  View,
 } from "react-native";
-
-import UserContext from "../context/UserContext";
-import { AntDesign } from "@expo/vector-icons";
-import styles from "../helpers/styles";
-
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
-
-import TextButton from "../components/TextButton";
-import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
-import ShopSetup from "./ShopSetup";
-import CustomAlert from "../components/CustomAlert";
+import { Button, Card, Chip, FadeIn, Input, ListRow, PressableScale, Text } from "../components/ui";
+import UserContext from "../context/UserContext";
 import { VILLES } from "../helpers/flow";
-import MenuButton from "../components/MenuButton";
+import { colors, radius, space, type } from "../theme";
+import ShopSetup from "./ShopSetup";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -43,6 +35,7 @@ function ProfileSetup({ navigation, route }) {
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
   const [error, seterror] = useState(false);
   const { phone } = route.params;
+  const insets = useSafeAreaInsets();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -172,218 +165,116 @@ function ProfileSetup({ navigation, route }) {
   };
 
   return (
-    <ScrollView>
-      <View
-        style={[
-          styles.justifyCenter,
-          styles.alignCenter,
-          styles.flex1,
-          styles.paddingMid,
-        ]}
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: colors.bg }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <ScrollView
+        contentContainerStyle={{ padding: space.lg, paddingTop: insets.top + space.lg, gap: space.xl, paddingBottom: space.xxxl }}
+        keyboardShouldPersistTaps="handled"
       >
-        <View style={[{ marginBottom: 60 }]}>
-          <Text style={[st.title]}>
-            Creation de votre profil et du profile de votre maison
-          </Text>
-          <Text>
-            Permettre a vos clients d'en savoir plus sur vos services et
-            produits offerts
-          </Text>
-        </View>
-
-        <View style={[styles.flex1, styles.marginMin, styles.alignCenter]}>
-          <TouchableOpacity onPress={handleAddImage}>
-            <ImageBackground
-              style={[st.profile]}
-              source={{ uri: profile || null }}
-            >
-              <AntDesign name="camera" size={24} color="gray" />
-            </ImageBackground>
-          </TouchableOpacity>
-
-          <View style={[styles.flexRow, styles.alignCenter]}>
-            <AntDesign name="phone" size={24} color="gray" />
-            <View style={[{ width: 10 }]} />
-            <Text
-              style={[
-                st.ti,
-                { borderBottomColor: "grey" },
-                styles.paddingSmall,
-              ]}
-            >
-              {phone}
-            </Text>
+        <FadeIn style={{ gap: space.sm }}>
+          <View style={st.steps}>
+            <View style={[st.step, st.stepOn]} />
+            <View style={st.step} />
           </View>
-          <View style={[{ height: 20 }]} />
-          <View style={[styles.flexRow, styles.alignCenter]}>
-            <AntDesign name="user" size={24} color="gray" />
-            <View style={[{ width: 10 }]} />
-            <TextInput
-              value={display_name}
-              onChangeText={(txt) => set_display_name(txt)}
-              style={[
-                st.ti,
-                { borderBottomColor: error ? "red" : "grey" },
-                styles.paddingSmall,
-              ]}
-              placeholderTextColor={error ? "red" : "grey"}
-              placeholder={"Votre nom de profile"}
-            />
-          </View>
-          <Text style={[st.selfStart]}>
-            Ceci est le nom de votre profil en tant que client
+          <Text style={[type.overline, { color: colors.primary }]}>Étape 1 sur 2</Text>
+          <Text style={type.h1}>Créez votre profil</Text>
+          <Text style={[type.body, { color: colors.textMuted }]}>
+            Permettez à vos clients d'en savoir plus sur vous, vos services et vos produits.
           </Text>
+        </FadeIn>
 
-          <View style={[{ height: 20 }]} />
-
-          <TouchableOpacity onPress={(e) => showVilleSelector()}>
-            <View style={[styles.flexRow, styles.alignCenter]}>
-              <MaterialCommunityIcons
-                name="google-my-business"
-                size={24}
-                color="black"
-              />
-              <View style={[{ width: 10 }]} />
-              <Text
-                style={[
-                  ville ? { color: "#000000" } : styles.textBlue,
-                  st.ti,
-                  { borderBottomColor: "grey" },
-                  styles.paddingSmall,
-                ]}
-              >
-                {ville || "Choisissez votre ville"}
-              </Text>
-            </View>
-          </TouchableOpacity>
-          {/*  <Text style={[st.selfStart]}>Votre ville </Text> */}
-
-          <CustomAlert
-            visible={showvilles}
-            onClose={(e) => setshowvilles(false)}
-            message={"this is sample message"}
-          >
-            <View
-              style={[
-                {
-                  backgroundColor: "white",
-
-                  width: "80%",
-                  margin: 24,
-                  padding: 12,
-                  borderRadius: 12,
-                  height: 320,
-                },
-              ]}
-            >
-              <FlatList
-                keyExtractor={(it, i) => i}
-                renderItem={(item) => (
-                  <TouchableOpacity onPress={(e) => handleVillePress(item)}>
-                    <Text
-                      style={[
-                        {
-                          padding: 8,
-
-                          margin: 8,
-                        },
-                      ]}
-                    >
-                      {item.item}
-                    </Text>
-                  </TouchableOpacity>
-                )}
-                data={VILLES}
-              />
-            </View>
-          </CustomAlert>
-
-          <View style={[{ height: 20 }]} />
-          <View
-            style={[
-              {
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "100%",
-                alignItems: "center",
-              },
-            ]}
-          >
-            <Text style={[{ fontWeight: "bold", marginVertical: 12 }]}>
-              I have a promo code
-            </Text>
-            <Switch
-              trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
-              thumbColor={hasPromoCode ? KOOP_BLUE : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={(e) => setHasPromoCode((prev) => !prev)}
-              value={hasPromoCode}
-            />
-          </View>
-          {hasPromoCode && (
-            <View style={[{ marginHorizontal: 14 }]}>
-              <View style={[styles.flexRow, styles.alignCenter]}>
-                <MaterialCommunityIcons name="lock" size={24} color="black" />
-                <View style={[{ width: 10 }]} />
-                <TextInput
-                  value={promoCode}
-                  onChangeText={(txt) => setPromoCode(txt)}
-                  style={[
-                    st.ti,
-                    {
-                      padding: 12,
-                      width: "80%",
-                      borderBottomColor: error ? "red" : "grey",
-                    },
-                  ]}
-                  placeholderTextColor={error ? "red" : "grey"}
-                  placeholder={"ex:STARPRO"}
-                />
+        <FadeIn delay={80} style={{ alignItems: "center", gap: space.xs }}>
+          <PressableScale onPress={handleAddImage} style={st.avatarBtn}>
+            {profile ? (
+              <Image source={{ uri: profile }} style={st.avatarImg} contentFit="cover" />
+            ) : (
+              <View style={[st.avatarImg, st.avatarEmpty]}>
+                <Feather name="user" size={40} color={colors.primary} />
               </View>
-              <Text style={[st.selfStart]}>
-                Si vous ete invite avec un code promo, veuillez l'inserer SVP{" "}
-              </Text>
+            )}
+            <View style={st.avatarBadge}>
+              <Feather name="camera" size={15} color="#fff" />
             </View>
-          )}
+          </PressableScale>
+          <Text style={[type.small, { color: colors.textMuted }]}>
+            {profile ? "Touchez pour changer" : "Ajoutez une photo de profil"}
+          </Text>
+        </FadeIn>
 
-          {error && (
-            <Text style={[st.error]}>
-              Profile name and businessName cant be empty
-            </Text>
-          )}
-        </View>
+        <FadeIn delay={140} style={{ gap: space.md }}>
+          <Input label="Téléphone" icon="phone" value={phone} editable={false} inputStyle={{ color: colors.textMuted }} />
+          <Input
+            label="Nom de profil"
+            icon="user"
+            value={display_name}
+            onChangeText={(txt) => set_display_name(txt)}
+            placeholder="ex : Jean Mukendi"
+            error={error ? "Le nom de profil est requis" : null}
+            hint="C'est le nom que verront les autres utilisateurs"
+          />
+        </FadeIn>
 
-        <TextButton label={"NEXT"} handlePress={onNext} />
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={bottomSheetVisible}
-          onRequestClose={closeBottomSheet}
-        >
-          <View style={bs.modalContainer}>
-            <View style={bs.bottomSheet}>
-              <Text>Choose media source</Text>
+        <FadeIn delay={200} style={{ gap: space.sm }}>
+          <Text style={[type.overline, { color: colors.textMuted, marginLeft: 2 }]}>Votre ville</Text>
+          <View style={st.chips}>
+            {VILLES.map((v) => (
+              <Chip key={v} label={v} selected={ville === v} onPress={() => setville(v)} />
+            ))}
+          </View>
+        </FadeIn>
+
+        <FadeIn delay={240}>
+          <Card style={{ gap: space.md }}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: space.sm }}>
+              <View style={st.promoIcon}>
+                <Feather name="gift" size={18} color={colors.violet} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={type.bodyStrong}>J'ai un code promo</Text>
+                <Text style={[type.small, { color: colors.textMuted }]}>Invité par un ami ? Saisissez son code.</Text>
+              </View>
+              <Switch
+                trackColor={{ false: colors.line, true: colors.primary }}
+                thumbColor="#fff"
+                ios_backgroundColor={colors.line}
+                onValueChange={() => setHasPromoCode((prev) => !prev)}
+                value={hasPromoCode}
+              />
+            </View>
+            {hasPromoCode && (
+              <Input
+                icon="tag"
+                value={promoCode}
+                autoCapitalize="characters"
+                onChangeText={(txt) => setPromoCode(txt)}
+                placeholder="ex : STARPRO"
+              />
+            )}
+          </Card>
+        </FadeIn>
+
+        <Button title="Continuer" iconRight="arrow-right" onPress={onNext} />
+      </ScrollView>
+
+      <Modal animationType="slide" transparent visible={bottomSheetVisible} onRequestClose={closeBottomSheet}>
+        <Pressable style={bs.modalContainer} onPress={closeBottomSheet}>
+          <Pressable style={bs.bottomSheet}>
+            <View style={bs.grabber} />
+            <Text style={type.h3}>Photo de profil</Text>
+            <View style={bs.list}>
               {[
-                {
-                  label: "Camera",
-                  icon: require("../assets/icons/camera.png"),
-                },
-                {
-                  label: "Gallery",
-                  icon: require("../assets/icons/gallery.png"),
-                },
+                { label: "Prendre une photo", icon: "camera" },
+                { label: "Choisir dans la galerie", icon: "image" },
               ].map((btn, i) => (
-                <MenuButton
-                  key={i}
-                  btn={{ ...btn, id: i }}
-                  handleOnPress={(e) => onChooseMedia(i)}
-                />
+                <ListRow key={i} icon={btn.icon} title={btn.label} last={i === 1} onPress={() => onChooseMedia(i)} />
               ))}
             </View>
-          </View>
-        </Modal>
-      </View>
-    </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -392,73 +283,59 @@ ProfileSetup.ROUTE = "ProfileSetup";
 export default ProfileSetup;
 
 const st = StyleSheet.create({
-  error: {
-    backgroundColor: "red",
-    color: "white",
-    fontSize: 11,
-    padding: 8,
-    margin: 12,
-    textAlign: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginVertical: 32,
-  },
-  profile: {
-    backgroundColor: "#ddd",
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    justifyContent: "center",
+  steps: { flexDirection: "row", gap: 6, marginBottom: space.xs },
+  step: { flex: 1, height: 4, borderRadius: 2, backgroundColor: colors.line },
+  stepOn: { backgroundColor: colors.primary },
+  avatarBtn: { width: 120, height: 120 },
+  avatarImg: { width: 120, height: 120, borderRadius: 60 },
+  avatarEmpty: {
+    backgroundColor: colors.primarySoft,
+    borderWidth: 2,
+    borderColor: colors.sky100,
+    borderStyle: "dashed",
     alignItems: "center",
-    marginBottom: 24,
-    overflow: "hidden",
+    justifyContent: "center",
   },
-  ti: {
-    borderBottomWidth: 1,
-    width: "80%",
+  avatarBadge: {
+    position: "absolute",
+    right: 4,
+    bottom: 4,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: colors.ink,
+    borderWidth: 3,
+    borderColor: colors.bg,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  selfStart: {
-    alignSelf: "flex-start",
+  chips: { flexDirection: "row", flexWrap: "wrap", gap: space.xs },
+  promoIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 14,
+    backgroundColor: colors.violetSoft,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
 const bs = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  button: {
-    padding: 16,
-    backgroundColor: "#3498db",
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
+  modalContainer: { flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(11,18,32,0.45)" },
   bottomSheet: {
-    backgroundColor: "white",
-    padding: 20,
-    width: "100%",
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    backgroundColor: colors.bg,
+    padding: space.lg,
+    paddingBottom: space.xxl,
+    borderTopLeftRadius: radius.xl,
+    borderTopRightRadius: radius.xl,
   },
-  closeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: "#e74c3c",
-    borderRadius: 8,
+  grabber: {
+    alignSelf: "center",
+    width: 40,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: colors.line,
+    marginBottom: space.md,
   },
-  closeButtonText: {
-    color: "white",
-  },
+  list: { marginTop: space.md, backgroundColor: colors.card, borderRadius: radius.lg, paddingHorizontal: space.md },
 });

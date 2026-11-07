@@ -1,60 +1,38 @@
 import { useEffect, useState } from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import styles from "../helpers/styles";
-import { KOOP_BLUE } from "../helpers/colors";
+import { FlatList, View } from "react-native";
+import { space } from "../theme";
+import { Chip } from "./ui";
 
 export default function TagsSelector({ onTagsUpdate, data }) {
   const [tags, settags] = useState([]);
 
   const onTagPress = (item) => {
-    if (tags.includes(item)) {
-      const idx = tags.findIndex((i) => item === i);
-      settags((prev) => prev.filter((it) => it !== item));
-    } else {
-      settags((prev) => [...prev, item]);
-    }
+    settags((prev) =>
+      prev.includes(item) ? prev.filter((it) => it !== item) : [...prev, item]
+    );
   };
 
   useEffect(() => {
     onTagsUpdate(tags);
   }, [tags]);
 
-  const renderItem = (item_data) => (
-    <TouchableOpacity onPress={(e) => onTagPress(item_data.item)}>
-      <Text style={[st.tag, tags.includes(item_data.item) && st.tag_sel]}>
-        {item_data.item}
-      </Text>
-    </TouchableOpacity>
-  );
-  const keyExtractor = (item, i) => i;
   return (
-    <View style={[styles.paddingSmall]}>
+    <View style={{ paddingVertical: space.sm }}>
       <FlatList
         horizontal
+        showsHorizontalScrollIndicator={false}
         data={data}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
+        contentContainerStyle={{ paddingHorizontal: space.lg, gap: space.xs }}
+        keyExtractor={(item, i) => `${i}-${item}`}
+        renderItem={({ item }) => (
+          <Chip
+            label={item}
+            icon={item === "Favorites" ? "heart" : "map-pin"}
+            selected={tags.includes(item)}
+            onPress={() => onTagPress(item)}
+          />
+        )}
       />
     </View>
   );
 }
-
-const st = StyleSheet.create({
-  tag: {
-    backgroundColor: "#dddddd",
-    padding: 8,
-    marginHorizontal: 8,
-    borderRadius: 16,
-    overflow: "hidden",
-  },
-  tag_sel: {
-    backgroundColor: KOOP_BLUE,
-    color: "white",
-  },
-});

@@ -1,12 +1,6 @@
+import Text, { TextInput } from "../components/ui/Text";
 import * as React from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  TextInput,
-} from "react-native";
+import { View, ScrollView, TouchableOpacity, Image } from "react-native";
 import styles from "../helpers/styles";
 import * as FUNCS from "../helpers/funcs";
 import { IMG_SIZE } from "../helpers/flow";

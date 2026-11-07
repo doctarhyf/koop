@@ -1,102 +1,96 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { colors, fonts, gradients, radius, shadows, space, type } from "../theme";
+import { Avatar, PressableScale, Text } from "./ui";
 
 export default function ShopItem({ navigation, shop, favedShops, onFaveShop }) {
-  const onShopBtnPress = (i) => {
-    if (i === 0) {
-      navigation.navigate("Shop", shop, { pop: true });
-    } else {
-      //alert(`Added "${shop.shop_name}" to favorite!`);
-      const { id } = shop;
-
-      onFaveShop(id);
-    }
-  };
-
   const isFaved = favedShops && favedShops.includes(shop.id);
 
   return (
-    <View
-      style={{
-        borderBottomColor: "#dddddd",
-        borderBottomWidth: 1,
-        flexDirection: "row",
-        padding: 12,
-        alignItems: "center",
-        gap: 12,
-        flex: 1,
-      }}
+    <PressableScale
+      onPress={() => navigation.navigate("Shop", shop, { pop: true })}
+      scaleTo={0.985}
+      style={[st.card, shadows.sm]}
     >
-      <Image
-        transition={1000}
-        source={shop.shop_profile}
-        style={{
-          width: 90,
-          borderRadius: 45,
-          overflow: "hidden",
-          height: 90,
-        }}
-      />
-      <View
-        style={{
-          flex: 1,
-          gap: 8,
-        }}
-      >
-        <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-          {shop.shop_name}
-        </Text>
-        <Text style={{ color: "#999999" }}>@{shop.display_name}</Text>
-
-        <View style={{ flexDirection: "row", gap: 8 }}>
-          {[shop.items_count, shop.comments_count].map((dt, i) => (
-            <View key={i} style={{ flexDirection: "row", gap: 4 }}>
-              {i === 0 ? (
-                <FontAwesome5 name="bolt" size={18} color="#333" />
-              ) : (
-                <FontAwesome name="comments" size={18} color="#333" />
-              )}
-              <Text style={{ color: "#333" }}>{dt}</Text>
-            </View>
-          ))}
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 12,
-            justifyContent: "space-between",
-          }}
+      <View style={st.cover}>
+        {shop.shop_profile ? (
+          <Image source={shop.shop_profile} style={StyleSheet.absoluteFill} contentFit="cover" transition={250} />
+        ) : (
+          <LinearGradient colors={gradients.brand} style={StyleSheet.absoluteFill} />
+        )}
+        <LinearGradient colors={gradients.scrim} style={StyleSheet.absoluteFill} />
+        <PressableScale
+          onPress={() => onFaveShop && onFaveShop(shop.id)}
+          hapticKind="medium"
+          scaleTo={0.85}
+          style={[st.fave, isFaved && { backgroundColor: colors.danger }]}
         >
-          {["View", "Favorite"].map((it, i) => (
-            <TouchableOpacity
-              style={{ flex: 1 }}
-              onPress={(e) => onShopBtnPress(i)}
-            >
-              <Text
-                style={{
-                  textAlign: "center",
-                  padding: 8,
-                  backgroundColor:
-                    i === 0 ? "#dddddd" : isFaved ? "purple" : "#ddd",
-                  color: i === 0 ? "black" : isFaved ? "white" : "purple",
-                  borderRadius: 8,
-                  overflow: "hidden",
-                  borderWidth: 1,
-                  borderColor:
-                    i === 1 ? (isFaved ? "#0000" : "purple") : "#0000",
-                }}
-                key={i}
-              >
-                {it}
-              </Text>
-            </TouchableOpacity>
-          ))}
+          <Feather name="heart" size={16} color="#fff" />
+        </PressableScale>
+      </View>
+
+      <View style={st.body}>
+        <Avatar uri={shop.profile} name={shop.display_name} size={52} style={st.avatar} ring />
+        <View style={{ flex: 1, gap: 2 }}>
+          <Text style={type.h3} numberOfLines={1}>{shop.shop_name}</Text>
+          <Text style={[type.small, { color: colors.textMuted }]} numberOfLines={1}>
+            @{shop.display_name}
+          </Text>
+        </View>
+        <View style={st.stats}>
+          <View style={st.stat}>
+            <Feather name="zap" size={13} color={colors.primary} />
+            <Text style={st.statText}>{shop.items_count ?? 0}</Text>
+          </View>
+          <View style={st.stat}>
+            <Feather name="message-square" size={13} color={colors.violet} />
+            <Text style={st.statText}>{shop.comments_count ?? 0}</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </PressableScale>
   );
 }
+
+const st = StyleSheet.create({
+  card: {
+    backgroundColor: colors.card,
+    borderRadius: radius.lg,
+    marginBottom: space.md,
+    overflow: "hidden",
+  },
+  cover: { height: 120, backgroundColor: colors.sky100 },
+  fave: {
+    position: "absolute",
+    top: space.sm,
+    right: space.sm,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: "rgba(11,18,32,0.4)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  body: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: space.sm,
+    padding: space.md,
+    paddingTop: space.sm,
+  },
+  avatar: { marginTop: -34 },
+  stats: { flexDirection: "row", gap: space.xs },
+  stat: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: colors.cardAlt,
+    borderRadius: radius.pill,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  statText: { fontFamily: fonts.bold, fontSize: 12, color: colors.text },
+});

@@ -1,15 +1,6 @@
+import Text, { TextInput } from "../components/ui/Text";
 import React, { useState, useEffect, useLayoutEffect, useContext } from "react";
-import {
-  Text,
-  View,
-  ScrollView,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-  TextInput,
-  Pressable,
-  Alert,
-} from "react-native";
+import { View, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity, Pressable, Alert } from "react-native";
 import { Image } from "expo-image";
 import { KOOP_BLUE, KOOP_BLUE_DARK, KOOP_BLUE_LIGHT } from "../helpers/colors";
 import * as FUNCS from "../helpers/funcs";

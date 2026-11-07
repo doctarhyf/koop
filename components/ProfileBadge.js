@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet } from "react-native";
+import Text from "./ui/Text";
+import { View, StyleSheet } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
 import styles from "../helpers/styles";

@@ -1,4 +1,5 @@
-import { View, Text } from "react-native";
+import Text from "./ui/Text";
+import { View } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
 

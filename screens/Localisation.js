@@ -1,5 +1,6 @@
+import Text from "../components/ui/Text";
 import * as React from "react";
-import { Text, View, Image, StyleSheet } from "react-native";
+import { View, Image, StyleSheet } from "react-native";
 import styles from "../helpers/styles";
 
 const bg = require("../assets/images/gps.jpg");

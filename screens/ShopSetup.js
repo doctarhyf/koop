@@ -1,49 +1,28 @@
-import React, {
-  useEffect,
-  useCallback,
-  useContext,
-  useLayoutEffect,
-  useState,
-} from "react";
-import {
-  Text,
-  BackHandler,
-  Alert,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Modal,
-  ImageBackground,
-  KeyboardAvoidingView,
-  Vibration,
-  Switch,
-  StatusBar,
-} from "react-native";
-
-import { Foundation } from "@expo/vector-icons";
-import UserContext from "../context/UserContext";
-import { AntDesign } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import styles from "../helpers/styles";
-import { useFocusEffect } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
+import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
-
-import TextButton from "../components/TextButton";
-import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
-import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  Alert,
+  BackHandler,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Vibration,
+  View,
+} from "react-native";
+import { Button, Card, Chip, FadeIn, Input, ListRow, PressableScale, Text } from "../components/ui";
+import { colors, radius, space, type } from "../theme";
 import InfoEdit from "./InfoEdit";
 import Initializing from "./Initializing";
-import MenuButton from "../components/MenuButton";
 
 const MEDIA_TYPE_CAMERA = 0;
-
-const ShopTagsSelector = () => {
-  return <Text>Shop tags selector</Text>;
-};
 
 function ShopSetup({ navigation, route }) {
   const [error, seterror] = useState(false);
@@ -215,223 +194,134 @@ function ShopSetup({ navigation, route }) {
     navigation.navigate(InfoEdit.ROUTE, ["shop_tags", cur_shop_tags, true], { pop: true });
   };
 
+  const tags = (profileData.shop_tags || "").split(";").slice(1).filter((t) => t !== "");
+
   return (
-    <ScrollView>
-      <View
-        style={[
-          styles.justifyCenter,
-          styles.alignCenter,
-          styles.flex1,
-          styles.paddingMid,
-        ]}
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: colors.bg }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <ScrollView
+        contentContainerStyle={{ padding: space.lg, gap: space.xl, paddingBottom: space.xxxl }}
+        keyboardShouldPersistTaps="handled"
       >
-        <View>
-          <Text style={[st.title]}>Creation du profile de votre business</Text>
-          <Text>
-            Permettre a vos clients d'en savoir plus sur vos services et
-            produits offerts
+        <FadeIn style={{ gap: space.sm }}>
+          <View style={st.steps}>
+            <View style={[st.step, st.stepOn]} />
+            <View style={[st.step, st.stepOn]} />
+          </View>
+          <Text style={[type.overline, { color: colors.primary }]}>Étape 2 sur 2</Text>
+          <Text style={type.h1}>Votre boutique</Text>
+          <Text style={[type.body, { color: colors.textMuted }]}>
+            Présentez votre activité pour que les clients vous trouvent plus facilement.
           </Text>
-        </View>
+        </FadeIn>
 
-        <View
-          style={[
-            {
-              flexDirection: "row",
-              justifyContent: "space-between",
-              width: "80%",
-              alignItems: "center",
-            },
-          ]}
-        >
-          <Text style={[{ marginVertical: 12, fontWeight: "bold" }]}>
-            I have a shop
-          </Text>
-          <Switch
-            trackColor={{ false: "#767577", true: KOOP_BLUE_DARK }}
-            thumbColor={has_shop ? KOOP_BLUE : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={(e) => set_has_shop((prev) => !prev)}
-            value={has_shop}
-          />
-        </View>
+        <FadeIn delay={60}>
+          <Card style={{ flexDirection: "row", alignItems: "center", gap: space.sm }}>
+            <View style={st.shopIcon}>
+              <Feather name="shopping-bag" size={18} color={colors.primary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={type.bodyStrong}>J'ai une boutique</Text>
+              <Text style={[type.small, { color: colors.textMuted }]}>Vous pourrez en créer une plus tard</Text>
+            </View>
+            <Switch
+              trackColor={{ false: colors.line, true: colors.primary }}
+              thumbColor="#fff"
+              ios_backgroundColor={colors.line}
+              onValueChange={() => set_has_shop((prev) => !prev)}
+              value={has_shop}
+            />
+          </Card>
+        </FadeIn>
 
-        {has_shop && (
-          <View>
-            <View style={[styles.alignCenter]}>
-              <TouchableOpacity
-                onPress={handleAddImage}
-                style={{ width: "96%" }}
-              >
-                <ImageBackground
-                  style={[st.profile]}
-                  source={{ uri: profileData.shop_profile }}
-                >
-                  <AntDesign name="camera" size={24} color="gray" />
-                </ImageBackground>
-              </TouchableOpacity>
-
-              <View style={[{ height: 20 }]} />
-              <View style={[styles.flexRow, styles.alignCenter]}>
-                <MaterialCommunityIcons
-                  name="google-my-business"
-                  size={24}
-                  color="black"
-                />
-                <View style={[{ width: 10 }]} />
-                <TextInput
-                  value={profileData.shop_name}
-                  onChangeText={(txt) => onUpdateProfileData("shop_name", txt)}
-                  style={[
-                    st.ti,
-                    { borderBottomColor: error ? "red" : "grey" },
-                    styles.paddingSmall,
-                  ]}
-                  placeholderTextColor={error ? "red" : "grey"}
-                  placeholder={"My Business name"}
-                />
-              </View>
-              <Text style={[st.selfStart]}>
-                Ceci est le nom de votre Maison{" "}
-              </Text>
-
-              <View style={[{ height: 20 }]} />
-              <View style={[styles.flexRow, styles.alignCenter]}>
-                <Entypo name="location" size={24} color="black" />
-                <View style={[{ width: 10 }]} />
-                <TextInput
-                  multiline={true}
-                  value={profileData.shop_add}
-                  onChangeText={(txt) => onUpdateProfileData("shop_add", txt)}
-                  style={[
-                    st.ti,
-                    styles.paddingSmall,
-                    { borderBottomColor: error ? "red" : "grey" },
-                    ,
-                  ]}
-                  placeholderTextColor={error ? "red" : "grey"}
-                  placeholder={"Shop physicall address"}
-                />
-              </View>
-
-              <View style={[{ height: 20 }]} />
-              <View style={[styles.flexRow, styles.alignCenter]}>
-                <Foundation name="torso-business" size={24} color="black" />
-                <View style={[{ width: 10 }]} />
-                <TextInput
-                  multiline={true}
-                  value={profileData.shop_desc}
-                  onChangeText={(txt) => onUpdateProfileData("shop_desc", txt)}
-                  style={[
-                    st.ti,
-                    { borderBottomColor: error ? "red" : "grey" },
-                    styles.paddingSmall,
-                  ]}
-                  placeholderTextColor={error ? "red" : "grey"}
-                  placeholder={"Shop description"}
-                />
-              </View>
-              <Text style={[st.selfStart]}>
-                Ceci est un message de bienvenue de que vos clients verons sur
-                la page de profile de votre maison
-              </Text>
-
-              <View style={[{ height: 20 }]} />
-
-              <View
-                style={[
-                  styles.flexRow,
-                  styles.alignCenter,
-                  { marginHorizontal: 12, width: "90%" },
-                ]}
-              >
-                <MaterialCommunityIcons
-                  name="google-my-business"
-                  size={24}
-                  color={KOOP_BLUE}
-                />
-                <View style={[{ width: 10 }]} />
-
-                <TouchableOpacity onPress={(e) => setShowShopTagsSelctor()}>
-                  <Text style={[styles.paddingSmall, styles.textBlue]}>
-                    + Add categories
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <Text style={[st.selfStart]}>
-                Selectionnez les differentes categories dans les quelles vous
-                oeuvrez
-              </Text>
-
-              {profileData.shop_tags && profileData.shop_tags.length > 0 && (
-                <View style={[st.tagCont]}>
-                  {profileData.shop_tags
-                    .split(";")
-                    .slice(1)
-                    .map(
-                      (it, i) =>
-                        it !== "" && (
-                          <Text key={i} style={[st.tag, { fontSize: 10 }]}>
-                            {it}
-                          </Text>
-                        )
-                    )}
+        {has_shop ? (
+          <FadeIn delay={120} style={{ gap: space.md }}>
+            <PressableScale onPress={handleAddImage} scaleTo={0.985} style={st.cover}>
+              {profileData.shop_profile ? (
+                <Image source={{ uri: profileData.shop_profile }} style={StyleSheet.absoluteFill} contentFit="cover" />
+              ) : (
+                <View style={st.coverEmpty}>
+                  <View style={st.coverIcon}>
+                    <Feather name="image" size={22} color={colors.primary} />
+                  </View>
+                  <Text style={type.bodyStrong}>Ajouter une photo de couverture</Text>
+                  <Text style={[type.caption, { color: colors.textMuted }]}>Votre vitrine, en 16:9 idéalement</Text>
                 </View>
               )}
+              {profileData.shop_profile ? (
+                <View style={st.coverBadge}>
+                  <Feather name="camera" size={14} color="#fff" />
+                </View>
+              ) : null}
+            </PressableScale>
 
-              <View style={[{ height: 20 }]} />
+            <Input
+              label="Nom de la boutique"
+              icon="shopping-bag"
+              value={profileData.shop_name}
+              onChangeText={(txt) => onUpdateProfileData("shop_name", txt)}
+              placeholder="ex : Mukendi Électronique"
+            />
+            <Input
+              label="Adresse"
+              icon="map-pin"
+              value={profileData.shop_add}
+              onChangeText={(txt) => onUpdateProfileData("shop_add", txt)}
+              placeholder="Av. du Commerce 12, Gombe"
+            />
+            <Input
+              label="Description"
+              icon="align-left"
+              multiline
+              value={profileData.shop_desc}
+              onChangeText={(txt) => onUpdateProfileData("shop_desc", txt)}
+              placeholder="Un message d'accueil pour vos clients…"
+              hint="Affiché sur la page de votre boutique"
+            />
 
-              {/* 
-              {error && (
-                <Text style={[st.error]}>
-                  Profile name and businessName cant be empty
-                </Text>
-              )} */}
+            <View style={{ gap: space.xs }}>
+              <Text style={[type.overline, { color: colors.textMuted, marginLeft: 2 }]}>Catégories</Text>
+              <View style={st.chips}>
+                {tags.map((t, i) => (
+                  <Chip key={i} label={t} selected />
+                ))}
+                <Chip label={tags.length ? "Modifier" : "Ajouter des catégories"} icon="plus" onPress={setShowShopTagsSelctor} />
+              </View>
             </View>
-          </View>
+          </FadeIn>
+        ) : (
+          <FadeIn delay={120}>
+            <Card style={{ flexDirection: "row", gap: space.sm }}>
+              <Feather name="info" size={18} color={colors.primary} />
+              <Text style={[type.small, { flex: 1, color: colors.textSecondary }]}>
+                Pas de boutique pour le moment ? Inscrivez-vous en tant que client — vous pourrez toujours créer votre boutique plus tard.
+              </Text>
+            </Card>
+          </FadeIn>
         )}
 
-        {!has_shop && (
-          <Text style={[{ marginVertical: 24 }]}>
-            Pas de business pour le moment? vous pouvez vous enregistrer en
-            temps que client, vous gardez toujours la possibilite de creer un
-            shop plutard
-          </Text>
-        )}
+        <Button title="Créer mon compte" iconRight="check" onPress={onNext} />
+      </ScrollView>
 
-        <TextButton label={"NEXT"} handlePress={onNext} />
-        <View style={[{ height: 20 }]} />
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={bottomSheetVisible}
-          onRequestClose={closeBottomSheet}
-        >
-          <View style={bs.modalContainer}>
-            <View style={bs.bottomSheet}>
-              <Text>Choose media source</Text>
+      <Modal animationType="slide" transparent visible={bottomSheetVisible} onRequestClose={closeBottomSheet}>
+        <Pressable style={bs.modalContainer} onPress={closeBottomSheet}>
+          <Pressable style={bs.bottomSheet}>
+            <View style={bs.grabber} />
+            <Text style={type.h3}>Photo de couverture</Text>
+            <View style={bs.list}>
               {[
-                {
-                  label: "Camera",
-                  icon: require("../assets/icons/camera.png"),
-                },
-                {
-                  label: "Gallery",
-                  icon: require("../assets/icons/gallery.png"),
-                },
+                { label: "Prendre une photo", icon: "camera" },
+                { label: "Choisir dans la galerie", icon: "image" },
               ].map((btn, i) => (
-                <MenuButton
-                  key={i}
-                  btn={{ ...btn, id: i }}
-                  handleOnPress={(e) => onChooseMedia(i)}
-                />
+                <ListRow key={i} icon={btn.icon} title={btn.label} last={i === 1} onPress={() => onChooseMedia(i)} />
               ))}
             </View>
-          </View>
-        </Modal>
-      </View>
-    </ScrollView>
+          </Pressable>
+        </Pressable>
+      </Modal>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -440,112 +330,73 @@ ShopSetup.ROUTE = "ShopSetup";
 export default ShopSetup;
 
 const st = StyleSheet.create({
-  tagCont: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  tag: {
-    padding: 8,
-    margin: 4,
-
-    borderRadius: 16,
-    overflow: "hidden",
-    flexShrink: 1,
-
-    borderColor: KOOP_BLUE,
-    backgroundColor: KOOP_BLUE,
-
-    borderWidth: 1,
-    color: "white",
-  },
-  error: {
-    backgroundColor: "red",
-    color: "white",
-    fontSize: 11,
-    padding: 8,
-    margin: 12,
-    textAlign: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginVertical: 32,
-  },
-  profile: {
-    backgroundColor: "#ddd",
-    height: 180,
-    width: "100%",
-    borderRadius: 12,
-    justifyContent: "center",
+  steps: { flexDirection: "row", gap: 6, marginBottom: space.xs },
+  step: { flex: 1, height: 4, borderRadius: 2, backgroundColor: colors.line },
+  stepOn: { backgroundColor: colors.primary },
+  shopIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 14,
+    backgroundColor: colors.primarySoft,
     alignItems: "center",
-    marginBottom: 24,
+    justifyContent: "center",
+  },
+  cover: {
+    height: 180,
+    borderRadius: radius.lg,
     overflow: "hidden",
+    backgroundColor: colors.card,
   },
-  ti: {
-    borderBottomWidth: 1,
-    width: "80%",
+  coverEmpty: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 4,
+    borderRadius: radius.lg,
+    borderWidth: 2,
+    borderStyle: "dashed",
+    borderColor: colors.sky100,
+    backgroundColor: colors.primarySoft,
   },
-  selfStart: {
-    alignSelf: "flex-start",
+  coverIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: colors.card,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 6,
   },
-  error: {
-    backgroundColor: "red",
-    color: "white",
-    fontSize: 11,
-    padding: 8,
-    margin: 12,
-    textAlign: "center",
+  coverBadge: {
+    position: "absolute",
+    right: space.sm,
+    bottom: space.sm,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: "rgba(11,18,32,0.6)",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginVertical: 32,
-  },
-
-  ti: {
-    borderBottomWidth: 1,
-    width: "80%",
-  },
-  selfStart: {
-    alignSelf: "flex-start",
-  },
+  chips: { flexDirection: "row", flexWrap: "wrap", gap: space.xs },
 });
 
 const bs = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  button: {
-    padding: 16,
-    backgroundColor: "#3498db",
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 18,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
+  modalContainer: { flex: 1, justifyContent: "flex-end", backgroundColor: "rgba(11,18,32,0.45)" },
   bottomSheet: {
-    backgroundColor: "white",
-    padding: 20,
-    width: "100%",
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    backgroundColor: colors.bg,
+    padding: space.lg,
+    paddingBottom: space.xxl,
+    borderTopLeftRadius: radius.xl,
+    borderTopRightRadius: radius.xl,
   },
-  closeButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: "#e74c3c",
-    borderRadius: 8,
+  grabber: {
+    alignSelf: "center",
+    width: 40,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: colors.line,
+    marginBottom: space.md,
   },
-  closeButtonText: {
-    color: "white",
-  },
+  list: { marginTop: space.md, backgroundColor: colors.card, borderRadius: radius.lg, paddingHorizontal: space.md },
 });

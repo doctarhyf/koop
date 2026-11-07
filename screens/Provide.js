@@ -1,3 +1,4 @@
+import Text, { TextInput } from "../components/ui/Text";
 import React, {
   useContext,
   useState,
@@ -5,21 +6,7 @@ import React, {
   useLayoutEffect,
   useRef,
 } from "react";
-import {
-  Text,
-  View,
-  ScrollView,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  Button,
-  ActivityIndicator,
-  Modal,
-  Switch,
-  Alert,
-  ImageBackground,
-} from "react-native";
+import { View, ScrollView, Image, StyleSheet, TouchableOpacity, Button, ActivityIndicator, Modal, Switch, Alert, ImageBackground } from "react-native";
 import * as FUNCS from "../helpers/funcs";
 
 import {

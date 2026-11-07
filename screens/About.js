@@ -1,13 +1,5 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
-  Pressable,
-  Alert,
-  Vibration,
-} from "react-native";
+import Text from "../components/ui/Text";
+import { View, ScrollView, TouchableOpacity, StyleSheet, Pressable, Alert, Vibration } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
 import { KOOP_BLUE } from "../helpers/colors";

@@ -1,20 +1,22 @@
+import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import { StatusBar } from "expo-status-bar";
 import { useContext, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
   Vibration,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ImageSlider from "../components/ImageSlider";
-import { KOOP_BLUE, KOOP_BLUE_DARK, WHITE } from "../helpers/colors";
-import { BIG_FONT_SIZE, IMG_SIZE } from "../helpers/flow";
-import { blurhash } from "../utils/const";
+import { BrandBackdrop, Button, FadeIn, Input, Text, haptic } from "../components/ui";
+import { IMG_SIZE } from "../helpers/flow";
+import { colors, radius, space, type } from "../theme";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as FUNCS from "../helpers/funcs";
@@ -32,6 +34,7 @@ export default function Home({ navigation }) {
   const [logginSuccess, setLogginSuccess] = useState(false);
 
   const { user, setuser } = useContext(UserContext);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (phoneNumberPattern.test(creds.phone)) {
@@ -48,7 +51,11 @@ export default function Home({ navigation }) {
         IMG_SIZE.h
       );
 
-      setImages(randomImages.map((img, i) => img.urls.regular));
+      setImages(
+        Array.isArray(randomImages)
+          ? randomImages.map((img) => img?.urls?.regular).filter(Boolean)
+          : []
+      );
       checkUserLogin();
     };
 
@@ -116,6 +123,7 @@ export default function Home({ navigation }) {
     } else {
       setloading(false);
       setLogginSuccess(true);
+      haptic("success");
       await saveSession(userData);
       navigation.replace("Home");
     }
@@ -145,191 +153,144 @@ export default function Home({ navigation }) {
     setcreds((old) => ({ ...old, [type]: val }));
   }
 
+  const phoneError =
+    creds.phone.length > 0 && formaterror !== null
+      ? "Numéro invalide — 10 chiffres attendus"
+      : null;
+
   return (
-    <ScrollView style={[{ backgroundColor: KOOP_BLUE }]}>
-      <View style={[styles.container]}>
-        <View>
-          <Image
-            transition={1500}
-            contentFit="cover"
-            source={require("../assets/koop.png")}
-            style={[styles.alignSelfCenter, styles.logo]}
-            placeholder={blurhash}
-          />
-          <Text style={[styles.tc, styles.pt, { marginBottom: 10 }]}>
-            + 1 millions de services et des professionels au bout de vos doigts
-          </Text>
-
-          {/* <SliderBox autoplay circleLoop images={images} /> */}
-
-          <ImageSlider
-            images={images}
-            imageHeight={250}
-            dotSize={10}
-            dotColor="white"
-            activeDotColor={KOOP_BLUE_DARK}
-            showIndicatorDots={true}
-            autoSlideInterval={5000}
-            containerStyle={{ marginBottom: 20 }}
-            radius={5}
-          />
-        </View>
-
-        {!loading && (
-          <View style={[styles.formCont]}>
-            <View>
-              <Text style={[styles.tc, styles.bigText, { marginVertical: 8 }]}>
-                Welcome to KOOP
-              </Text>
-              <Text style={[styles.tc, , { marginVertical: 8 }]}>
-                Please enter your phone number below. The default PIN is 0000
-              </Text>
-            </View>
-
-            <View>
-              <TextInput
-                maxLength={10}
-                keyboardType="phone-pad"
-                style={[styles.txtInput, styles.mt]}
-                placeholder="Phone ex: 0980967780"
-                value={creds.phone || ""}
-                onChangeText={(text) => onLoginValueChange("phone", text)}
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      <StatusBar style="light" />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView
+          bounces={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          <BrandBackdrop style={[st.hero, { paddingTop: insets.top + space.md }]}>
+            <FadeIn style={{ gap: space.md }}>
+              <Image
+                contentFit="contain"
+                source={require("../assets/koop.png")}
+                style={st.logo}
               />
-              <Text
-                style={[
-                  formaterror === null ? { color: "white" } : styles.error,
-                ]}
-              >
-                Invalid phone number
+              <Text style={st.heroTitle}>Bon retour 👋</Text>
+              <Text style={st.heroSub}>
+                +1 million de services et de professionnels au bout de vos doigts
               </Text>
+            </FadeIn>
 
-              <TextInput
-                keyboardType="number-pad"
-                secureTextEntry
-                style={[styles.txtInput, styles.mt]}
-                placeholder="PIN" //"OTP"
-                value={creds.otp || ""}
-                maxLength={6}
-                onChangeText={(text) => onLoginValueChange("otp", text)}
-              />
-              <TouchableOpacity
-                disabled={loading}
-                onPress={(e) => onRequestOtp()}
-              >
-                {!loading && (
-                  <Text
-                    style={[
-                      styles.btn,
-                      styles.bigText,
-                      loading ? { backgroundColor: "grey" } : "",
-                    ]}
-                  >
-                    LOGIN
+            <FadeIn delay={120} style={st.sliderCard}>
+              {images.length > 0 ? (
+                <ImageSlider
+                  images={images}
+                  imageHeight={170}
+                  dotSize={6}
+                  dotColor="white"
+                  activeDotColor="white"
+                  showIndicatorDots={true}
+                  autoSlideInterval={4500}
+                  radius={0}
+                />
+              ) : (
+                <View style={st.sliderPlaceholder}>
+                  <Feather name="image" size={28} color="rgba(255,255,255,0.7)" />
+                </View>
+              )}
+            </FadeIn>
+          </BrandBackdrop>
+
+          <View style={st.sheet}>
+            {loading ? (
+              <View style={st.loader}>
+                <ActivityIndicator color={colors.primary} />
+                <Text style={[type.small, { color: colors.textMuted }]}>
+                  Connexion en cours…
+                </Text>
+              </View>
+            ) : (
+              <FadeIn delay={200} style={{ gap: space.lg }}>
+                <View style={{ gap: 6 }}>
+                  <Text style={type.h1}>Se connecter</Text>
+                  <Text style={[type.body, { color: colors.textMuted }]}>
+                    Entrez votre numéro de téléphone. Le PIN par défaut est{" "}
+                    <Text style={{ fontWeight: "700", color: colors.text }}>0000</Text>.
                   </Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
+                </View>
 
-        {loading && (
-          <View
-            style={[
-              {
-                flex: 1,
-                flexGrow: 1,
-                height: 120,
-                justifyContent: "center",
-                alignItems: "center",
-              },
-            ]}
-          >
-            <ActivityIndicator color={WHITE} animating={loading} />
+                <Input
+                  label="Téléphone"
+                  icon="phone"
+                  maxLength={10}
+                  keyboardType="phone-pad"
+                  placeholder="0980 967 780"
+                  value={creds.phone || ""}
+                  error={phoneError}
+                  onChangeText={(text) => onLoginValueChange("phone", text)}
+                />
+
+                <Input
+                  label="Code PIN"
+                  icon="lock"
+                  keyboardType="number-pad"
+                  secureTextEntry
+                  placeholder="••••"
+                  value={creds.otp || ""}
+                  maxLength={6}
+                  onChangeText={(text) => onLoginValueChange("otp", text)}
+                />
+
+                <Button
+                  title="Continuer"
+                  iconRight="arrow-right"
+                  loading={loading}
+                  onPress={onRequestOtp}
+                />
+
+                <View style={st.secure}>
+                  <Feather name="shield" size={14} color={colors.textFaint} />
+                  <Text style={[type.caption, { color: colors.textFaint }]}>
+                    Connexion sécurisée · Vos données restent privées
+                  </Text>
+                </View>
+              </FadeIn>
+            )}
           </View>
-        )}
-      </View>
-    </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  logginsuccess: {
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 20,
-    margin: 18,
+const st = StyleSheet.create({
+  hero: {
+    paddingHorizontal: space.xl,
+    paddingBottom: space.xxxl + space.md,
+    gap: space.xl,
   },
-  error: {
-    color: "red",
-    textAlign: "center",
-  },
-  logo: {
-    height: 100,
-    marginTop: 20,
-    resizeMode: "contain",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: KOOP_BLUE,
-  },
-  tc: {
-    textAlign: "center",
-  },
-  alignSelfCenter: {
-    alignSelf: "center",
-  },
-
-  scrollView: {
-    paddingHorizontal: 12,
-  },
-  imgDiapo: {
-    marginRight: 10,
-  },
-  pt: {
-    paddingTop: 12,
-  },
-  mt: {
-    marginTop: 24,
-  },
-  formCont: {
-    backgroundColor: "white",
-    flex: 1,
-    borderTopStartRadius: 48,
-    borderTopEndRadius: 48,
-    marginTop: 36,
-    padding: 36,
-  },
-  formTypeTitleCont: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  formTitle: {
-    fontSize: 18,
-  },
-  sel: {
-    borderBottomColor: KOOP_BLUE,
-    borderBottomWidth: 4,
-    color: KOOP_BLUE,
-  },
-  bigText: {
-    fontSize: BIG_FONT_SIZE,
-  },
-  txtInput: {
-    padding: 12,
-    margin: 8,
-    borderColor: "lightgrey",
-    borderWidth: 1,
-    borderRadius: 12,
-  },
-  btn: {
-    alignSelf: "center",
-    backgroundColor: KOOP_BLUE,
-    width: "100%",
-    textAlign: "center",
-    padding: 12,
-    borderRadius: 12,
-    marginVertical: 12,
-    color: "white",
+  logo: { width: 96, height: 40 },
+  heroTitle: { ...type.h1, color: "#fff" },
+  heroSub: { ...type.body, color: "rgba(255,255,255,0.85)" },
+  sliderCard: {
+    borderRadius: radius.xl,
     overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.3)",
+    backgroundColor: "rgba(255,255,255,0.12)",
   },
+  sliderPlaceholder: { height: 170, alignItems: "center", justifyContent: "center" },
+  sheet: {
+    flex: 1,
+    marginTop: -space.xxl,
+    backgroundColor: colors.bg,
+    borderTopLeftRadius: radius.xl + 4,
+    borderTopRightRadius: radius.xl + 4,
+    padding: space.xl,
+    paddingBottom: space.xxxl,
+  },
+  loader: { alignItems: "center", gap: space.sm, paddingVertical: space.xxxl },
+  secure: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6 },
 });

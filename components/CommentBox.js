@@ -1,10 +1,7 @@
-import { View, Text, TextInput, Alert } from "react-native";
-import React, { useContext, useState } from "react";
-import styles from "../helpers/styles";
-import LoadingButton from "./LoadingButton";
-import { FontAwesome } from "@expo/vector-icons";
-import { KOOP_BLUE } from "../helpers/colors";
-import UserContext from "../context/UserContext";
+import { Alert, View } from "react-native";
+import React, { useState } from "react";
+import { space } from "../theme";
+import { Button, Input } from "./ui";
 import * as API from "../utils/api";
 
 export default function CommentBox({
@@ -52,21 +49,20 @@ export default function CommentBox({
     setloading(false);
   };
   return (
-    <View>
-      <TextInput
+    <View style={{ gap: space.sm }}>
+      <Input
         value={comment}
         onChangeText={(txt) => setcomment(txt)}
         multiline
-        numberOfLines={5}
-        textAlignVertical="top"
-        style={[styles.ti, { padding: 12 }]}
-        placeholder="Laisser un commentaire ..."
+        icon="edit-3"
+        placeholder="Partagez votre avis…"
       />
-      <LoadingButton
+      <Button
+        title="Publier le commentaire"
+        icon="send"
+        variant="dark"
         loading={loading}
-        text={"ENVOYER COMMENTAIRE"}
-        handlePress={sendComment}
-        icon={<FontAwesome name="send" size={24} color={KOOP_BLUE} />}
+        onPress={sendComment}
       />
     </View>
   );

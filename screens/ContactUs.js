@@ -1,10 +1,5 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import Text, { TextInput } from "../components/ui/Text";
+import { View, TouchableOpacity, ActivityIndicator } from "react-native";
 import React, { useContext, useState } from "react";
 import styles from "../helpers/styles";
 import UserContext from "../context/UserContext";

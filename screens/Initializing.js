@@ -1,6 +1,5 @@
 import React, { useLayoutEffect, useEffect, useState, useContext } from "react";
 import {
-  Text,
   BackHandler,
   Alert,
   View,
@@ -15,7 +14,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { KOOP_BLUE } from "../helpers/colors";
+import { BrandBackdrop, FadeIn, Text } from "../components/ui";
+import { radius, space, type } from "../theme";
 import styles from "../helpers/styles";
 import { insertItem, uploadFile } from "../utils/db";
 import { TABLE_NAMES, supabase } from "../utils/supabase";
@@ -124,25 +124,22 @@ function Initializing({ navigation, route }) {
     });
   }, [navigation]);
   return (
-    <View style={[st.cont]}>
-      <Text style={[st.title]}>Initializing ...</Text>
-      <Text style={[st.wait]}>Please wait a moment</Text>
-
-      <ImageBackground source={SPLASH} style={[st.splashcont]}>
-        <View
-          style={[
-            styles.bgBlue,
-            st.koopcont,
-            { width: LOGO_WIDTH, height: LOGO_HEIGHT },
-          ]}
-        >
-          <Image source={KOOP} style={[st.koop]} />
+    <BrandBackdrop style={st.cont}>
+      <FadeIn style={{ alignItems: "center", gap: space.lg }}>
+        <View style={st.ring}>
+          <ImageBackground source={SPLASH} style={st.splash} imageStyle={{ borderRadius: 110 }}>
+            <View style={st.logoChip}>
+              <Image source={KOOP} style={st.koop} />
+            </View>
+          </ImageBackground>
         </View>
-      </ImageBackground>
-
-      <View style={[styles.flex1]} />
-      <ActivityIndicator animating={loading} />
-    </View>
+        <Text style={st.title}>Création de votre espace…</Text>
+        <Text style={st.wait}>
+          Nous préparons votre profil et votre boutique. Cela ne prend que quelques secondes.
+        </Text>
+        <ActivityIndicator animating={loading} color="#fff" style={{ marginTop: space.sm }} />
+      </FadeIn>
+    </BrandBackdrop>
   );
 }
 
@@ -151,42 +148,23 @@ Initializing.ROUTE = "Initializing";
 export default Initializing;
 
 const st = StyleSheet.create({
-  koopcont: {
-    position: "absolute",
-    right: 0,
-    bottom: 50,
-    padding: 4,
+  cont: { flex: 1, justifyContent: "center", alignItems: "center", padding: space.xl },
+  ring: {
+    padding: 6,
+    borderRadius: 130,
+    backgroundColor: "rgba(255,255,255,0.18)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.35)",
   },
-  koop: {
-    width: LOGO_WIDTH - 10,
-    height: LOGO_HEIGHT - 20,
-    resizeMode: "contain",
+  splash: { width: 220, height: 220, justifyContent: "flex-end", alignItems: "center" },
+  logoChip: {
+    marginBottom: 18,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: radius.pill,
+    backgroundColor: "rgba(11,18,32,0.55)",
   },
-  cont: {
-    marginVertical: 64,
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-  },
-  title: {
-    fontSize: 18,
-    color: KOOP_BLUE,
-    marginBottom: 12,
-  },
-  wait: {
-    marginBottom: 12,
-  },
-  splashcont: {
-    marginTop: 32,
-    borderRadius: 120,
-
-    width: 240,
-    height: 240,
-    overflow: "hidden",
-  },
-  splashimg: {
-    resizeMode: "contain",
-    width: 340,
-    height: 340,
-  },
+  koop: { width: LOGO_WIDTH * 0.6, height: LOGO_HEIGHT * 0.35, resizeMode: "contain" },
+  title: { ...type.h2, color: "#fff", textAlign: "center" },
+  wait: { ...type.body, color: "rgba(255,255,255,0.82)", textAlign: "center", maxWidth: 300 },
 });

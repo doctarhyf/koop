@@ -1,14 +1,6 @@
+import Text from "../components/ui/Text";
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  Alert,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { View, TouchableOpacity, Image, StyleSheet, Alert, ScrollView, ActivityIndicator } from "react-native";
 import {
   KOOP_BLUE,
   KOOP_BLUE_DARK,

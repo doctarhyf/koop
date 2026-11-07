@@ -6,82 +6,56 @@ import React, {
   useContext,
 } from "react";
 import {
-  View,
-  TextView,
-  ScrollView,
   ActivityIndicator,
-  TouchableOpacity,
-  StyleSheet,
   FlatList,
-  Image,
   RefreshControl,
+  StyleSheet,
   Vibration,
+  View,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { Text } from "react-native";
-import { Entypo } from "@expo/vector-icons";
-import { KOOP_BLUE } from "../helpers/colors";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
-import styles from "../helpers/styles";
+import {
+  Avatar,
+  EmptyState,
+  FadeIn,
+  ListSkeleton,
+  PressableScale,
+  Text,
+} from "../components/ui";
 import useFetch from "../hooks/useFetch";
 import UserContext from "../context/UserContext";
-import { FontAwesome } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { supabase } from "../utils/supabase";
+import { colors, radius, space, type } from "../theme";
 
 const MESSAGE_TYPE = {
   INBOX: "inbox",
   OUTBOX: "outbox",
 };
 
-const ContactItem = ({ contact_data, handleContactPress }) => {
+const ContactItem = ({ contact_data, handleContactPress, index }) => {
   const contact = contact_data.item[1][0];
-
-  if (contact === null) return null;
+  if (contact === null || contact === undefined) return null;
 
   const last_message = contact_data.item[1][contact_data.item[1].length - 1];
-  const { shop_name, profile } = contact;
-  const last_date = new Date(last_message.created_at).toISOString().split("T");
-  const last_message_date = `${last_date[0]}`;
+  const { shop_name, profile, display_name } = contact;
 
   return (
-    <TouchableOpacity onPress={(e) => handleContactPress(contact_data)}>
-      <View style={[st.contactContainer, styles.flex1]}>
-        <Image source={{ uri: profile }} style={st.contactProfile} />
-        <View style={[{ flexGrow: 1, flex: 1 }]}>
-          <View
-            style={[
-              {
-                justifyContent: "space-between",
-                flexDirection: "row",
-                flexGrow: 1,
-                flex: 1,
-              },
-            ]}
-          >
-            <Text numberOfLines={1} style={[{ fontWeight: "bold" }]}>
-              {shop_name}
+    <FadeIn delay={Math.min(index, 8) * 40}>
+      <PressableScale onPress={() => handleContactPress(contact_data)} scaleTo={0.985} style={st.row}>
+        <Avatar uri={profile} name={shop_name || display_name} size={54} />
+        <View style={{ flex: 1, gap: 3 }}>
+          <View style={st.rowTop}>
+            <Text numberOfLines={1} style={[type.title, { flex: 1 }]}>
+              {shop_name || display_name}
             </Text>
-            <Text
-              numberOfLines={2}
-              style={[
-                styles.textGray,
-                {
-                  flexGrow: 1,
-                  textAlign: "right",
-                },
-              ]}
-            >
-              {last_message.timeAgo}
-            </Text>
+            <Text style={[type.caption, { color: colors.textFaint }]}>{last_message?.timeAgo}</Text>
           </View>
-          <Text numberOfLines={2} style={[styles.textGray]}>
-            {last_message.content}
+          <Text numberOfLines={1} style={[type.small, { color: colors.textMuted }]}>
+            {last_message?.me ? "Vous : " : ""}
+            {last_message?.content}
           </Text>
         </View>
-      </View>
-    </TouchableOpacity>
+      </PressableScale>
+    </FadeIn>
   );
 };
 
@@ -118,7 +92,7 @@ export default function Inbox({ navigation, route }) {
     navigation.setOptions({
       headerRight: () => (
         <ActivityIndicator
-          color={KOOP_BLUE}
+          color={colors.primary}
           animating={refreshing || loadingRawMessages}
         />
       ),
@@ -131,37 +105,38 @@ export default function Inbox({ navigation, route }) {
     navigation.navigate("ViewMessage", message_data, { pop: true });
   };
 
-  const onRenderContact = (item) => (
-    <ContactItem contact_data={item} handleContactPress={handleContactPress} />
+  const onRenderContact = ({ item, index }) => (
+    <ContactItem contact_data={{ item }} index={index} handleContactPress={handleContactPress} />
   );
 
-  const onExtractContactKey = (item) => item[0];
+  const onExtractContactKey = (item) => String(item[0]);
   const onRefresh = () => {
     reloadMessages();
   };
 
   return (
-    <View style={{}}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        {!loadingRawMessages && messages.length === 0 && (
-          <Text style={[styles.paddingLarge, styles.textCenter]}>
-            No Messages
-          </Text>
-        )}
-      </ScrollView>
-
-      {messages && messages.length > 0 && (
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      {loadingRawMessages && messages.length === 0 ? (
+        <View style={{ padding: space.lg }}>
+          <ListSkeleton rows={6} />
+        </View>
+      ) : (
         <FlatList
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />
           }
           data={messages}
           keyExtractor={onExtractContactKey}
           renderItem={onRenderContact}
+          contentContainerStyle={[st.list, messages.length === 0 && { flex: 1, justifyContent: "center" }]}
+          ItemSeparatorComponent={() => <View style={st.sep} />}
+          ListEmptyComponent={
+            <EmptyState
+              icon="message-circle"
+              title="Aucun message"
+              subtitle="Vos conversations avec les vendeurs et acheteurs apparaîtront ici."
+            />
+          }
         />
       )}
     </View>
@@ -169,38 +144,15 @@ export default function Inbox({ navigation, route }) {
 }
 
 const st = StyleSheet.create({
-  nomsg: {
-    color: "grey",
-    textAlign: "center",
-    padding: 24,
-  },
-  on: {
-    borderBottomWidth: 1,
-    borderBottomColor: KOOP_BLUE,
-    color: KOOP_BLUE,
-  },
-  contactContainer: {
+  list: { padding: space.lg, paddingBottom: space.xxxl },
+  row: {
     flexDirection: "row",
-    padding: 10,
-    borderBottomWidth: 1,
-
-    borderBottomColor: "#ccc",
+    alignItems: "center",
+    gap: space.sm,
+    padding: space.sm,
+    borderRadius: radius.lg,
+    backgroundColor: colors.card,
   },
-  contactProfile: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  messageContentContainer: {
-    flex: 1,
-  },
-  messageContent: {
-    fontSize: 16,
-  },
-  messageDate: {
-    fontSize: 12,
-    color: "#666",
-    marginTop: 5,
-  },
+  rowTop: { flexDirection: "row", alignItems: "center", gap: space.xs },
+  sep: { height: space.xs },
 });

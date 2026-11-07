@@ -1,20 +1,10 @@
-import React, { useState, useLayoutEffect, useContext } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  ActivityIndicator,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
-import * as API from "../utils/api";
-import styles from "../helpers/styles";
+import { Feather } from "@expo/vector-icons";
+import React, { useContext, useState } from "react";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import { Button, Card, Input, Text, haptic } from "../components/ui";
 import UserContext from "../context/UserContext";
-import { FontAwesome } from "@expo/vector-icons";
-import { KOOP_BLUE } from "../helpers/colors";
-import { insertItem, sendMessage } from "../utils/db";
-import { TABLE_NAMES } from "../utils/supabase";
-import TextButton from "../components/TextButton";
+import { colors, space, type } from "../theme";
+import * as API from "../utils/api";
 
 export default function SendMessage({ route, navigation }) {
   const { user, setuser } = useContext(UserContext);
@@ -22,19 +12,6 @@ export default function SendMessage({ route, navigation }) {
 
   const { shop_name, shop_id, from_id, to_id, name } = route.params;
   const [message, setmessage] = useState("");
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () =>
-        loading ? (
-          <ActivityIndicator animating={loading} />
-        ) : (
-          <TouchableOpacity onPress={onSendMessage}>
-            <FontAwesome name="send" size={24} color={KOOP_BLUE} />
-          </TouchableOpacity>
-        ),
-    });
-  }, [navigation, loading, message]);
 
   const onSendMessage = async (e) => {
     setloading(true);
@@ -46,9 +23,10 @@ export default function SendMessage({ route, navigation }) {
     });
 
     if (res.id) {
+      haptic("success");
       Alert.alert(
-        "Message sent",
-        `Your message to ${shop_name} has been sent successfully!`
+        "Message envoyé",
+        `Votre message à ${shop_name} a bien été envoyé.`
       );
       console.error(JSON.stringify(res));
     } else {
@@ -60,23 +38,65 @@ export default function SendMessage({ route, navigation }) {
   };
 
   return (
-    <View style={[styles.paddingSmall]}>
-      <View style={[styles.flexRow]}>
-        <Text style={[styles.textGray]}>Send to : </Text>
-        <Text>{shop_name}</Text>
-      </View>
-      <TextInput
-        style={[styles.ti]}
+    <ScrollView
+      style={{ flex: 1, backgroundColor: colors.bg }}
+      contentContainerStyle={{ padding: space.lg, gap: space.lg }}
+      keyboardShouldPersistTaps="handled"
+    >
+      <Card style={{ flexDirection: "row", alignItems: "center", gap: space.sm }}>
+        <View style={st.to}>
+          <Feather name="shopping-bag" size={18} color={colors.primary} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={[type.caption, { color: colors.textMuted }]}>DESTINATAIRE</Text>
+          <Text style={type.title} numberOfLines={1}>{shop_name}</Text>
+        </View>
+        <Button
+          title="Voir"
+          variant="secondary"
+          size="sm"
+          full={false}
+          onPress={() => navigation.navigate("Shop", route.params, { pop: true })}
+        />
+      </Card>
+
+      {name ? (
+        <View style={st.context}>
+          <Feather name="corner-down-right" size={14} color={colors.textMuted} />
+          <Text style={[type.small, { color: colors.textMuted, flex: 1 }]} numberOfLines={2}>
+            À propos de : <Text style={{ fontWeight: "600", color: colors.text }}>{name}</Text>
+          </Text>
+        </View>
+      ) : null}
+
+      <Input
+        label="Votre message"
         value={message}
         onChangeText={(txt) => setmessage(txt)}
-        multiline={true}
-        numberOfLines={5}
-        placeholder="Write your message here ..."
+        multiline
+        placeholder="Bonjour, je suis intéressé(e) par…"
+        autoFocus
       />
-      <TextButton
-        label={"View Shop"}
-        handlePress={(e) => navigation.navigate("Shop", route.params, { pop: true })}
+
+      <Button
+        title="Envoyer"
+        icon="send"
+        loading={loading}
+        disabled={message.trim().length === 0}
+        onPress={onSendMessage}
       />
-    </View>
+    </ScrollView>
   );
 }
+
+const st = StyleSheet.create({
+  to: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: colors.primarySoft,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  context: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 4 },
+});

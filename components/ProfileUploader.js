@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useLayoutEffect, useContext } from "react";
-import { Alert, Text, View, TouchableOpacity, Modal, StyleSheet } from "react-native";
-import { Entypo } from "@expo/vector-icons";
+import { Alert, View, Modal, Pressable, StyleSheet } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { ListRow, PressableScale, Text } from "./ui";
+import { colors, radius, space, type } from "../theme";
 import { KOOP_BLUE } from "../helpers/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -10,7 +12,6 @@ import { readFileBase64 } from "../utils/files";
 import { decode } from "base64-arraybuffer";
 import { KOOP_BUCKET_NAME, supabase } from "../utils/supabase";
 import UserContext from "../context/UserContext";
-import MenuButton from "./MenuButton";
 
 const MEDIA_TYPE_CAMERA = 0;
 
@@ -33,6 +34,7 @@ export default function ProfileUploader({
   };
 
   const onChooseMedia = (mediaType) => {
+    closeBottomSheet();
     pickImageAsync(mediaType);
   };
 
@@ -97,36 +99,38 @@ export default function ProfileUploader({
 
   return (
     <>
-      <TouchableOpacity onPress={handleAddImage}>
-        <Entypo name="camera" size={24} color={color} />
-      </TouchableOpacity>
+      <PressableScale onPress={handleAddImage} scaleTo={0.88} style={bs.trigger}>
+        <Feather name="camera" size={15} color="#fff" />
+      </PressableScale>
       <Modal
         animationType="slide"
         transparent={true}
         visible={bottomSheetVisible}
         onRequestClose={closeBottomSheet}
       >
-        <View style={bs.modalContainer}>
-          <View style={bs.bottomSheet}>
-            <Text>Choose media source</Text>
-            {[
-              {
-                label: "Camera",
-                icon: require("../assets/icons/camera.png"),
-              },
-              {
-                label: "Gallery",
-                icon: require("../assets/icons/gallery.png"),
-              },
-            ].map((btn, i) => (
-              <MenuButton
-                key={i}
-                btn={{ ...btn, id: i }}
-                handleOnPress={(e) => onChooseMedia(i)}
-              />
-            ))}
-          </View>
-        </View>
+        <Pressable style={bs.modalContainer} onPress={closeBottomSheet}>
+          <Pressable style={bs.bottomSheet}>
+            <View style={bs.grabber} />
+            <Text style={type.h3}>Changer la photo</Text>
+            <Text style={[type.small, { color: colors.textMuted }]}>
+              Choisissez une source
+            </Text>
+            <View style={bs.list}>
+              {[
+                { label: "Prendre une photo", icon: "camera" },
+                { label: "Choisir dans la galerie", icon: "image" },
+              ].map((btn, i) => (
+                <ListRow
+                  key={i}
+                  icon={btn.icon}
+                  title={btn.label}
+                  last={i === 1}
+                  onPress={() => onChooseMedia(i)}
+                />
+              ))}
+            </View>
+          </Pressable>
+        </Pressable>
       </Modal>
     </>
   );
@@ -183,15 +187,39 @@ const bs = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: "flex-end",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(11,18,32,0.45)",
   },
   bottomSheet: {
-    backgroundColor: "white",
-    padding: 20,
-    width: "100%",
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    backgroundColor: colors.bg,
+    padding: space.lg,
+    paddingBottom: space.xxl,
+    gap: 4,
+    borderTopLeftRadius: radius.xl,
+    borderTopRightRadius: radius.xl,
+  },
+  grabber: {
+    alignSelf: "center",
+    width: 40,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: colors.line,
+    marginBottom: space.sm,
+  },
+  list: {
+    marginTop: space.md,
+    backgroundColor: colors.card,
+    borderRadius: radius.lg,
+    paddingHorizontal: space.md,
+  },
+  trigger: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: colors.ink,
+    borderWidth: 2,
+    borderColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   closeButton: {
     marginTop: 20,

@@ -1,25 +1,12 @@
-import { View, Text, ActivityIndicator, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
-import styles from "../helpers/styles";
+import React from "react";
+import { View } from "react-native";
+import { Button } from "./ui";
 
-import { KOOP_BLUE } from "../helpers/colors";
-
-export default function LoadingButton({ handlePress, loading, text, icon }) {
+// Legacy API kept for existing screens; renders the design-system Button.
+export default function LoadingButton({ handlePress, loading, text, variant = "primary" }) {
   return (
-    <View
-      style={[styles.justifyCenter, styles.alignCenter, { marginVertical: 12 }]}
-    >
-      {loading ? (
-        <ActivityIndicator size={32} animating={true} color={KOOP_BLUE} />
-      ) : (
-        <TouchableOpacity
-          onPress={handlePress}
-          style={[styles.alignCenter, icon ? styles.flexRow : null, { gap: 8 }]}
-        >
-          {icon}
-          <Text style={[styles.textBlue, styles.textCenter]}>{text}</Text>
-        </TouchableOpacity>
-      )}
+    <View style={{ marginVertical: 12 }}>
+      <Button title={text} onPress={handlePress} loading={loading} variant={variant} />
     </View>
   );
 }

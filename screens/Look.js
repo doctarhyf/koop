@@ -1,62 +1,42 @@
-import {
-  View,
-  Text,
-  TextInput,
-  ScrollView,
-  ImageBackground,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-  RefreshControl,
-  Alert,
-  Linking,
-} from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 import { Image } from "expo-image";
-import styles from "../helpers/styles";
-import MenuButton from "../components/MenuButton";
+import { LinearGradient } from "expo-linear-gradient";
+import { useCallback, useContext, useEffect, useLayoutEffect, useState } from "react";
+import { Alert, Linking, RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import AnnonceItem from "../components/AnnonceItem";
 import {
-  useEffect,
-  useState,
-  useLayoutEffect,
-  useContext,
-  useCallback,
-} from "react";
+  Badge,
+  EmptyState,
+  FadeIn,
+  IconButton,
+  ListSkeleton,
+  PressableScale,
+  SectionHeader,
+  Skeleton,
+  Text,
+} from "../components/ui";
 import UserContext from "../context/UserContext";
 import * as FUNCS from "../helpers/funcs";
 import { IMG_SIZE } from "../helpers/flow";
-import TextButton from "../components/TextButton";
-import useItemsLoader from "../hooks/useItemsLoader";
-import { TABLE_NAMES } from "../utils/supabase";
-import useFetch, { useFetch2 } from "../hooks/useFetch";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
-import { KOOP_BLUE } from "../helpers/colors";
-import AnnonceItem from "../components/AnnonceItem";
-import { useFocusEffect } from "@react-navigation/native";
-import { FontAwesome } from "@expo/vector-icons";
+import { useFetch2 } from "../hooks/useFetch";
+import { colors, fonts, gradients, radius, shadows, space, type } from "../theme";
 
-const ViewAll = (e) => {
-  return (
-    <View style={[styles.flexRow, { gap: 8 }, styles.alignCenter]}>
-      <Text style={[styles.textBlue]}>View All</Text>
-      <AntDesign name="rightcircle" size={18} color={KOOP_BLUE} />
-    </View>
-  );
-};
-
-const SectionTitle = ({ text }) => {
-  return (
-    <Text style={[styles.mbLarge, styles.mtLarge, { fontWeight: "bold" }]}>
-      {text}
+const SearchBar = ({ onPress }) => (
+  <PressableScale onPress={onPress} scaleTo={0.985} style={[st.search, shadows.xs]}>
+    <Feather name="search" size={18} color={colors.textMuted} />
+    <Text style={[type.body, { color: colors.textFaint, flex: 1 }]}>
+      Rechercher une annonce, un service…
     </Text>
-  );
-};
+    <View style={st.searchKbd}>
+      <Feather name="sliders" size={14} color={colors.text} />
+    </View>
+  </PressableScale>
+);
 
 const FeaturedShops = ({ navigation, onViewAll, refreshing }) => {
-  const { user, setuser } = useContext(UserContext);
-  const [loading, shops, error, reload] = useFetch2(
-    "https://konext.vercel.app/api/shops",
-    true
-  );
+  const { user } = useContext(UserContext);
+  const [loading, shops, error, reload] = useFetch2("https://konext.vercel.app/api/shops", true);
 
   useFocusEffect(
     useCallback(() => {
@@ -73,19 +53,11 @@ const FeaturedShops = ({ navigation, onViewAll, refreshing }) => {
   const onViewShop = (shop) => {
     if (shop.id === user.id) {
       Alert.alert(
-        "Your shop",
-        "This is your shop, if you want to change some information go to My Account?",
+        "Votre boutique",
+        "C'est votre boutique. Pour modifier ses informations, allez dans Mon compte.",
         [
-          {
-            text: "Cancel",
-          },
-          {
-            text: "My Account",
-            onPress: () => {
-              navigation.navigate("MyAccount", undefined, { pop: true });
-            },
-            style: "destructive",
-          },
+          { text: "Annuler" },
+          { text: "Mon compte", onPress: () => navigation.navigate("MyAccount", undefined, { pop: true }) },
         ]
       );
       return;
@@ -95,64 +67,42 @@ const FeaturedShops = ({ navigation, onViewAll, refreshing }) => {
 
   return (
     <View>
-      <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <SectionTitle text={"POPULAR SHOPS"} />
-        <TouchableOpacity onPress={(e) => onViewAll(FUNCS.VIEW_ALL_TYPE.SHOPS)}>
-          <ViewAll />
-        </TouchableOpacity>
-      </View>
-      {loading ? (
-        <ActivityIndicator animating={loading} color={KOOP_BLUE} />
-      ) : (
-        <View>
-          <ScrollView horizontal>
-            {shops &&
-              shops.map &&
-              shops.map((shop, shop_idx) => (
-                <TouchableOpacity
-                  key={shop_idx}
-                  onPress={(e) => onViewShop(shop)}
-                >
-                  <ImageBackground
-                    style={[
-                      styles.bgBlue,
-                      styles.roundedMd,
-                      styles.marginH,
-                      {
-                        width: 200,
-                        height: 140,
-                        borderWidth: 4,
-                        borderColor: user.id === shop.id ? KOOP_BLUE : "white",
-                      },
-                      styles.justifyEnd,
-                      styles.overflowHidden,
-                    ]}
-                    source={{
-                      uri: shop.shop_profile, //"https://cdn.britannica.com/49/182849-050-4C7FE34F/scene-Iron-Man.jpg",
-                    }}
-                  >
-                    <View style={[{ padding: 10 }, styles.textBGBlackTransp]}>
-                      <Text style={styles.textWhite}>{shop.shop_name}</Text>
-                      {/*  <Text style={[styles.textGreen]}>{curShop.shop_name}</Text> */}
-                      <Text style={[styles.textGreen, { fontSize: 12 }]}>
-                        {shop.items_count} announces
-                      </Text>
-                    </View>
-                  </ImageBackground>
-                </TouchableOpacity>
-              ))}
-          </ScrollView>
-        </View>
-      )}
+      <SectionHeader
+        title="Boutiques populaires"
+        action="Tout voir"
+        onAction={() => onViewAll(FUNCS.VIEW_ALL_TYPE.SHOPS)}
+        style={st.pad}
+      />
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={st.hList}>
+        {loading
+          ? [0, 1, 2].map((i) => <Skeleton key={i} width={220} height={150} r={radius.lg} />)
+          : Array.isArray(shops) &&
+            shops.map((shop, i) => (
+              <PressableScale key={shop.id ?? i} onPress={() => onViewShop(shop)} style={[st.shop, shadows.sm]}>
+                {shop.shop_profile ? (
+                  <Image source={shop.shop_profile} style={StyleSheet.absoluteFill} contentFit="cover" transition={300} />
+                ) : (
+                  <LinearGradient colors={gradients.brand} style={StyleSheet.absoluteFill} />
+                )}
+                <LinearGradient colors={gradients.scrim} style={StyleSheet.absoluteFill} />
+                {user.id === shop.id ? <Badge label="Ma boutique" tone="glass" style={st.shopBadge} /> : null}
+                <View style={st.shopInfo}>
+                  <Text style={st.shopName} numberOfLines={1}>{shop.shop_name}</Text>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                    <Feather name="zap" size={12} color="#A7F3D0" />
+                    <Text style={st.shopCount}>{shop.items_count ?? 0} annonces</Text>
+                  </View>
+                </View>
+              </PressableScale>
+            ))}
+      </ScrollView>
     </View>
   );
 };
 
 const ServiceRequests = ({ navigation, onViewAll, refreshing }) => {
-  const { user, setuser } = useContext(UserContext);
-  const [loadingsreq, servicesRequests, errorsreqs, reloadsreqs] = useFetch2(
-    "https://konext.vercel.app/api/sreq"
-  );
+  const { user } = useContext(UserContext);
+  const [loadingsreq, servicesRequests, errorsreqs, reloadsreqs] = useFetch2("https://konext.vercel.app/api/sreq");
   const limit = 5;
 
   useFocusEffect(
@@ -167,140 +117,95 @@ const ServiceRequests = ({ navigation, onViewAll, refreshing }) => {
     }, [])
   );
 
+  const list = Array.isArray(servicesRequests) ? servicesRequests.slice(0, limit) : [];
+
   return (
-    <View style={[{ marginTop: 12 }]}>
-      <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <SectionTitle text={"DERNIERES ANNONCES"} />
-        <TouchableOpacity
-          onPress={(e) => onViewAll(FUNCS.VIEW_ALL_TYPE.SERVICE_REQUESTS)}
-        >
-          <ViewAll />
-        </TouchableOpacity>
-      </View>
-      {loadingsreq && (
-        <ActivityIndicator
-          color={KOOP_BLUE}
-          animating={true}
-          style={[styles.paddingLarge]}
-        />
-      )}
-      {servicesRequests &&
-        servicesRequests
-          .filter((it, i) => i < limit)
-          .map((it, i) => (
-            <TouchableOpacity
-              key={i}
-              onPress={(e) => navigation.navigate("ViewServiceRequest", it, { pop: true })}
+    <View style={st.pad}>
+      <SectionHeader
+        title="Dernières annonces"
+        action="Tout voir"
+        onAction={() => onViewAll(FUNCS.VIEW_ALL_TYPE.SERVICE_REQUESTS)}
+      />
+      {loadingsreq && list.length === 0 ? (
+        <ListSkeleton rows={3} />
+      ) : list.length === 0 ? (
+        <EmptyState icon="inbox" title="Aucune annonce" subtitle="Soyez le premier à publier aujourd'hui." />
+      ) : (
+        list.map((it, i) => (
+          <FadeIn key={it.id ?? i} delay={i * 60}>
+            <PressableScale
+              scaleTo={0.985}
+              onPress={() => navigation.navigate("ViewServiceRequest", it, { pop: true })}
             >
               <AnnonceItem item={it} itsMyItem={it.user_id === user.id} />
-            </TouchableOpacity>
-          ))}
+            </PressableScale>
+          </FadeIn>
+        ))
+      )}
     </View>
   );
 };
 
-const FeaturedAd = ({ navigation }) => {
-  const SAMPLE_PROMO_DATA = [
-    {
-      label: "ElectroHub",
-      desc: "Your one-stop destination for cutting-edge electronics, from smartphones to smart home gadgets.",
-      url: "https://www.instagram.com/doctarhyf/",
-    },
-    {
-      label: "Sportify",
-      desc: "Gear up for victory with our premium selection of sports equipment and athletic wear.",
-      url: "https://soundcloud.com/slimrecords-ent/sets/l-f-d-y-ep",
-    },
-    {
-      label: "FashionFusion",
-      desc: "Unleash your style with our trendy clothing collection, blending fashion with comfort seamlessly.",
-      url: "https://www.youtube.com/watch?v=vPSqPP23RsA",
-    },
-  ];
+const SAMPLE_PROMO_DATA = [
+  {
+    label: "ElectroHub",
+    desc: "Smartphones, gadgets et maison connectée — tout l'électronique en un seul endroit.",
+    url: "https://www.instagram.com/doctarhyf/",
+  },
+  {
+    label: "Sportify",
+    desc: "Équipements sportifs premium et vêtements techniques pour gagner.",
+    url: "https://soundcloud.com/slimrecords-ent/sets/l-f-d-y-ep",
+  },
+  {
+    label: "FashionFusion",
+    desc: "Une collection tendance qui marie style et confort.",
+    url: "https://www.youtube.com/watch?v=vPSqPP23RsA",
+  },
+];
 
-  const SUGGESTS_COUNT = SAMPLE_PROMO_DATA.length;
-
+const FeaturedAd = () => {
   const [images, setimages] = useState([]);
   const [loading, setloading] = useState(false);
 
   useEffect(() => {
     setloading(true);
-
-    const fetchImages = async () => {
-      const randomImages = await FUNCS.GetRandomImages(
-        SUGGESTS_COUNT,
-        IMG_SIZE.w,
-        IMG_SIZE.h
-      );
-
+    (async () => {
+      const randomImages = await FUNCS.GetRandomImages(SAMPLE_PROMO_DATA.length, IMG_SIZE.w, IMG_SIZE.h);
       setloading(false);
-      setimages(
-        randomImages.map((img, i) => ({ url: img.urls?.regular, id: i }))
-      );
-    };
-
-    fetchImages();
+      setimages(Array.isArray(randomImages) ? randomImages.map((img, i) => ({ url: img?.urls?.regular, id: i })) : []);
+    })();
   }, []);
+
+  const cards = SAMPLE_PROMO_DATA.map((p, i) => ({ ...p, url_img: images[i]?.url }));
 
   return (
     <View>
-      <View style={[styles.flexRow, styles.justifyBetween, styles.alignCenter]}>
-        <SectionTitle text={"ESPACE PUB"} />
-      </View>
-      {loading ? (
-        <ActivityIndicator animating={loading} size={32} color={KOOP_BLUE} />
-      ) : (
-        <ScrollView>
-          {images.map((it, i) => (
-            <TouchableOpacity
-              key={i}
-              onPress={(e) => Linking.openURL(SAMPLE_PROMO_DATA[i].url)}
-            >
-              <View
-                style={[
-                  {
-                    marginVertical: 12,
-                    borderRadius: 12,
-                    borderColor: "#ddd",
-                    borderWidth: 1,
-                    overflow: "hidden",
-                  },
-                ]}
-              >
-                <View
-                  style={[
-                    {
-                      height: 200,
-
-                      backgroundColor: KOOP_BLUE,
-                      overflow: "hidden",
-                    },
-                  ]}
-                >
-                  <Image
-                    style={[
-                      {
-                        resizeMode: "cover",
-                        overflow: "hidden",
-                        width: "100%",
-                        height: 200,
-                      },
-                    ]}
-                    source={it.url}
-                    transition={1000}
-                  />
-                </View>
-                <View style={[{ padding: 12 }]}>
-                  <Text>{SAMPLE_PROMO_DATA[i].label}</Text>
-                  <Text style={[styles.textGray]}>
-                    {SAMPLE_PROMO_DATA[i].desc}
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      )}
+      <SectionHeader title="Sponsorisé" style={st.pad} />
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={300 + space.sm}
+        decelerationRate="fast"
+        contentContainerStyle={st.hList}
+      >
+        {cards.map((it, i) => (
+          <PressableScale key={i} onPress={() => Linking.openURL(it.url)} style={[st.ad, shadows.sm]}>
+            <View style={st.adImg}>
+              {loading || !it.url_img ? (
+                <LinearGradient colors={i % 2 ? gradients.premium : gradients.brand} style={StyleSheet.absoluteFill} />
+              ) : (
+                <Image source={it.url_img} style={StyleSheet.absoluteFill} contentFit="cover" transition={400} />
+              )}
+              <Badge label="PUB" tone="dark" style={{ margin: space.sm }} />
+            </View>
+            <View style={{ padding: space.md, gap: 4 }}>
+              <Text style={type.title}>{it.label}</Text>
+              <Text numberOfLines={2} style={[type.small, { color: colors.textMuted }]}>{it.desc}</Text>
+            </View>
+          </PressableScale>
+        ))}
+      </ScrollView>
     </View>
   );
 };
@@ -310,81 +215,80 @@ export default function Look({ navigation }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Welcom to KOOP",
+      title: "Découvrir",
+      headerLargeTitle: false,
       headerRight: () => (
-        <TouchableOpacity
-          onPress={(e) => navigation.navigate("ServiceRequest", undefined, { pop: true })}
-        >
-          <FontAwesome name="send" size={24} color={KOOP_BLUE} />
-        </TouchableOpacity>
+        <IconButton
+          name="plus"
+          size={36}
+          bg={colors.ink}
+          color="#fff"
+          border={false}
+          onPress={() => navigation.navigate("ServiceRequest", undefined, { pop: true })}
+        />
       ),
     });
   }, [navigation]);
 
-  const st_search = [
-    styles.bgWhite,
-    styles.paddingSmall,
-    styles.marginMin,
-    styles.roundedMd,
+  const onViewAll = (type) => navigation.navigate("Search", type, { pop: true });
 
-    { overflow: "hidden", marginTop: 24 },
-  ];
-
-  const st_feat_cont = [
-    styles.mtLarge,
-    styles.paddingSmall,
-    styles.flex1,
-    styles.borderTopRadiusLarge,
-    styles.bgWhite,
-    { paddingTop: 12 },
-  ];
-
-  const onViewAll = (type) => {
-    navigation.navigate("Search", type, { pop: true });
-  };
-
-  const onRefresh = (e) => {
+  const onRefresh = () => {
     setrefreshing(true);
-
-    setTimeout(() => {
-      setrefreshing(false);
-    }, 2500);
+    setTimeout(() => setrefreshing(false), 2500);
   };
 
   return (
-    <View style={[styles.flex1, styles.bgBlue]}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        <View>
-          {/*   <TouchableOpacity onPress={(e) => navigation.replace("Search")}>
-            <Text style={st_search}>Rechercher koop ...</Text>
-          </TouchableOpacity> */}
-
-          <View style={st_feat_cont}>
-            <FeaturedShops
-              navigation={navigation}
-              onViewAll={onViewAll}
-              refreshing={refreshing}
-            />
-            <ServiceRequests
-              navigation={navigation}
-              onViewAll={onViewAll}
-              refreshing={refreshing}
-            />
-            <FeaturedAd navigation={navigation} />
-          </View>
-        </View>
-      </ScrollView>
-    </View>
+    <ScrollView
+      style={{ flex: 1, backgroundColor: colors.bg }}
+      contentContainerStyle={{ paddingBottom: space.xxxl, gap: space.xl }}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={[st.pad, { paddingTop: space.xs }]}>
+        <SearchBar onPress={() => onViewAll(FUNCS.VIEW_ALL_TYPE.SERVICE_REQUESTS)} />
+      </View>
+      <FeaturedShops navigation={navigation} onViewAll={onViewAll} refreshing={refreshing} />
+      <ServiceRequests navigation={navigation} onViewAll={onViewAll} refreshing={refreshing} />
+      <FeaturedAd />
+    </ScrollView>
   );
 }
 
 const st = StyleSheet.create({
-  imgbg: {
-    width: 140,
-    height: 180,
+  pad: { paddingHorizontal: space.lg },
+  hList: { paddingHorizontal: space.lg, gap: space.sm, paddingBottom: space.xs },
+  search: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: space.sm,
+    height: 52,
+    paddingLeft: space.md,
+    paddingRight: 8,
+    backgroundColor: colors.card,
+    borderRadius: radius.md,
   },
+  searchKbd: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    backgroundColor: colors.cardAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  shop: {
+    width: 220,
+    height: 150,
+    borderRadius: radius.lg,
+    overflow: "hidden",
+    justifyContent: "flex-end",
+    backgroundColor: colors.sky100,
+  },
+  shopBadge: { position: "absolute", top: space.sm, left: space.sm },
+  shopInfo: { padding: space.md, gap: 2 },
+  shopName: { fontFamily: fonts.bold, fontSize: 16, color: "#fff" },
+  shopCount: { ...type.caption, color: "rgba(255,255,255,0.85)" },
+  ad: { width: 300, backgroundColor: colors.card, borderRadius: radius.lg, overflow: "hidden" },
+  adImg: { height: 150, backgroundColor: colors.sky100 },
 });

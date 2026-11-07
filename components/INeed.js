@@ -1,89 +1,57 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated, StyleSheet, View } from "react-native";
+import { gradients, radius, space, type } from "../theme";
+import { Badge, Text } from "./ui";
 
 const professions = [
-  "Médecin",
-  "Un macon",
-  "Ingénieur",
-  "Un electricien",
-  "Une vehicule a acheter",
-  "Programmeur",
-  "Un service traiteur",
-  "Une plaquette arduino",
+  "un médecin",
+  "un maçon",
+  "un ingénieur",
+  "un électricien",
+  "une voiture",
+  "un programmeur",
+  "un traiteur",
+  "une carte Arduino",
   "un MacBook",
   "un iPhone 15",
 ];
 
-const getRandomColor = () => {
-  const letters = "0123456789ABCDEF";
-  let color = "#";
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return "#ffffff"; //color;
-};
-
-const invertColor = (hexColor) => {
-  return (
-    "#" +
-    (0xffffff - parseInt(hexColor.replace("#", ""), 16))
-      .toString(16)
-      .padStart(6, "0")
-  );
-};
-
-const RandomProfessionComponent = () => {
-  const [randomProfession, setRandomProfession] = useState("");
-  const [textColor, setTextColor] = useState(getRandomColor());
-  const [backgroundColor, setBackgroundColor] = useState(
-    invertColor(textColor)
-  );
+// Rotating headline that hints at what people post on KOOP.
+export default function INeed() {
+  const [i, setI] = useState(0);
+  const a = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * professions.length);
-      const color = getRandomColor();
-      setRandomProfession(professions[randomIndex]);
-      setTextColor(color);
-      setBackgroundColor(invertColor(color));
-    }, 1000);
-
-    return () => clearInterval(interval);
+    const id = setInterval(() => {
+      Animated.timing(a, { toValue: 0, duration: 180, useNativeDriver: true }).start(() => {
+        setI((v) => (v + 1) % professions.length);
+        Animated.timing(a, { toValue: 1, duration: 260, useNativeDriver: true }).start();
+      });
+    }, 1800);
+    return () => clearInterval(id);
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor,
-        padding: 12,
-      }}
-    >
-      <Text style={{ fontSize: 18, color: textColor }}>
-        {randomProfession} ...
-      </Text>
-    </View>
-  );
-};
-
-export default function INeed() {
-  return (
-    <View>
-      <Text
-        style={[
-          {
-            fontSize: 18,
-            textAlign: "center",
-            marginVertical: 18,
-            fontWeight: "bold",
-          },
-        ]}
-      >
-        Je cherche / Je vends / Je fais
-      </Text>
-      <RandomProfessionComponent />
-    </View>
+    <LinearGradient colors={gradients.aurora} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={st.card}>
+      <Badge label="Je cherche · Je vends · Je fais" tone="glass" />
+      <View style={{ height: 40, justifyContent: "center" }}>
+        <Animated.View
+          style={{
+            opacity: a,
+            transform: [{ translateY: a.interpolate({ inputRange: [0, 1], outputRange: [8, 0] }) }],
+          }}
+        >
+          <Text style={[type.h2, { color: "#fff" }]}>
+            {professions[i]}
+            <Text style={{ color: "#7BC6F0" }}>…</Text>
+          </Text>
+        </Animated.View>
+      </View>
+    </LinearGradient>
   );
 }
+
+const st = StyleSheet.create({
+  card: { borderRadius: radius.lg, padding: space.lg, gap: space.sm },
+});

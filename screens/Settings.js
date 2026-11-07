@@ -1,209 +1,123 @@
-import React, { useContext } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SectionList,
-  StatusBar,
-  ImageBackground,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  Share,
-  Platform,
-  Alert,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import UserContext from "../context/UserContext";
-import { KOOP_BLUE } from "../helpers/colors";
-import { Entypo } from "@expo/vector-icons";
-import { Octicons } from "@expo/vector-icons";
-import { FontAwesome6 } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { IMG_SIZE } from "../helpers/flow";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Constants from "expo-constants";
+import React, { useContext } from "react";
+import { Alert, Platform, ScrollView, Share, StyleSheet, View } from "react-native";
+import { Avatar, BrandBackdrop, FadeIn, Group, ListRow, Text } from "../components/ui";
+import UserContext from "../context/UserContext";
+import { colors, radius, space, type } from "../theme";
 
-const ICON_SIZE = 24;
-
-const DATA = [
+const SECTIONS = [
   {
-    title: "Settings",
+    title: "Sécurité",
     data: [
-      {
-        text: "Change PIN",
-        icon: <Entypo name="lock" size={ICON_SIZE} color="black" />,
-        route: "change_pin",
-      },
-      {
-        text: "Face ID",
-        icon: <FontAwesome6 name="face-grin-wide" size={24} color="black" />,
-        route: "face_id",
-        os: "ios",
-      },
+      { text: "Changer le PIN", sub: "Code à 4–6 chiffres", icon: "lock", route: "change_pin" },
+      { text: "Face ID", sub: "Déverrouillage biométrique", icon: "smile", route: "face_id", os: "ios" },
     ],
   },
   {
-    title: "Help and contact",
+    title: "Aide et contact",
     data: [
-      {
-        text: "Share the app",
-        icon: <Octicons name="share" size={24} color="black" />,
-        route: "share_app",
-      },
-      {
-        text: "Terms & Conditions",
-        icon: <FontAwesome5 name="file-contract" size={24} color="black" />,
-        route: "terms_and_cond",
-      },
-      {
-        text: "Contact us",
-        icon: <FontAwesome6 name="smile-wink" size={24} color="black" />,
-        route: "contact_us",
-      },
-      {
-        text: "Sign out",
-        icon: <Octicons name="sign-out" size={24} color="black" />,
-        route: "signout",
-      },
-      ,
-      {
-        text: "About",
-        icon: <Entypo name="info-with-circle" size={24} color="black" />,
-        route: "about",
-      },
+      { text: "Partager l'application", icon: "share-2", route: "share_app", tint: colors.success, bg: colors.successSoft },
+      { text: "Termes et conditions", icon: "file-text", route: "terms_and_cond", tint: colors.slate, bg: colors.lineSoft },
+      { text: "Nous contacter", icon: "life-buoy", route: "contact_us", tint: colors.violet, bg: colors.violetSoft },
+      { text: "À propos", icon: "info", route: "about", tint: colors.slate, bg: colors.lineSoft },
     ],
+  },
+  {
+    title: "Compte",
+    data: [{ text: "Se déconnecter", icon: "log-out", route: "signout", destructive: true }],
   },
 ];
 
-const Settings = ({ navigation, route }) => {
+const Settings = ({ navigation }) => {
   const { user, setuser } = useContext(UserContext);
 
   const shareLink = async () => {
     try {
       const applink = "https://konext.app/";
-      const result = await Share.share({
-        message: `Salut ! 👋 Je voulais te faire découvrir cette superbe application que j'utilise en ce moment. Elle s'appelle KOOP, et elle m'a été incroyablement utile pour trouver des clients et des articles rares. Tu peux la télécharger gratuitement sur l'App Store/Google Play : ${applink}. N'hésite pas à l'essayer et à me faire part de ton avis ! 😊 #KOOP #KOOP2024.`,
+      await Share.share({
+        message: `Salut ! 👋 Je voulais te faire découvrir KOOP, une super application pour trouver des clients et des articles rares. Télécharge-la gratuitement : ${applink} 😊 #KOOP`,
       });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
     } catch (error) {
       alert(error.message);
     }
   };
 
-  const onSettingsPress = (settings) => {
-    const { route } = settings;
+  const signout = async () => {
+    await AsyncStorage.removeItem("@KOOP:user");
+    navigation.replace("Login");
+  };
 
+  const onSettingsPress = ({ route }) => {
     if (route === "about") navigation.navigate("About", undefined, { pop: true });
-
     if (route === "contact_us") navigation.navigate("ContactUs", undefined, { pop: true });
-
     if (route === "change_pin")
-      navigation.navigate("ChangePIN", { user: user, setuser: setuser }, { pop: true });
-
+      navigation.navigate("ChangePIN", { user, setuser }, { pop: true });
     if (route === "terms_and_cond")
-      navigation.navigate("TOS", { user: user, setuser: setuser }, { pop: true });
-
-    if (route === "share_app") {
-      shareLink();
-    }
-
+      navigation.navigate("TOS", { user, setuser }, { pop: true });
+    if (route === "share_app") shareLink();
     if (route === "signout") {
-      Alert.alert("Sign out", "Are you sure you wanna sign out?", [
-        { text: "No", style: "cancel" },
-        {
-          text: "Yes",
-          style: "destructive",
-          onPress: () => {
-            signout();
-          },
-        },
+      Alert.alert("Se déconnecter", "Voulez-vous vraiment vous déconnecter ?", [
+        { text: "Annuler", style: "cancel" },
+        { text: "Déconnexion", style: "destructive", onPress: signout },
       ]);
     }
   };
 
-  const signout = async () => {
-    await AsyncStorage.removeItem("@KOOP:user");
-
-    navigation.replace("Login");
-  };
-
   return (
-    <SafeAreaView edges={["bottom", "left", "right"]} style={[st.container, { flex: 1 }]}>
-      <ImageBackground
-        style={[st.head]}
-        source={require("../assets/icons/settings_2.png")}
-      >
-        <Text style={[{ fontSize: 14 }]}>{user.display_name}</Text>
-        <Text style={[{ fontSize: 18, fontWeight: "bold" }]}>{user.phone}</Text>
-      </ImageBackground>
-
-      <ScrollView style={[{ padding: 12 }]}>
-        {DATA.map((section, isec) => (
-          <View key={isec}>
-            <Text style={[st.sec_title]}>{section.title}</Text>
-            {section.data.map((it, i) =>
-              it.os ? (
-                Platform.OS === it.os ? (
-                  <TouchableOpacity
-                    key={i}
-                    onPress={(e) => onSettingsPress(it)}
-                  >
-                    <View style={[st.it_cont]}>
-                      <View style={[st.it_icon]}>{it.icon}</View>
-                      <Text>{it.text}</Text>
-                    </View>
-                  </TouchableOpacity>
-                ) : null
-              ) : (
-                <TouchableOpacity key={i} onPress={(e) => onSettingsPress(it)}>
-                  <View style={[st.it_cont]}>
-                    <View style={[st.it_icon]}>{it.icon}</View>
-                    <Text>{it.text}</Text>
-                  </View>
-                </TouchableOpacity>
-              )
-            )}
+    <ScrollView
+      style={{ flex: 1, backgroundColor: colors.bg }}
+      contentContainerStyle={{ padding: space.lg, gap: space.xl, paddingBottom: space.xxxl }}
+    >
+      <FadeIn>
+        <BrandBackdrop style={st.head}>
+          <Avatar uri={user?.profile} name={user?.display_name} size={60} />
+          <View style={{ flex: 1 }}>
+            <Text style={[type.h3, { color: "#fff" }]} numberOfLines={1}>{user?.display_name}</Text>
+            <Text style={[type.small, { color: "rgba(255,255,255,0.85)" }]}>{user?.phone}</Text>
           </View>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+        </BrandBackdrop>
+      </FadeIn>
+
+      {SECTIONS.map((section, si) => {
+        const rows = section.data.filter((it) => !it.os || it.os === Platform.OS);
+        return (
+          <FadeIn key={section.title} delay={80 + si * 60}>
+            <Group title={section.title}>
+              {rows.map((it, i) => (
+                <ListRow
+                  key={it.route}
+                  icon={it.icon}
+                  iconColor={it.tint}
+                  iconBg={it.bg}
+                  title={it.text}
+                  subtitle={it.sub}
+                  destructive={it.destructive}
+                  onPress={() => onSettingsPress(it)}
+                  last={i === rows.length - 1}
+                />
+              ))}
+            </Group>
+          </FadeIn>
+        );
+      })}
+
+      <Text style={[type.caption, { textAlign: "center", color: colors.textFaint }]}>
+        KOOP v{Constants.expoConfig?.version || "1.0.0"} · Fait avec ❤️ en RDC
+      </Text>
+    </ScrollView>
   );
 };
 
 const st = StyleSheet.create({
-  container: {
-    padding: 8,
-  },
   head: {
-    height: 180,
-    padding: 8,
-    resizeMode: "center",
-  },
-  sec_title: { color: "#666", fontWeight: "bold" },
-  it_icon: {
-    width: ICON_SIZE,
-    height: ICON_SIZE,
-    marginRight: 12,
-  },
-  it_cont: {
     flexDirection: "row",
-    justifyContent: "flex-start",
-
     alignItems: "center",
-    padding: 16,
-    borderBottomColor: "#ddd",
-    borderBottomWidth: 1,
-    marginBottom: 8,
+    gap: space.md,
+    padding: space.lg,
+    borderRadius: radius.xl,
+    overflow: "hidden",
   },
-  it_text: { marginLeft: 12 },
 });
 
 export default Settings;

@@ -1,29 +1,16 @@
-import React from "react";
-import { TouchableOpacity, Text, View } from "react-native";
-import { KOOP_BLUE } from "../helpers/colors";
 import Icon from "@expo/vector-icons/FontAwesome";
-import styles from "../helpers/styles";
+import React from "react";
+import { View } from "react-native";
+import { colors, fonts } from "../theme";
+import { PressableScale, Text } from "./ui";
 
-export default function TextButton({
-  label,
-  handlePress,
-  iconName = "",
-  customStyles = [],
-}) {
+export default function TextButton({ label, handlePress, iconName = "", customStyles = [] }) {
   return (
-    <TouchableOpacity onPress={handlePress}>
-      <View
-        style={[
-          styles.flexRow,
-          customStyles,
-          styles.justifyBetween,
-          styles.alignCenter,
-        ]}
-      >
-        <Icon name={iconName} size={20} style={{ color: KOOP_BLUE }} />
-        <View style={[{ width: 5 }]}></View>
-        <Text style={[{ color: KOOP_BLUE }]}>{label}</Text>
+    <PressableScale onPress={handlePress}>
+      <View style={[{ flexDirection: "row", alignItems: "center", gap: 8, paddingVertical: 10 }, customStyles]}>
+        {iconName ? <Icon name={iconName} size={18} color={colors.primary} /> : null}
+        <Text style={{ color: colors.primary, fontFamily: fonts.semibold }}>{label}</Text>
       </View>
-    </TouchableOpacity>
+    </PressableScale>
   );
 }

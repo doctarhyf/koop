@@ -1,15 +1,6 @@
+import Text, { TextInput } from "../components/ui/Text";
 import * as React from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  TextInput,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Switch,
-  Alert,
-} from "react-native";
+import { View, ScrollView, Image, StyleSheet, TouchableOpacity, Switch, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import styles from "../helpers/styles";
 import MenuButton from "../components/MenuButton";

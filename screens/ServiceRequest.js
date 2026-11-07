@@ -1,30 +1,21 @@
+import { Feather } from "@expo/vector-icons";
+import React, { useContext, useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  Switch,
   Alert,
   KeyboardAvoidingView,
-  TouchableOpacity,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  View,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useContext, useEffect, useState } from "react";
-import styles from "../helpers/styles";
-import { Image } from "expo-image";
-import SimpSimpleTextButtonle from "../components/SimpleTextButton";
-import * as SB from "../utils/db";
-import * as API from "../utils/api";
-import { TABLE_NAMES } from "../utils/supabase";
 import ImageAdder from "../components/ImageAdder";
-//import * as API from "../utils/api";
-import UserContext from "../context/UserContext";
-import LoadingButton from "../components/LoadingButton";
-import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
 import INeed from "../components/INeed";
 import LinksBox from "../components/LinksBox";
-import SimpleTextButton from "../components/SimpleTextButton";
+import { Button, Card, FadeIn, Input, PressableScale, Text, haptic } from "../components/ui";
+import UserContext from "../context/UserContext";
+import { colors, radius, space, type } from "../theme";
+import * as API from "../utils/api";
 
 const ANNOUNCE_TYPE = [
   {
@@ -141,6 +132,7 @@ const [emptyLabel, setEmptyLabel] = useState(false);
               //alert(JSON.stringify(res));
               const posted = res.id;
               if (posted) {
+                haptic("success");
                 Alert.alert(
                   "Annonce postee!",
                   "Votre annonce a ete postee avec success.",
@@ -183,170 +175,149 @@ const [emptyLabel, setEmptyLabel] = useState(false);
   };
 
   return (
-    <ScrollView>
-      <View style={[styles.paddingSmall]}>
-        <View
-          style={[
-            {
-              height: 120,
-              justifyContent: "center",
-              alignItems: "center",
-            },
-          ]}
-        >
-          <Image
-            source={require("../assets/icons/service.png")}
-            transition={1000}
-            style={[{ width: 100, height: 100 }]}
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: colors.bg }}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <ScrollView
+        contentContainerStyle={{ padding: space.lg, gap: space.lg, paddingBottom: space.xxxl }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <FadeIn>
+          <INeed />
+        </FadeIn>
+
+        <FadeIn delay={60}>
+          <Input
+            label="Que recherchez-vous ou proposez-vous ?"
+            multiline
+            icon="edit-3"
+            placeholder="ex : Besoin d'un MacBook Pro M3, bon état…"
+            value={servData.label || ""}
+            hint={`${(servData.label || "").length} caractères · minimum 10`}
+            onChangeText={(txt) => setServData((prev) => ({ ...prev, label: txt }))}
           />
-        </View>
-        <Text style={[{ textAlign: "center" }]}>
-          Lancer une nouvelle annonce, un article ou une demande de service
-        </Text>
-        <INeed />
-        <Text style={[{ marginVertical:12 }]} >Description de votre annonce </Text>
-        <TextInput
-          multiline={true}
-          style={[
-            st.ti,
-            { marginVertical: 12, fontSize: 18, textAlignVertical: "center", borderColor: emptyLabel ? 'red' : 'gray' },
-            styles.paddingSmall,
-          ]}
-          placeholder="ex:Besoin d'un MacBook pro ..."
-          value={servData.label || ""}
-          onChangeText={(txt) =>
-            setServData((prev) => ({ ...prev, label: txt }))
-          }
-        />
+        </FadeIn>
 
-        <View
-          style={[
-            {
-              gap: 16,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              marginVertical: 12,
-            },
-          ]}
-        >
-          <Text>Add more Info</Text>
-          <Switch
-            style={[
-              {
-                justifyContent: "flex-start",
-                alignSelf: "flex-start",
-                marginVertical: 12,
-              },
-            ]}
-            trackColor={{ false: "#767577", true: KOOP_BLUE }}
-            thumbColor={hasMoreData ? KOOP_BLUE_DARK : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={(e) => {
-              setServData((prev) => ({ ...prev, images: [] }));
-              toggleHasMoreData();
-            }}
-            value={hasMoreData}
-          />
-        </View>
-
-        {hasMoreData && (
-          <View>
-            <View>
-              <Text>Add Links</Text>
-              <LinksBox onLinksAdd={onLinksAdd} />
-            </View>
-
-            <View>
-              <Text>Add Pictures</Text>
-              <ImageAdder
-                navigation={navigation}
-                onImageAdded={onImageAdded}
-                onImagePressed={onImagePressed}
+        <FadeIn delay={120}>
+          <Card style={{ gap: space.md }}>
+            <View style={st.toggleRow}>
+              <View style={st.toggleIcon}>
+                <Feather name="image" size={18} color={colors.primary} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={type.bodyStrong}>Photos et liens</Text>
+                <Text style={[type.small, { color: colors.textMuted }]}>
+                  Les annonces avec photos reçoivent bien plus de réponses
+                </Text>
+              </View>
+              <Switch
+                trackColor={{ false: colors.line, true: colors.primary }}
+                thumbColor="#fff"
+                ios_backgroundColor={colors.line}
+                onValueChange={() => {
+                  setServData((prev) => ({ ...prev, images: [] }));
+                  toggleHasMoreData();
+                }}
+                value={hasMoreData}
               />
             </View>
-          </View>
-        )}
 
-        <View>
-          <View style={{ flexDirection: "row" }}>
-            {ANNOUNCE_TYPE.map((pt, i) => (
-              <TouchableOpacity onPress={(e) => setAnnounceType(pt)}>
-                <View
-                  style={[
-                    {
-                      padding: 12,
-                      backgroundColor:
-                        i === announceType.id ? "purple" : "#ffffff00",
-                      borderTopLeftRadius: 18,
-                      borderTopRightRadius: 18,
-                    },
-                  ]}
-                >
-                  <Text
-                    style={{
-                      fontWeight: i === announceType.id ? "bold" : "normal",
-                      color: i === announceType.id ? "white" : "black",
-                    }}
-                  >
-                    {pt.label}
-                  </Text>
+            {hasMoreData && (
+              <View style={{ gap: space.md }}>
+                <View style={{ gap: 6 }}>
+                  <Text style={type.overline}>Liens</Text>
+                  <LinksBox onLinksAdd={onLinksAdd} />
                 </View>
-              </TouchableOpacity>
-            ))}
-          </View>
+                <View style={{ gap: 6 }}>
+                  <Text style={type.overline}>Photos</Text>
+                  <ImageAdder
+                    navigation={navigation}
+                    onImageAdded={onImageAdded}
+                    onImagePressed={onImagePressed}
+                  />
+                </View>
+              </View>
+            )}
+          </Card>
+        </FadeIn>
 
-          <View
-            style={{
-              borderWidth: 2,
-              borderColor: "purple",
-              padding: 8,
-              borderBottomStartRadius: 18,
-              borderBottomEndRadius: 18,
-            }}
-          >
-            <View>
-              <Text style={[st.subt]}>{announceType.desc}</Text>
-              <LoadingButton
-                text={"POST"}
-                handlePress={onPost}
-                loading={loading}
-              />
-            </View>
+        <FadeIn delay={180} style={{ gap: space.sm }}>
+          <Text style={[type.overline, { color: colors.textMuted, marginLeft: 4 }]}>Type d'annonce</Text>
+          <View style={{ flexDirection: "row", gap: space.sm }}>
+            {ANNOUNCE_TYPE.map((pt) => {
+              const on = pt.id === announceType.id;
+              const premium = pt.type === "PREMIUM";
+              const tint = premium ? colors.violet : colors.primary;
+              return (
+                <PressableScale
+                  key={pt.id}
+                  onPress={() => setAnnounceType(pt)}
+                  hapticKind="select"
+                  style={[st.plan, on && (premium ? st.planOnPremium : st.planOn)]}
+                >
+                  <View style={st.planHead}>
+                    <Feather name={premium ? "star" : "zap"} size={18} color={on ? tint : colors.textMuted} />
+                    <View style={[st.radio, on && { borderColor: tint }]}>
+                      {on && <View style={[st.radioDot, { backgroundColor: tint }]} />}
+                    </View>
+                  </View>
+                  <Text style={type.title}>{pt.label}</Text>
+                  <Text style={[type.caption, { color: colors.textMuted }]}>
+                    {premium ? "En tête des résultats" : "Visible 24 h"}
+                  </Text>
+                </PressableScale>
+              );
+            })}
           </View>
-        </View>
+          <Text style={[type.small, { color: colors.textMuted, paddingHorizontal: 4 }]}>
+            {announceType.desc}
+          </Text>
+        </FadeIn>
 
-        {/* <View style={[styles.paddingLarge]}>
-          <LoadingButton text={"POST"} handlePress={onPost} loading={loading} />
-          <Text style={[st.subt]}>
-            Une annonce normale ne s'affiche que pour 24h
-          </Text>
-          <SimpleTextButton text={"POST as AD"} handlePress={onPostAsAd} />
-          <Text style={[st.subt]}>
-            Une annonce promo s'affichera au top des recherches pour plus de
-            visibilite, selon la duree que vous allez choisir selon votre budget
-            😎
-          </Text>
-        </View> */}
-      </View>
-    </ScrollView>
+        <Button
+          title={announceType.type === "PREMIUM" ? "Publier en Premium" : "Publier l'annonce"}
+          icon="send"
+          loading={loading}
+          onPress={onPost}
+        />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const st = StyleSheet.create({
-  ti: {
-    borderWidth: 1,
-    padding: 8,
-    borderRadius: 16,
-    borderColor: "#ddd",
+  toggleRow: { flexDirection: "row", alignItems: "center", gap: space.sm },
+  toggleIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 14,
+    backgroundColor: colors.primarySoft,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  subt: {
-    color: "grey",
-    fontStyle: "italic",
+  plan: {
+    flex: 1,
+    gap: 4,
+    padding: space.md,
+    borderRadius: radius.lg,
+    backgroundColor: colors.card,
+    borderWidth: 1.5,
+    borderColor: colors.border,
   },
-  posttbtn: {
-    padding: 12,
+  planOn: { borderColor: colors.primary, backgroundColor: colors.primarySoft },
+  planOnPremium: { borderColor: colors.violet, backgroundColor: colors.violetSoft },
+  planHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 8 },
+  radio: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: colors.line,
+    alignItems: "center",
+    justifyContent: "center",
   },
+  radioDot: { width: 10, height: 10, borderRadius: 5 },
 });
 
 ServiceRequest.ROUTE = "ServiceRequest";

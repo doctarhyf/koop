@@ -1,4 +1,5 @@
-import { View, Text, ScrollView } from "react-native";
+import Text from "../components/ui/Text";
+import { View, ScrollView } from "react-native";
 import { Image } from "expo-image";
 import React from "react";
 import styles from "../helpers/styles";

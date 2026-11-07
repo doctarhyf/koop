@@ -1,72 +1,78 @@
-import { View, Text } from "react-native";
-import React, { useContext } from "react";
-import styles from "../helpers/styles";
-import { FontAwesome5 } from "@expo/vector-icons";
-import * as FUNCS from "../helpers/funcs";
+import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import UserContext from "../context/UserContext";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { colors, fonts, radius, shadows, space, type } from "../theme";
+import { Badge, Text } from "./ui";
 
-export default function AnnonceItem({ item, itsMyItem, showProfile }) {
+export default function AnnonceItem({ item, itsMyItem }) {
   const me = itsMyItem;
+  const author = item?.user_data || {};
+  const hasImage = item?.images && item.images.length > 0;
+  const thumb = hasImage ? item.images[0] : author.profile;
 
   return (
-    <View
-      style={[
-        styles.flexRow,
-        styles.flex1,
-        styles.alignCenter,
-        {
-          gap: 8,
-          padding: 8,
-          borderColor: "#ddd",
-          marginBottom: 8,
-          borderWidth: 1,
-          borderRadius: 8,
-        },
-      ]}
-    >
-      <Image
-        placeholder={"Loading ..."}
-        source={
-          item.images && item.images.length > 0
-            ? item.images[0]
-            : item.user_data.profile
-        }
-        style={[
-          {
-            width: 60,
-            height: 60,
-            borderRadius: 8,
-            overflow: "hidden",
-            alignSelf: "flex-start",
-          },
-        ]}
-      />
-
-      <View style={[styles.flex1, { gap: 8 }]}>
-        <View style={{ flexDirection: "row", gap: 8 }}>
-          <Text
-            style={[
-              { color: "purple", fontWeight: "bold", fontSize: 12 },
-              styles.fontBold,
-            ]}
-          >
-            {item.user_data.ville}
-          </Text>
-          <Text>-</Text>
-          <Text style={[{ color: "grey", fontSize: 12 }]}>
-            {me
-              ? `${item.user_data.display_name} (Me)`
-              : item.user_data.display_name}
-          </Text>
-        </View>
-
-        <Text style={[{ fontWeight: "bold", flex: 1, fontSize: 16 }]}>
-          {item.label}
-        </Text>
-
-        <Text style={[styles.textGray]}>{item.timeAgo}</Text>
+    <View style={[st.card, shadows.xs]}>
+      <View style={st.thumbWrap}>
+        {thumb ? (
+          <Image source={thumb} style={st.thumb} contentFit="cover" transition={250} />
+        ) : (
+          <View style={[st.thumb, st.thumbEmpty]}>
+            <Feather name="image" size={20} color={colors.primary} />
+          </View>
+        )}
+        {hasImage && item.images.length > 1 ? (
+          <View style={st.count}>
+            <Text style={st.countText}>+{item.images.length - 1}</Text>
+          </View>
+        ) : null}
       </View>
+
+      <View style={{ flex: 1, gap: 6 }}>
+        <View style={st.meta}>
+          {author.ville ? <Badge label={author.ville} tone="primary" /> : null}
+          {me ? <Badge label="Moi" tone="success" /> : null}
+        </View>
+        <Text numberOfLines={2} style={type.title}>
+          {item?.label}
+        </Text>
+        <View style={st.footer}>
+          <Text numberOfLines={1} style={[type.caption, { color: colors.textMuted, flexShrink: 1 }]}>
+            {author.display_name}
+          </Text>
+          <View style={st.dot} />
+          <Feather name="clock" size={11} color={colors.textFaint} />
+          <Text style={[type.caption, { color: colors.textFaint }]}>{item?.timeAgo}</Text>
+        </View>
+      </View>
+      <Feather name="chevron-right" size={18} color={colors.textFaint} style={{ alignSelf: "center" }} />
     </View>
   );
 }
+
+const st = StyleSheet.create({
+  card: {
+    flexDirection: "row",
+    gap: space.sm,
+    padding: space.sm,
+    marginBottom: space.sm,
+    backgroundColor: colors.card,
+    borderRadius: radius.lg,
+  },
+  thumbWrap: { width: 76, height: 76 },
+  thumb: { width: 76, height: 76, borderRadius: radius.md, backgroundColor: colors.sky50 },
+  thumbEmpty: { alignItems: "center", justifyContent: "center" },
+  count: {
+    position: "absolute",
+    right: 4,
+    bottom: 4,
+    backgroundColor: "rgba(11,18,32,0.65)",
+    borderRadius: radius.pill,
+    paddingHorizontal: 6,
+    paddingVertical: 1,
+  },
+  countText: { color: "#fff", fontFamily: fonts.bold, fontSize: 10 },
+  meta: { flexDirection: "row", gap: 6, flexWrap: "wrap" },
+  footer: { flexDirection: "row", alignItems: "center", gap: 5 },
+  dot: { width: 3, height: 3, borderRadius: 2, backgroundColor: colors.textFaint },
+});

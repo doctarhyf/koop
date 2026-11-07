@@ -1,373 +1,196 @@
-import React, { useContext, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-  // ImageBackground,
-} from "react-native";
-import ImageBackground from "../components/ImageBackground";
-import styles from "../helpers/styles";
-import {
-  KOOP_BLUE,
-  KOOP_BLUE_DARK,
-  KOOP_BLUE_LIGHT,
-  KOOP_BLUE_TRANSLUCIDE,
-  KOOP_GREEN,
-} from "../helpers/colors";
-import { Image } from "expo-image";
-import UserContext from "../context/UserContext";
-import { updateUserData } from "../utils/db";
-import ProfileUploader from "../components/ProfileUploader";
+import { Feather } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Image } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
+import React, { useContext, useRef, useState } from "react";
+import { ActivityIndicator, Animated, ScrollView, StyleSheet, View } from "react-native";
+import ProfileUploader from "../components/ProfileUploader";
 import TabPersonalInfo from "../components/TabPersonalInfo";
 import TabShopInfo from "../components/TabShopInfo";
+import { Avatar, Badge, FadeIn, PressableScale, Text } from "../components/ui";
+import UserContext from "../context/UserContext";
+import { colors, fonts, gradients, radius, shadows, space, type } from "../theme";
+import { updateUserData } from "../utils/db";
 
-const INPUTS = [
-  { ph: "Name", dataName: "fullName" }, //ph for placeholder
-  { ph: "Displayname", dataName: "displayName" },
-  {
-    ph: "Email",
-    dataName: "email",
-    options: { keyboardType: "email-address", autoCapitalize: "none" },
-  },
-  { ph: "DOB", dataName: "dob" },
-  {
-    ph: "Ville",
-    dataName: "ville",
-    data: ["KINSHASA", "LUBUMBASHI", "LIKASI", "KOLWEZI"],
-  },
-];
+const TABS = ["Profil", "Boutique"];
 
-const FA_ICONS = {
-  name: "user",
-  tags: "tags",
-  desc: "align-right",
-  add: "location-arrow",
-  email: "envelope",
-  web: "globe",
-  servicesIDs: "",
-  def: "coffee",
-};
-
-const TAB = {
-  PERSONAL_INFO: 0,
-  SHOP_INFO: 1,
-};
-
-const HeaderShopInfo = ({ user, setuser, handleBGUpdatePress }) => {
-  const [updatingProfile, setUpdatingProfile] = useState(false);
-
-  const onProfilePicUri = async (uri) => {
-    const upd = { shop_profile: uri };
-    await updateUserData(user.id, upd);
-    console.error("shop bg uri => ", uri);
-    const newUserData = { ...user, shop_profile: uri };
-    setuser(newUserData);
-    await AsyncStorage.setItem("@KOOP:user", JSON.stringify(newUserData));
-    console.error("upd usr new user => ", newUserData);
+function Segmented({ value, onChange }) {
+  const [w, setW] = useState(0);
+  const x = useRef(new Animated.Value(value)).current;
+  const set = (i) => {
+    Animated.spring(x, { toValue: i, useNativeDriver: true, speed: 20, bounciness: 6 }).start();
+    onChange(i);
   };
-
-  const bg =
-    "https://images.unsplash.com/photo-1531297484001-80022131f5a1?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dGVjaHxlbnwwfHwwfHx8MA%3D%3D";
-
+  const segW = w / TABS.length;
   return (
-    <View style={[st.shopfront]}>
-      <Image
-        source={user.shop_profile || bg}
-        style={[st.fsbg]}
-        transition={1000}
-      />
-
-      <View
-        style={[st.sn, { flexDirection: "row", gap: 8 }, styles.alignCenter]}
-      >
-        <Image
-          source={user.profile}
-          style={{ width: 60, height: 60, borderRadius: 30 }}
+    <View style={st.seg} onLayout={(e) => setW(e.nativeEvent.layout.width - 8)}>
+      {w > 0 && (
+        <Animated.View
+          style={[
+            st.segThumb,
+            shadows.xs,
+            { width: segW, transform: [{ translateX: x.interpolate({ inputRange: [0, 1], outputRange: [0, segW] }) }] },
+          ]}
         />
-        <View>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>
-            {user.shop_name.toUpperCase() || "MY SHOP"}
-          </Text>
-          <Text>@{user.display_name}</Text>
-        </View>
-      </View>
-      <View style={{ position: "absolute", top: 0, right: 0, margin: 12 }}>
-        <ProfileUploader
-          onProfilePicUri={onProfilePicUri}
-          currentURI={user.shop_profile}
-          setUpdatingProfile={setUpdatingProfile}
-        />
-      </View>
-      <ActivityIndicator animating={updatingProfile} color={KOOP_BLUE} />
+      )}
+      {TABS.map((t, i) => (
+        <PressableScale key={t} onPress={() => set(i)} hapticKind="select" style={st.segItem}>
+          <Text style={[st.segText, value === i && { color: colors.text }]}>{t}</Text>
+        </PressableScale>
+      ))}
     </View>
   );
-};
+}
 
 export default function MyAccount({ navigation }) {
   const [tab, settab] = useState(0);
   const { user, setuser } = useContext(UserContext);
   const [updatingProfile, setUpdatingProfile] = useState(false);
-  const [loading, setloading] = useState(false);
+  const [updatingCover, setUpdatingCover] = useState(false);
 
-  const handleBGUpdatePress = (e) => {};
+  const persist = async (newUserData) => {
+    setuser(newUserData);
+    await AsyncStorage.setItem("@KOOP:user", JSON.stringify(newUserData));
+  };
 
   const handleInfoPress = (data) => {
     if (data[0] === "prods") {
       navigation.navigate("MyItems", undefined, { pop: true });
       return;
     }
-
-    const editable = data[1].editable;
-
-    if (editable === false || editable === undefined) {
-      return;
-    }
-
+    if (!data[1].editable) return;
     navigation.navigate("InfoEdit", data, { pop: true });
   };
 
   const handleProfileChange = async (uri) => {
-    console.error("will update new profile => ", uri);
-    const upd = { profile: uri };
-    console.error("new user dt to upd => \n", upd);
+    const res = await updateUserData(user.id, { profile: uri });
+    if (res && res.length === 1) await persist(res[0]);
+    else console.error("Error updating user");
+  };
 
-    const res = await updateUserData(user.id, upd);
-
-    if (res.length === 1) {
-      const newUserData = res[0];
-
-      setuser(newUserData);
-      await AsyncStorage.setItem("@KOOP:user", JSON.stringify(newUserData));
-      console.error("upd usr new user => ", newUserData);
-    } else {
-      console.error("Error updating user => ");
-    }
+  const handleCoverChange = async (uri) => {
+    await updateUserData(user.id, { shop_profile: uri });
+    await persist({ ...user, shop_profile: uri });
   };
 
   return (
-    <ScrollView style={[styles.bgWhite]}>
-      <View style={[st.modalContainer, styles.flex1, styles.marginBottomXXL]}>
-        {tab === TAB.PERSONAL_INFO && (
-          <View style={[styles.paddingMid]}>
-            <View
-              style={[
-                styles.flexRow,
-                styles.justifyBetween,
-                styles.alignCenter,
-              ]}
-            >
-              <TouchableOpacity
-                onPress={(e) =>
-                  navigation.navigate("PhotoViewer", user.profile, { pop: true })
-                }
-                onLongPress={handleProfileChange}
-              >
-                <ImageBackground
-                  source={
-                    user.profile ||
-                    "https://avatars.githubusercontent.com/u/5081332?v=4"
-                  }
-                  width={80}
-                  height={80}
-                  style={[
-                    {
-                      backgroundColor: "red",
-                      borderRadius: 50,
-                      overflow: "hidden",
-                    },
-                  ]}
-                >
-                  {updatingProfile ? (
-                    <ActivityIndicator
-                      animating={updatingProfile}
-                      color={KOOP_BLUE}
-                    />
-                  ) : (
-                    <ProfileUploader
-                      setUpdatingProfile={setUpdatingProfile}
-                      currentURI={user.profile}
-                      onProfilePicUri={handleProfileChange}
-                    />
-                  )}
-                </ImageBackground>
-              </TouchableOpacity>
-              <View style={[styles.flexRow, styles.justifyBetween]}>
-                <View style={[styles.marginRightLarge]}>
-                  <Text style={styles.textWhite}>ACC. STATS</Text>
-                  <Text style={[st.active]}>Active</Text>
-                </View>
-                <View>
-                  <Text style={styles.textWhite}>SUBSCR. END</Text>
-                  <Text>30/06/2024</Text>
-                </View>
-              </View>
-            </View>
+    <ScrollView
+      style={{ flex: 1, backgroundColor: colors.bg }}
+      contentContainerStyle={{ paddingBottom: space.xxxl }}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Cover */}
+      <View style={st.cover}>
+        {user.shop_profile ? (
+          <Image source={user.shop_profile} style={StyleSheet.absoluteFill} contentFit="cover" transition={300} />
+        ) : (
+          <LinearGradient colors={gradients.brand} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+        )}
+        <LinearGradient colors={["rgba(11,18,32,0)", "rgba(11,18,32,0.35)"]} style={StyleSheet.absoluteFill} />
+        <View style={st.coverEdit}>
+          {updatingCover ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <ProfileUploader
+              onProfilePicUri={handleCoverChange}
+              currentURI={user.shop_profile}
+              setUpdatingProfile={setUpdatingCover}
+            />
+          )}
+        </View>
+      </View>
 
-            <View style={[styles.alignCenter]}>
-              <Text style={[styles.textLarge, styles.textWhite]}>
-                {user.display_name}
-              </Text>
-              <Text
-                style={[{ fontWeight: "bold", fontSize: 14, color: "#666666" }]}
-              >
-                {user.shop_name}
-              </Text>
-              <Text style={[styles.textBold, { fontSize: 18 }]}>
-                {user.phone}
-              </Text>
-            </View>
-
-            <ActivityIndicator animating={loading} color={"white"} />
+      {/* Identity */}
+      <FadeIn style={st.identity}>
+        <View style={st.avatarWrap}>
+          <PressableScale onPress={() => navigation.navigate("PhotoViewer", user.profile, { pop: true })}>
+            <Avatar uri={user.profile} name={user.display_name} size={96} style={st.avatar} />
+          </PressableScale>
+          <View style={st.avatarEdit}>
+            {updatingProfile ? (
+              <ActivityIndicator color={colors.primary} />
+            ) : (
+              <ProfileUploader
+                setUpdatingProfile={setUpdatingProfile}
+                currentURI={user.profile}
+                onProfilePicUri={handleProfileChange}
+              />
+            )}
           </View>
-        )}
-
-        {tab === TAB.SHOP_INFO && (
-          <HeaderShopInfo
-            user={user}
-            setuser={setuser}
-            handleBGUpdatePress={handleBGUpdatePress}
-          />
-        )}
-
-        <View
-          style={[
-            {
-              marginBottom: -30,
-            },
-            styles.borderTopRadiusLarge,
-
-            styles.flexRow,
-          ]}
-        >
-          {[{ label: "Personal Info" }, { label: "Shop Info" }].map((it, i) => (
-            <TouchableOpacity key={i} onPress={(e) => settab(i)}>
-              <View
-                style={[
-                  {
-                    backgroundColor: i === tab ? KOOP_BLUE_DARK : "#0000",
-                    paddingTop: 20,
-                    paddingHorizontal: 20,
-                    paddingBottom: 40,
-                  },
-                  styles.paddingHorizontal,
-                  styles.borderTopRadiusLarge,
-                ]}
-              >
-                <Text style={i === tab ? styles.textWhite : []}>
-                  {it.label}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
         </View>
 
-        <View
-          style={[
-            styles.paddingMid,
-            styles.bgWhite,
-            styles.borderTopRadiusLarge,
-          ]}
-        >
-          {tab === TAB.PERSONAL_INFO && (
-            <TabPersonalInfo
-              user={user}
-              navigation={navigation}
-              handleInfoPress={handleInfoPress}
-            />
-          )}
+        <Text style={[type.h1, { textAlign: "center" }]}>{user.display_name}</Text>
+        <Text style={[type.body, { color: colors.textMuted, textAlign: "center" }]}>
+          {user.shop_name ? `${user.shop_name} · ` : ""}{user.phone}
+        </Text>
 
-          {tab === TAB.SHOP_INFO && (
-            <TabShopInfo
-              user={user}
-              navigation={navigation}
-              handleInfoPress={handleInfoPress}
-            />
-          )}
+        <View style={st.statsRow}>
+          <View style={[st.stat, shadows.xs]}>
+            <Text style={[type.caption, { color: colors.textMuted }]}>Statut</Text>
+            <Badge label="● Actif" tone="success" />
+          </View>
+          <View style={[st.stat, shadows.xs]}>
+            <Text style={[type.caption, { color: colors.textMuted }]}>Abonnement</Text>
+            <Text style={{ fontFamily: fonts.bold, fontSize: 14 }}>30/06/2024</Text>
+          </View>
+          <PressableScale
+            onPress={() => navigation.navigate("MyItems", undefined, { pop: true })}
+            style={[st.stat, shadows.xs]}
+          >
+            <Text style={[type.caption, { color: colors.textMuted }]}>Annonces</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+              <Text style={{ fontFamily: fonts.bold, fontSize: 14, color: colors.primary }}>Voir</Text>
+              <Feather name="arrow-right" size={14} color={colors.primary} />
+            </View>
+          </PressableScale>
         </View>
+      </FadeIn>
+
+      <View style={{ paddingHorizontal: space.lg, gap: space.lg }}>
+        <Segmented value={tab} onChange={settab} />
+        {tab === 0 ? (
+          <TabPersonalInfo user={user} navigation={navigation} handleInfoPress={handleInfoPress} />
+        ) : (
+          <TabShopInfo user={user} navigation={navigation} handleInfoPress={handleInfoPress} />
+        )}
       </View>
     </ScrollView>
   );
 }
 
 const st = StyleSheet.create({
-  sn: {
-    backgroundColor: KOOP_BLUE_TRANSLUCIDE,
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    width: "100%",
-    padding: 12,
-  },
-  active: {
-    backgroundColor: KOOP_GREEN,
-    padding: 4,
-    textAlign: "center",
-    marginVertical: 4,
-    color: "white",
-    borderRadius: 12,
-    overflow: "hidden",
-  },
-  fsbg: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-  },
-  shopfront: {
-    backgroundColor: KOOP_BLUE_DARK,
-    height: 220,
-    marginBottom: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  shopfronttitle: {
-    fontSize: 20,
-    backgroundColor: "black",
-    padding: 12,
-  },
-  header: {
-    backgroundColor: KOOP_BLUE,
-    color: "white",
-  },
-  shopdt: {
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#99999933",
-  },
-  hspace: {
-    width: 10,
-  },
-  t: {
-    alignSelf: "flex-start",
-    flexGrow: 1,
-  },
-  modalContainer: {
-    flex: 1,
-
-    backgroundColor: KOOP_BLUE_TRANSLUCIDE,
-  },
-  cbsubcont: {
-    backgroundColor: "white",
-    width: 20,
-    height: 20,
+  cover: { height: 180, backgroundColor: colors.sky100 },
+  coverEdit: { position: "absolute", top: space.md, right: space.md },
+  identity: { alignItems: "center", gap: 4, paddingHorizontal: space.lg, marginTop: -56, marginBottom: space.lg },
+  avatarWrap: { marginBottom: space.sm },
+  avatar: {
+    borderRadius: 60,
     borderWidth: 4,
-    borderRadius: 10,
-    borderColor: "#999",
+    borderColor: colors.bg,
   },
-  cbsub: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+  avatarEdit: { position: "absolute", right: 0, bottom: 4 },
+  statsRow: { flexDirection: "row", gap: space.xs, marginTop: space.md, alignSelf: "stretch" },
+  stat: {
+    flex: 1,
+    backgroundColor: colors.card,
+    borderRadius: radius.md,
+    padding: space.sm,
+    gap: 6,
   },
-  bgOn: { backgroundColor: "green" },
-  bgOff: { backgroundColor: "#9996" },
-  activeSub: {
-    borderWidth: 2,
-    borderColor: KOOP_BLUE_DARK,
+  seg: {
+    flexDirection: "row",
+    padding: 4,
+    borderRadius: radius.md,
+    backgroundColor: colors.lineSoft,
   },
+  segThumb: {
+    position: "absolute",
+    top: 4,
+    left: 4,
+    bottom: 4,
+    borderRadius: radius.sm,
+    backgroundColor: colors.card,
+  },
+  segItem: { flex: 1, alignItems: "center", paddingVertical: 10 },
+  segText: { fontFamily: fonts.semibold, fontSize: 14, color: colors.textMuted },
 });

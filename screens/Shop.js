@@ -1,38 +1,37 @@
-import {
-  View,
-  Text,
-  ImageBackground,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import MenuButton from "../components/MenuButton";
-import styles from "../helpers/styles";
-import { useContext, useLayoutEffect, useState } from "react";
-import { Entypo, FontAwesome } from "@expo/vector-icons";
-import { KOOP_BLUE } from "../helpers/colors";
-import SimpleTextButton from "../components/SimpleTextButton";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import LoadingButton from "../components/LoadingButton";
-import UserContext from "../context/UserContext";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { useContext, useLayoutEffect } from "react";
+import { Linking, ScrollView, StyleSheet, View } from "react-native";
 import CommentBox from "../components/CommentBox";
-import ProfileBadge from "../components/ProfileBadge";
+import {
+  Avatar,
+  Button,
+  Card,
+  FadeIn,
+  Group,
+  ListRow,
+  PressableScale,
+  Text,
+} from "../components/ui";
+import UserContext from "../context/UserContext";
+import { colors, gradients, radius, space, type } from "../theme";
+
+const SocialIcon = ({ src }) => (
+  <View style={st.social}>
+    <Image source={src} style={{ width: 20, height: 20 }} contentFit="contain" />
+  </View>
+);
 
 export default function Shop({ route, navigation }) {
-  const { user, setuser } = useContext(UserContext);
-  const [loading, setloading] = useState(false);
-  let { params } = route;
-  const shop = params;
+  const { user } = useContext(UserContext);
+  const shop = route.params || {};
   const {
     profile,
     display_name,
     phone,
     shop_profile,
     shop_name,
-    shop_tags,
     shop_desc,
     shop_add,
     shop_email,
@@ -41,178 +40,149 @@ export default function Shop({ route, navigation }) {
     shop_tiktok,
     shop_facebook,
     shop_id,
-    from_id,
-    to_id,
   } = shop;
 
-  //alert(JSON.stringify(params));
-
   const CONTACTS = [
-    {
-      id: shop_email,
-      icon: require("../assets/icons/mail.png"),
-    },
-    {
-      id: shop_whatsapp,
-      icon: require("../assets/icons/whatsapp.png"),
-    },
-    {
-      id: shop_wechat,
-      icon: require("../assets/icons/wechat.png"),
-    },
-    {
-      id: shop_tiktok,
-      icon: require("../assets/icons/tiktok.png"),
-    },
-    {
-      id: shop_facebook,
-      icon: require("../assets/icons/facebook.png"),
-    },
-  ];
+    { id: shop_email, label: "Email", icon: require("../assets/icons/mail.png"), url: shop_email && `mailto:${shop_email}` },
+    { id: shop_whatsapp, label: "WhatsApp", icon: require("../assets/icons/whatsapp.png"), url: shop_whatsapp && `https://wa.me/${String(shop_whatsapp).replace(/\D/g, "")}` },
+    { id: shop_wechat, label: "WeChat", icon: require("../assets/icons/wechat.png") },
+    { id: shop_tiktok, label: "TikTok", icon: require("../assets/icons/tiktok.png") },
+    { id: shop_facebook, label: "Facebook", icon: require("../assets/icons/facebook.png") },
+  ].filter((c) => c.id);
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      title: shop_name,
-    });
+    navigation.setOptions({ title: shop_name || "Boutique" });
   }, [navigation]);
 
-  const showAnnonces = (e) => {
-    //alert("Prods and servs");
-    navigation.navigate("MyItems", shop.id, { pop: true });
-  };
-
-  const showCommentaires = (e) => {
+  const showAnnonces = () => navigation.navigate("MyItems", shop.id, { pop: true });
+  const showCommentaires = () =>
     navigation.navigate("Comments", { item_id: shop_id, item_type: "shop" }, { pop: true });
-  };
+  const sendMessage = () =>
+    navigation.navigate(
+      "SendMessage",
+      { ...shop, from_id: user.id, to_id: shop_id, shop_name },
+      { pop: true }
+    );
 
   return (
-    <ScrollView style={[styles.bgWhite, styles.flex1]}>
-      <View>
-        <View>
-          <Image
-            source={
-              shop_profile ||
-              "https://i.ytimg.com/vi/D4EKydVVvHk/hqdefault.jpg?v=64668f72"
-            }
-            style={{ width: "100%", height: 220 }}
-            transition={1000}
-          />
+    <ScrollView
+      style={{ flex: 1, backgroundColor: colors.bg }}
+      contentContainerStyle={{ paddingBottom: space.xxxl }}
+      showsVerticalScrollIndicator={false}
+    >
+      <View style={st.cover}>
+        {shop_profile ? (
+          <Image source={shop_profile} style={StyleSheet.absoluteFill} contentFit="cover" transition={300} />
+        ) : (
+          <LinearGradient colors={gradients.brand} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+        )}
+        <LinearGradient colors={["rgba(11,18,32,0)", "rgba(11,18,32,0.25)"]} style={StyleSheet.absoluteFill} />
+      </View>
 
-          <View
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              width: "100%",
-            }}
-          >
-            <ProfileBadge
-              profile={profile}
-              display_name={display_name}
-              phone={phone}
+      <FadeIn style={st.identity}>
+        <PressableScale onPress={() => profile && navigation.navigate("PhotoViewer", profile, { pop: true })}>
+          <Avatar uri={profile} name={display_name} size={88} style={st.avatar} />
+        </PressableScale>
+        <Text style={[type.h1, { textAlign: "center" }]}>{shop_name}</Text>
+        <Text style={[type.body, { color: colors.textMuted }]}>@{display_name}</Text>
+
+        <View style={st.actions}>
+          <Button title="Message" icon="send" onPress={sendMessage} style={{ flex: 1 }} />
+          {phone ? (
+            <Button
+              title="Appeler"
+              icon="phone"
+              variant="light"
+              full={false}
+              onPress={() => Linking.openURL(`tel:${phone}`)}
             />
-          </View>
+          ) : null}
         </View>
+      </FadeIn>
 
-        <View style={styles.paddingMid}>
-          <Text style={[styles.textBlue]}>About</Text>
-          <Text>{shop_desc}</Text>
+      <View style={{ paddingHorizontal: space.lg, gap: space.lg }}>
+        {shop_desc ? (
+          <FadeIn delay={60}>
+            <Card style={{ gap: 6 }}>
+              <Text style={[type.overline, { color: colors.textMuted }]}>À propos</Text>
+              <Text style={[type.body, { color: colors.textSecondary }]}>{shop_desc}</Text>
+              {shop_add ? (
+                <View style={st.address}>
+                  <Feather name="map-pin" size={14} color={colors.primary} />
+                  <Text style={[type.small, { color: colors.text, flex: 1 }]}>{shop_add}</Text>
+                </View>
+              ) : null}
+            </Card>
+          </FadeIn>
+        ) : null}
 
-          {shop_add && (
-            <View>
-              <Text style={[styles.textBlue, , styles.marginTopLarge]}>
-                Address
-              </Text>
-              <Text>{shop_add}</Text>
-            </View>
-          )}
+        <FadeIn delay={100}>
+          <Group title="Explorer">
+            <ListRow icon="zap" title="Toutes les annonces" subtitle="Produits et services publiés" onPress={showAnnonces} />
+            <ListRow
+              icon="message-square"
+              iconColor={colors.violet}
+              iconBg={colors.violetSoft}
+              title="Tous les avis"
+              subtitle="Ce que disent les clients"
+              onPress={showCommentaires}
+              last
+            />
+          </Group>
+        </FadeIn>
 
-          <Text style={[styles.textBlue, , styles.marginTopLarge]}>
-            Contacts
-          </Text>
+        {CONTACTS.length > 0 && (
+          <FadeIn delay={140}>
+            <Group title="Contacts">
+              {CONTACTS.map((c, i) => (
+                <ListRow
+                  key={c.label}
+                  leading={<SocialIcon src={c.icon} />}
+                  title={c.id}
+                  subtitle={c.label}
+                  onPress={c.url ? () => Linking.openURL(c.url) : undefined}
+                  last={i === CONTACTS.length - 1}
+                />
+              ))}
+            </Group>
+          </FadeIn>
+        )}
 
-          {CONTACTS.map(
-            (contact, i) =>
-              contact.id && (
-                <TouchableOpacity key={i}>
-                  <View
-                    key={i}
-                    style={[styles.alignCenter, styles.mtLarge, styles.flexRow]}
-                  >
-                    <Image source={contact.icon} style={st.ctico} />
-                    <Text style={styles.marginH}>{contact.id}</Text>
-                  </View>
-                </TouchableOpacity>
-              )
-          )}
-
-          <MenuButton
-            btn={{
-              id: 0,
-              label: "SEND MESSAGE",
-            }}
-            icon={<Entypo name="new-message" size={28} color="black" />}
-            handleOnPress={(e) => {
-              navigation.navigate("SendMessage", {
-                ...shop,
-                from_id: user.id,
-                to_id: shop_id,
-                shop_name: shop_name,
-              }, { pop: true });
-            }}
-          />
-
-          <MenuButton
-            btn={{
-              id: 0,
-              label: "TOUTES LES ANNONCES",
-            }}
-            icon={<FontAwesome5 name="bolt" size={28} color="black" />}
-            handleOnPress={showAnnonces}
-          />
-
-          <MenuButton
-            btn={{
-              id: 0,
-              label: "TOUS LES COMMENTAIRES",
-            }}
-            icon={<FontAwesome name="comments" size={28} color="black" />}
-            iconColor={KOOP_BLUE}
-            handleOnPress={showCommentaires}
-          />
-          <View style={{ height: 40 }} />
-          <CommentBox
-            navigation={navigation}
-            item_id={shop_id}
-            posted_by_id={user.id}
-            item_type="shop"
-          />
-        </View>
+        <FadeIn delay={180} style={{ gap: space.xs }}>
+          <Text style={[type.overline, { color: colors.textMuted, marginLeft: 4 }]}>Laisser un avis</Text>
+          <CommentBox navigation={navigation} item_id={shop_id} posted_by_id={user.id} item_type="shop" />
+        </FadeIn>
       </View>
     </ScrollView>
   );
 }
 
 const st = StyleSheet.create({
-  img: {
-    height: 340,
-    width: "100%",
-    resizeMode: "cover",
+  cover: { height: 170, backgroundColor: colors.sky100 },
+  identity: {
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: space.lg,
+    marginTop: -48,
+    marginBottom: space.lg,
   },
-  ctico: {
-    width: 30,
-    height: 30,
-  },
-  tag: {
-    backgroundColor: "#ddd",
-    flexShrink: 1,
-    margin: 4,
-    padding: 4,
-    borderRadius: 8,
-    overflow: "hidden",
-  },
-  tagscont: {
-    flexWrap: "wrap",
+  avatar: { borderRadius: 60, borderWidth: 4, borderColor: colors.bg, marginBottom: space.xs },
+  actions: { flexDirection: "row", gap: space.xs, alignSelf: "stretch", marginTop: space.md },
+  address: {
     flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    marginTop: space.xs,
+    padding: space.sm,
+    borderRadius: radius.sm,
+    backgroundColor: colors.primarySoft,
+  },
+  social: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    backgroundColor: colors.cardAlt,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

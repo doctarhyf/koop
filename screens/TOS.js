@@ -1,5 +1,6 @@
+import Text from "../components/ui/Text";
 import React from "react";
-import { ScrollView, Text } from "react-native";
+import { ScrollView } from "react-native";
 import { WebView } from "react-native-webview";
 
 export default function TOS() {

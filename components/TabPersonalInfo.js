@@ -1,164 +1,36 @@
-import React, { useContext, useState, useEffect, useLayoutEffect } from "react";
-import {
-  View,
-  Image,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-  ImageBackground,
-} from "react-native";
-import styles from "../helpers/styles";
-import {
-  KOOP_BLUE,
-  KOOP_BLUE_DARK,
-  KOOP_BLUE_LIGHT,
-  KOOP_BLUE_TRANSLUCIDE,
-} from "../helpers/colors";
-import Icon from "@expo/vector-icons/FontAwesome";
+import React from "react";
+import { Feather } from "@expo/vector-icons";
+import { colors } from "../theme";
+import { Group, ListRow } from "./ui";
 
-const TabPersonalInfo = ({ user, handleInfoPress, navigation }) => {
-  const { full_name, display_name, phone, pin, dob, email, ville } = user;
+const TabPersonalInfo = ({ user, handleInfoPress }) => {
+  const { full_name, display_name, dob, email, ville } = user;
 
   const personalInfo = {
-    full_name: {
-      value: full_name,
-      icon: "user",
-      placeholder: "Full Name",
-      editable: true,
-      label: "Full Name",
-    },
-    display_name: {
-      value: display_name,
-      icon: "user-circle-o",
-      placeholder: "Website",
-      editable: false,
-      label: "Display Name",
-    },
-
-    dob: {
-      value: dob,
-      icon: "calendar",
-      placeholder: "Birthday",
-      editable: true,
-      label: "Birthday",
-    },
-    email: {
-      value: email,
-      icon: "envelope",
-      placeholder: "Email address",
-      editable: true,
-      label: "Email",
-    },
-    ville: {
-      value: ville,
-      icon: "globe",
-      placeholder: "Ville",
-      editable: true,
-      label: "Ville",
-    },
+    full_name: { value: full_name, icon: "user", placeholder: "Nom complet", editable: true, label: "Nom complet" },
+    display_name: { value: display_name, icon: "at-sign", placeholder: "Pseudo", editable: false, label: "Pseudo" },
+    dob: { value: dob, icon: "calendar", placeholder: "Date de naissance", editable: true, label: "Date de naissance" },
+    email: { value: email, icon: "mail", placeholder: "Adresse email", editable: true, label: "Email" },
+    ville: { value: ville, icon: "map-pin", placeholder: "Ville", editable: true, label: "Ville" },
   };
 
-  return (
-    <View>
-      {Object.entries(personalInfo).map((data, i) => (
-        <View key={i}>
-          <TouchableOpacity onPress={(e) => handleInfoPress(data)}>
-            <View
-              style={[
-                styles.flexRow,
-                styles.justifyBetween,
-                styles.alignCenter,
-                st.shopdt,
-              ]}
-            >
-              <View style={[{ width: 28 }]}>
-                <Icon
-                  name={data[1].icon || "coffee"}
-                  size={24}
-                  style={{ color: KOOP_BLUE }}
-                />
-              </View>
-              <View style={[st.hspace]}></View>
-              <Text style={[styles.alignSelfStart, st.t]}>
-                {data[1].value || (
-                  <Text style={[styles.textGray]}>{data[1].placeholder}</Text>
-                )}
-              </Text>
+  const entries = Object.entries(personalInfo);
 
-              <View style={[st.hspace]}></View>
-              {data[1].editable === true && (
-                <View>
-                  <Icon name={"edit"} size={24} style={{ color: KOOP_BLUE }} />
-                </View>
-              )}
-            </View>
-          </TouchableOpacity>
-        </View>
+  return (
+    <Group title="Informations personnelles">
+      {entries.map((data, i) => (
+        <ListRow
+          key={data[0]}
+          icon={data[1].icon}
+          title={data[1].value || data[1].placeholder}
+          subtitle={data[1].label}
+          onPress={data[1].editable ? () => handleInfoPress(data) : undefined}
+          right={!data[1].editable ? <Feather name="lock" size={14} color={colors.textFaint} /> : null}
+          last={i === entries.length - 1}
+        />
       ))}
-    </View>
+    </Group>
   );
 };
-
-const st = StyleSheet.create({
-  fsbg: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-  },
-  shopfront: {
-    backgroundColor: KOOP_BLUE_DARK,
-    height: 220,
-    marginBottom: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  shopfronttitle: {
-    fontSize: 20,
-  },
-  header: {
-    backgroundColor: KOOP_BLUE,
-    color: "white",
-  },
-  shopdt: {
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#99999933",
-  },
-  hspace: {
-    width: 10,
-  },
-  t: {
-    alignSelf: "flex-start",
-    flexGrow: 1,
-  },
-  modalContainer: {
-    flex: 1,
-
-    backgroundColor: KOOP_BLUE_TRANSLUCIDE,
-  },
-  cbsubcont: {
-    backgroundColor: "white",
-    width: 20,
-    height: 20,
-    borderWidth: 4,
-    borderRadius: 10,
-    borderColor: "#999",
-  },
-  cbsub: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  bgOn: { backgroundColor: "green" },
-  bgOff: { backgroundColor: "#9996" },
-  activeSub: {
-    borderWidth: 2,
-    borderColor: KOOP_BLUE_DARK,
-  },
-});
 
 export default TabPersonalInfo;

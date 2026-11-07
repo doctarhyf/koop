@@ -1,9 +1,21 @@
 // In App.js in a new project
 
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import registerNNPushToken from "native-notify";
-import React, { useState } from "react";
+import {
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+  PlusJakartaSans_800ExtraBold,
+  useFonts,
+} from "@expo-google-fonts/plus-jakarta-sans";
+import { DefaultTheme, NavigationContainer as NavContainer } from "@react-navigation/native";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import React, { useCallback, useState } from "react";
+import { View } from "react-native";
+import { colors, headerOptions } from "./theme";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import UserContext from "./context/UserContext";
@@ -51,30 +63,23 @@ const SCREENS = [
   { name: Initializing.ROUTE, comp: Initializing },
   { name: "TOS", comp: TOS, options: { title: "Terms and Conditions" } },
   { name: "Subscriptions", comp: Subscriptions },
-  {
-    name: "Home",
-    comp: Home,
-    options: {
-      title: "KOOP",
-      headerTitleAlign: "center",
-    },
-  },
+  { name: "Home", comp: Home, options: { headerShown: false } },
   { name: "Provide", comp: Provide }, //SendMessage
-  { name: "SendMessage", comp: SendMessage },
-  { name: "Look", comp: Look, options: { title: "Welcome to KOOP" } },
+  { name: "SendMessage", comp: SendMessage, options: { title: "New message" } },
+  { name: "Look", comp: Look, options: { title: "Discover" } },
   { name: "ViewAll", comp: ViewAll },
-  { name: "MyAccount", comp: MyAccount },
-  { name: "Inbox", comp: Inbox },
+  { name: "MyAccount", comp: MyAccount, options: { title: "My account" } },
+  { name: "Inbox", comp: Inbox, options: { title: "Messages" } },
   { name: "MyItems", comp: MyItems },
   { name: "Settings", comp: Settings },
-  { name: "Other", comp: Other },
+  { name: "Other", comp: Other, options: { title: "More services" } },
   { name: "Shop", comp: Shop },
   { name: "Popular", comp: Popular },
   { name: "GPS", comp: Localisation },
   { name: "Request", comp: Request },
   { name: "InfoEdit", comp: InfoEdit },
   { name: "ServiceInfo", comp: ServiceInfo },
-  { name: "Search", comp: Search },
+  { name: "Search", comp: Search, options: { title: "Browse" } },
   { name: "Test", comp: Test },
   { name: ProfileSetup.ROUTE, comp: ProfileSetup },
   { name: "Comments", comp: Comments },
@@ -83,32 +88,63 @@ const SCREENS = [
   { name: "About", comp: About },
   { name: "ContactUs", comp: ContactUs },
   { name: "ChangePIN", comp: ChangePIN },
-  { name: ShopSetup.ROUTE, comp: ShopSetup, options: { title: "Shop setup" } },
+  { name: ShopSetup.ROUTE, comp: ShopSetup, options: { title: "Inscription", headerBackVisible: false } },
   {
     name: ServiceRequest.ROUTE,
     comp: ServiceRequest,
-    options: { title: "Nouvelle Annonce" },
+    options: { title: "Nouvelle annonce" },
   },
   { name: "ViewServiceRequest", comp: ViewServiceRequest },
   { name: "PaymentResult", comp: PaymentResult },
-  { name: "FirstPage", comp: FirstPage },
+  { name: "FirstPage", comp: FirstPage, options: { headerShown: false } },
   { name: "PremiumSubscriptions", comp: PremiumSubscriptions },
 ];
 
 const Stack = createNativeStackNavigator();
 
+SplashScreen.preventAutoHideAsync().catch(() => {});
+
+const navTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: colors.primary,
+    background: colors.bg,
+    card: colors.bg,
+    text: colors.text,
+    border: colors.border,
+  },
+};
+
 export default function App() {
   registerNNPushToken(20602, "b4XsCQJJ9vzPICDZTpbPuy");
 
-  const tabs = false;
   const [user, setuser] = useState(null);
+  const [fontsLoaded, fontError] = useFonts({
+    PlusJakartaSans_400Regular,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
+    PlusJakartaSans_800ExtraBold,
+  });
+
+  const onLayout = useCallback(() => {
+    if (fontsLoaded || fontError) SplashScreen.hideAsync().catch(() => {});
+  }, [fontsLoaded, fontError]);
+
+  if (!fontsLoaded && !fontError) return null;
 
   return (
     <SafeAreaProvider>
+      <View style={{ flex: 1, backgroundColor: colors.bg }} onLayout={onLayout}>
+      <StatusBar style="dark" />
       <UserContext.Provider value={{ user, setuser }}>
         <RootSiblingParent>
-          <NavigationContainer>
-            <Stack.Navigator initialRouteName={"FirstPage"}>
+          <NavContainer theme={navTheme}>
+            <Stack.Navigator
+              initialRouteName={"FirstPage"}
+              screenOptions={headerOptions}
+            >
               {SCREENS.map((scr, i) => (
                 <Stack.Screen
                   key={i}
@@ -118,9 +154,10 @@ export default function App() {
                 />
               ))}
             </Stack.Navigator>
-          </NavigationContainer>
+          </NavContainer>
         </RootSiblingParent>
       </UserContext.Provider>
+      </View>
     </SafeAreaProvider>
   );
 }

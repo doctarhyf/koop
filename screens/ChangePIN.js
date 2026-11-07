@@ -1,4 +1,5 @@
-import { View, Text, TextInput, ActivityIndicator, Image } from "react-native";
+import Text, { TextInput } from "../components/ui/Text";
+import { View, ActivityIndicator, Image } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import styles from "../helpers/styles";
 import SimpleTextButton from "../components/SimpleTextButton";

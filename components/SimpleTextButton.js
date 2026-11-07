@@ -1,13 +1,11 @@
-import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import styles from "../helpers/styles";
+import { colors, fonts, space } from "../theme";
+import { PressableScale, Text } from "./ui";
 
 export default function SimpleTextButton({ text, handlePress }) {
   return (
-    <TouchableOpacity onPress={handlePress}>
-      <Text style={[styles.textBlue, styles.textCenter, styles.paddingMid]}>
-        {text}
-      </Text>
-    </TouchableOpacity>
+    <PressableScale onPress={handlePress} style={{ padding: space.md, alignItems: "center" }}>
+      <Text style={{ color: colors.primary, fontFamily: fonts.semibold, fontSize: 15 }}>{text}</Text>
+    </PressableScale>
   );
 }

@@ -3,6 +3,7 @@ import { View, FlatList, StyleSheet, Dimensions } from "react-native";
 import * as FUNCS from "../helpers/funcs";
 import { DIAPO_PICS, BIG_FONT_SIZE, IMG_SIZE } from "../helpers/flow";
 import { Image } from "expo-image";
+import { colors, radius } from "../theme";
 
 const Explore = () => {
   const [data, setdata] = useState([]);
@@ -23,12 +24,12 @@ const Explore = () => {
     fetchImages();
   }, []);
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item, index }) => (
     <Image
       source={item.image}
       contentFit="cover"
-      transition={1500}
-      style={styles.image}
+      transition={400}
+      style={[styles.image, { height: index % 3 === 0 ? imageWidth * 1.5 : imageWidth * 1.2 }]}
     />
   );
 
@@ -38,25 +39,28 @@ const Explore = () => {
         data={data}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
-        numColumns={2} // Adjust the number of columns as needed
+        numColumns={2}
+        columnWrapperStyle={{ gap: GAP }}
+        contentContainerStyle={{ gap: GAP, padding: GAP }}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
 };
 
 const screenWidth = Dimensions.get("window").width;
-const imageWidth = (screenWidth - 16) / 2; // 16 is the total horizontal margin space
+const GAP = 10;
+const imageWidth = (screenWidth - GAP * 3) / 2;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 8,
+    backgroundColor: colors.bg,
   },
   image: {
     width: imageWidth,
-    height: imageWidth * 1.5, //imageWidth * 1.5, // Adjust the aspect ratio as needed
-    marginBottom: 8,
-    borderRadius: 8,
+    borderRadius: radius.lg,
+    backgroundColor: colors.sky100,
   },
 });
 

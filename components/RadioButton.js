@@ -1,5 +1,6 @@
+import Text from "./ui/Text";
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { KOOP_BLUE } from "../helpers/colors";
 
 export const RadioButton = ({ options, selectedOption, onSelect }) => {

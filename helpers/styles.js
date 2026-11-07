@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { GREEN, KOOP_BLUE, KOOP_BLUE_DARK, KOOP_BLUE_LIGHT } from "./colors";
+import { colors, fonts, radius } from "../theme";
 import { BIG_FONT_SIZE } from "./flow";
 
 const styles = StyleSheet.create({
@@ -12,15 +13,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   txtInput: {
-    padding: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
     margin: 8,
-    borderColor: "lightgrey",
-    borderWidth: 1,
-    borderRadius: 12,
+    borderColor: colors.border,
+    borderWidth: 1.5,
+    borderRadius: radius.md,
+    backgroundColor: colors.card,
+    fontSize: 16,
   },
   ti: {
-    borderBottomColor: "lightgrey",
-    borderBottomWidth: 1,
+    borderColor: colors.border,
+    borderWidth: 1.5,
+    borderRadius: radius.md,
+    backgroundColor: colors.card,
+    padding: 14,
+    fontSize: 16,
     textAlignVertical: "top",
   },
   flexCol: {
@@ -151,13 +159,13 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   roundedMd: {
-    borderRadius: 18,
+    borderRadius: radius.lg,
   },
   overflowHidden: {
     overflow: "hidden",
   },
   textGray: {
-    color: "gray",
+    color: colors.textMuted,
   },
   textCenter: {
     textAlign: "center",
@@ -175,10 +183,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "lightGrey",
+    borderColor: colors.border,
+    backgroundColor: colors.card,
   },
   borderGray: {
-    borderColor: "lightgray",
+    borderColor: colors.border,
   },
   borderMid: {
     borderWidth: 1,

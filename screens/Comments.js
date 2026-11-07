@@ -1,18 +1,14 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  Text,
-  View,
-  ScrollView,
-  StyleSheet,
   ActivityIndicator,
-  TouchableOpacity,
   FlatList,
   RefreshControl,
+  StyleSheet,
+  View,
 } from "react-native";
+import { Avatar, EmptyState, FadeIn, ListSkeleton, Text } from "../components/ui";
 import { useFetch2 } from "../hooks/useFetch";
-import { Image } from "expo-image";
-import { KOOP_BLUE } from "../helpers/colors";
-import styles from "../helpers/styles";
+import { colors, radius, shadows, space, type } from "../theme";
 
 export default function Comments({ route, navigation }) {
   const { item_id, item_type, comments_count } = route.params;
@@ -25,66 +21,65 @@ export default function Comments({ route, navigation }) {
     if (comments) comlen = comments.length;
 
     navigation.setOptions({
-      title: `Comments (${comments_count || comlen})`,
+      title: `Avis (${comments_count || comlen})`,
       headerRight: () => (
-        <ActivityIndicator animating={loading} color={KOOP_BLUE} />
+        <ActivityIndicator animating={loading} color={colors.primary} />
       ),
     });
   }, [route, loading, comments]);
 
-  const keyExtractor = (item) => item.id;
+  const keyExtractor = (item, i) => String(item?.id ?? i);
 
-  const renderItem = (comment) => (
-    <View
-      style={[
-        st.cmt_cont,
-        {
-          borderBottomWidth: 1,
-          borderBottomColor: "#dddddd",
-          paddingVertical: 8,
-        },
-      ]}
-    >
-      <Image
-        transition={1000}
-        source={comment.item.user_data.profile || require("../assets/rhyf.png")}
-        style={[{ width: 60, height: 60, borderRadius: 30 }]}
-      />
-      <View style={[{ flex: 1 }]}>
-        <Text style={[{ color: "#666666" }]}>
-          {comment.item.user_data.display_name}
-        </Text>
-        <Text style={[{ fontWeight: "bold", fontSize: 16, flex: 1 }]}>
-          {comment.item.comment}
-        </Text>
-        <Text style={[{ color: "#aaaaaa" }]}>{comment.item.timeAgo}</Text>
+  const renderItem = ({ item, index }) => (
+    <FadeIn delay={Math.min(index, 8) * 40}>
+      <View style={[st.card, shadows.xs]}>
+        <Avatar uri={item.user_data?.profile} name={item.user_data?.display_name} size={40} />
+        <View style={{ flex: 1, gap: 4 }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+            <Text style={[type.bodyStrong, { flexShrink: 1 }]} numberOfLines={1}>
+              {item.user_data?.display_name}
+            </Text>
+            <Text style={[type.caption, { color: colors.textFaint }]}>· {item.timeAgo}</Text>
+          </View>
+          <Text style={[type.body, { color: colors.textSecondary }]}>{item.comment}</Text>
+        </View>
       </View>
-    </View>
+    </FadeIn>
   );
 
   return (
-    <View style={[styles.flex1]}>
-      {/*  {loading && (
-        <ActivityIndicator
-          animating={loading}
-          color={KOOP_BLUE}
-          style={[styles.paddingLarge]}
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      {loading && (!comments || comments.length === 0) ? (
+        <View style={{ padding: space.lg }}>
+          <ListSkeleton rows={4} />
+        </View>
+      ) : (
+        <FlatList
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={() => reload()} tintColor={colors.primary} />
+          }
+          contentContainerStyle={[
+            { padding: space.lg, gap: space.sm, paddingBottom: space.xxxl },
+            (!comments || comments.length === 0) && { flex: 1, justifyContent: "center" },
+          ]}
+          data={comments}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          ListEmptyComponent={
+            <EmptyState icon="message-square" title="Pas encore d'avis" subtitle="Soyez le premier à laisser un commentaire." />
+          }
         />
-      )} */}
-      <FlatList
-        refreshControl={<RefreshControl onRefresh={(e) => reload()} />}
-        style={[{ padding: 12 }, styles.flex1]}
-        data={comments}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-      />
+      )}
     </View>
   );
 }
 
 const st = StyleSheet.create({
-  cmt_cont: {
+  card: {
     flexDirection: "row",
-    gap: 8,
+    gap: space.sm,
+    padding: space.md,
+    borderRadius: radius.lg,
+    backgroundColor: colors.card,
   },
 });

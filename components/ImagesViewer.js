@@ -1,4 +1,5 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import Text from "./ui/Text";
+import { View, ScrollView, TouchableOpacity } from "react-native";
 import React from "react";
 import { Image } from "expo-image";
 import { KOOP_BLUE_TRANSLUCIDE } from "../helpers/colors";

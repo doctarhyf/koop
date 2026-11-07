@@ -1,14 +1,6 @@
+import Text, { TextInput } from "../components/ui/Text";
 import React, { useLayoutEffect, useState, useEffect, useContext } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  ActivityIndicator,
-  ScrollView,
-  TouchableOpacity,
-  Platform,
-  StyleSheet,
-} from "react-native";
+import { View, ActivityIndicator, ScrollView, TouchableOpacity, Platform, StyleSheet } from "react-native";
 
 import { Button } from "react-native";
 import TextButton from "../components/TextButton";

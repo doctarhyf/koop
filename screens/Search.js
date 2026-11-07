@@ -1,20 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import { Feather } from "@expo/vector-icons";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
 import {
+  EmptyState,
+  Input,
+  ListSkeleton,
+  PressableScale,
   Text,
-  TextInput,
-  View,
-  ScrollView,
-  StyleSheet,
-  onTagPress,
-  TouchableOpacity,
-  ActivityIndicator,
-  FlatList,
-  Button,
-} from "react-native";
-import { Image } from "expo-image";
-import styles from "../helpers/styles";
-
-import { KOOP_BLUE, KOOP_BLUE_DARK } from "../helpers/colors";
+} from "../components/ui";
+import { colors, space, type } from "../theme";
 
 import useFetch, { useFetch2 } from "../hooks/useFetch";
 import { VILLES } from "../helpers/flow";
@@ -45,6 +39,12 @@ export default function Search({ navigation, route }) {
   const tags =
     SEARCHING_MODE.SERVICE_REQUESTS === searchType ? VILLES : ["Favorites"];
   const [itemsf, setitemsf] = useState(null);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: SEARCHING_MODE.SHOPS === searchType ? "Boutiques" : "Annonces",
+    });
+  }, [navigation, searchType]);
 
   useEffect(() => {
     if (items && items.map) {
@@ -146,56 +146,86 @@ export default function Search({ navigation, route }) {
 
   const renderItem = (data) =>
     searchType === SEARCHING_MODE.SERVICE_REQUESTS ? (
-      <TouchableOpacity
-        onPress={(e) => navigation.navigate("ViewServiceRequest", data.item, { pop: true })}
+      <PressableScale
+        scaleTo={0.985}
+        onPress={() => navigation.navigate("ViewServiceRequest", data.item, { pop: true })}
       >
         <AnnonceItem
           item={data.item}
           itsMyItem={data.item?.user_data?.id === user.id}
           showProfile
         />
-      </TouchableOpacity>
+      </PressableScale>
     ) : (
       <ShopItem
         onFaveShop={onFaveShop}
         favedShops={favedShops}
         navigation={navigation}
         shop={data.item}
-        itsMyItem={false} //data.item.user_data.id === user.id}
+        itsMyItem={false}
       />
     );
 
-  const keyExtractor = (item) => item.index;
+  const keyExtractor = (item, i) => String(item?.id ?? i);
+  const isShops = searchType === SEARCHING_MODE.SHOPS;
 
   return (
-    <View style={{ flex: 1 }}>
-      <TextInput
-        style={[styles.ti, { marginHorizontal: 18, marginTop: 18 }]}
-        value={q}
-        onChangeText={onSearch}
-        placeholder="Search ..."
-      />
+    <View style={{ flex: 1, backgroundColor: colors.bg }}>
+      <View style={{ paddingHorizontal: space.lg, paddingTop: space.xs }}>
+        <Input
+          icon="search"
+          value={q}
+          onChangeText={onSearch}
+          placeholder={isShops ? "Rechercher une boutique…" : "Rechercher une annonce…"}
+          returnKeyType="search"
+          right={
+            q.length > 0 ? (
+              <PressableScale onPress={() => onSearch("")} scaleTo={0.85}>
+                <Feather name="x-circle" size={18} color={colors.textFaint} />
+              </PressableScale>
+            ) : null
+          }
+        />
+      </View>
 
       <TagsSelector onTagsUpdate={onTagsUpdate} data={tags} />
 
-      {loadingItems && (
-        <ActivityIndicator animating={loadingItems} color={KOOP_BLUE} />
+      {itemsf && itemsf.length > 0 && (
+        <Text style={[type.caption, st.count]}>
+          {itemsf.length} résultat{itemsf.length > 1 ? "s" : ""}
+        </Text>
       )}
 
-      {itemsf && itemsf.length > 0 && (
+      {loadingItems && (!itemsf || itemsf.length === 0) ? (
+        <View style={{ padding: space.lg }}>
+          <ListSkeleton rows={5} />
+        </View>
+      ) : itemsf && itemsf.length > 0 ? (
         <FlatList
-          style={[{ margin: 12, flex: 1 }]}
+          contentContainerStyle={{ paddingHorizontal: space.lg, paddingBottom: space.xxxl }}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           data={itemsf}
+          keyboardDismissMode="on-drag"
+          showsVerticalScrollIndicator={false}
         />
-      )}
-
-      {itemsf && itemsf.length === 0 && (
-        <Text style={[styles.textCenter, styles.paddingLarge]}>
-          No items found
-        </Text>
-      )}
+      ) : itemsf ? (
+        <EmptyState
+          icon="search"
+          title="Aucun résultat"
+          subtitle="Essayez un autre mot-clé ou retirez quelques filtres."
+        />
+      ) : null}
     </View>
   );
 }
+
+const st = StyleSheet.create({
+  count: {
+    color: colors.textMuted,
+    paddingHorizontal: space.lg,
+    paddingBottom: space.xs,
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+  },
+});

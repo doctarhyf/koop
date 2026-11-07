@@ -1,11 +1,6 @@
+import Text from "../components/ui/Text";
 import React, { useEffect, useLayoutEffect } from "react";
-import {
-  FlatList,
-  RefreshControl,
-  Text,
-  View,
-  ActivityIndicator,
-} from "react-native";
+import { FlatList, RefreshControl, View, ActivityIndicator } from "react-native";
 import { useFetch2 } from "../hooks/useFetch";
 import styles from "../helpers/styles";
 

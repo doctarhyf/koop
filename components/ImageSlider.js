@@ -73,11 +73,12 @@ export default function ImageSlider({
             <View
               key={i}
               style={{
-                width: dotSize,
+                width: i === index ? dotSize * 2.6 : dotSize,
                 height: dotSize,
                 borderRadius: dotSize / 2,
-                marginHorizontal: 4,
+                marginHorizontal: 3,
                 backgroundColor: i === index ? activeDotColor : dotColor,
+                opacity: i === index ? 1 : 0.6,
               }}
             />
           ))}
@@ -90,7 +91,7 @@ export default function ImageSlider({
 const st = StyleSheet.create({
   dots: {
     position: "absolute",
-    bottom: 10,
+    bottom: 14,
     left: 0,
     right: 0,
     flexDirection: "row",

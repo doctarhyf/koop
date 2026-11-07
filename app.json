@@ -27,7 +27,7 @@
           "image": "./assets/koop.png",
           "resizeMode": "contain",
           "imageWidth": 200,
-          "backgroundColor": "#7BC6F0"
+          "backgroundColor": "#2F80ED"
         }
       ],
       "expo-notifications",

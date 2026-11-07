@@ -1,4 +1,5 @@
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import Text, { TextInput } from "./ui/Text";
+import { View, TouchableOpacity, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import SimpleTextButton from "./SimpleTextButton";
 import LoadingButton from "./LoadingButton";

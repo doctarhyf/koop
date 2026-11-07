@@ -1,5 +1,6 @@
+import Text from "./ui/Text";
 import React from "react";
-import { View, Text, Modal, TouchableOpacity } from "react-native";
+import { View, Modal, TouchableOpacity } from "react-native";
 import SimpleTextButton from "./SimpleTextButton";
 
 const CustomAlert = ({

@@ -1,138 +1,108 @@
-import React, { useContext } from "react";
-import {
-  Modal,
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Pressable,
-  TouchableWithoutFeedback,
-} from "react-native";
-import styles from "../helpers/styles";
-import {
-  KOOP_BLUE,
-  KOOP_BLUE_DARK,
-  KOOP_BLUE_TRANSLUCIDE,
-} from "../helpers/colors";
-import { Image } from "expo-image";
+import React, { useContext, useEffect, useRef } from "react";
+import { Animated, Easing, Modal, Pressable, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import UserContext from "../context/UserContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import usePicURL from "../hooks/usePicURL";
+import { colors, radius, shadows, space, type } from "../theme";
+import { Avatar, ListRow, Text } from "./ui";
 
-const MAIN_MENU_ITEMS = [
-  { icon: require("../assets/rhyf.png"), label: "My Accout" },
-  { icon: require("../assets/icons/chat.png"), label: "Inbox" },
-  { icon: require("../assets/icons/post.png"), label: "Mes Annonces" },
-  { icon: require("../assets/icons/settings.png"), label: "Settings" },
-  { icon: require("../assets/icons/lab.png"), label: "Test" },
+const ITEMS = [
+  { icon: "user", label: "Mon compte", sub: "Profil et boutique", route: "MyAccount" },
+  { icon: "message-circle", label: "Messages", sub: "Vos conversations", route: "Inbox", tint: colors.success, bg: colors.successSoft },
+  { icon: "layers", label: "Mes annonces", sub: "Gérer vos publications", route: "MyItems", tint: colors.violet, bg: colors.violetSoft },
+  { icon: "settings", label: "Paramètres", sub: "PIN, aide, à propos", route: "Settings", tint: colors.slate, bg: colors.lineSoft },
+  ...(__DEV__ ? [{ icon: "terminal", label: "Lab", sub: "Écran de test", route: "Test", tint: "#D97706", bg: colors.warningSoft }] : []),
 ];
 
-const MAIN_MENU_ROUTES = {
-  0: "MyAccount",
-  1: "Inbox",
-  2: "MyItems",
-  //3: "Subscriptions",
-  3: "Settings",
-  4: "Test",
-};
-
 export default function ModalMenu({ navigation, isMenuVisible, closeMenu }) {
-  const { user, setuser } = useContext(UserContext);
-  //const [loadingPic, picUrl] = usePicURL(user.profile);
+  const { user } = useContext(UserContext);
+  const insets = useSafeAreaInsets();
+  const anim = useRef(new Animated.Value(0)).current;
 
-  const onPressBtn = async (btn) => {
-    const { id } = btn;
+  useEffect(() => {
+    if (isMenuVisible) {
+      anim.setValue(0);
+      Animated.timing(anim, {
+        toValue: 1,
+        duration: 320,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [isMenuVisible]);
 
-    //alert(id);
-
+  const go = (route) => {
     closeMenu();
-
-    if (id === 6) {
-      console.log(id);
-      return;
-    }
-
-    if (id === -1) {
-      await AsyncStorage.removeItem("@KOOP:user", (e) => {
-        console.error("async user data deleted!");
-        navigation.navigate("Login", undefined, { pop: true });
-      });
-
-      return;
-    }
-
-    MAIN_MENU_ROUTES[id] ? navigation.navigate(MAIN_MENU_ROUTES[id], undefined, { pop: true }) : null;
+    navigation.navigate(route, undefined, { pop: true });
   };
 
   return (
-    <Modal visible={isMenuVisible} transparent animationType="slide">
-      <TouchableWithoutFeedback onPress={(e) => closeMenu()}>
-        <View
-          style={[
-            styles.flex1,
-            styles.paddingLarge,
-            { backgroundColor: "#000d" },
-            styles.bgBlue,
-          ]}
-        >
-          <Pressable onPress={(e) => closeMenu()}>
-            <Image
-              source={require("../assets/koop.png")}
-              style={{ height: 120 }}
-              transition={1000}
-              contentFit="contain"
+    <Modal visible={isMenuVisible} transparent animationType="none" onRequestClose={closeMenu} statusBarTranslucent>
+      <Animated.View style={[st.backdrop, { opacity: anim }]}>
+        <Pressable style={StyleSheet.absoluteFill} onPress={closeMenu} />
+      </Animated.View>
+      <Animated.View
+        style={[
+          st.sheet,
+          shadows.lg,
+          { paddingBottom: insets.bottom + space.md },
+          { transform: [{ translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [500, 0] }) }] },
+        ]}
+      >
+        <View style={st.grabber} />
+        <View style={st.profile}>
+          <Avatar uri={user?.profile} name={user?.display_name} size={52} ring />
+          <View style={{ flex: 1 }}>
+            <Text style={type.h3} numberOfLines={1}>{user?.display_name}</Text>
+            <Text style={[type.small, { color: colors.textMuted }]} numberOfLines={1}>
+              {user?.shop_name ? `${user.shop_name} · ` : ""}{user?.phone}
+            </Text>
+          </View>
+        </View>
+        <View style={st.list}>
+          {ITEMS.map((it, i) => (
+            <ListRow
+              key={it.route}
+              icon={it.icon}
+              iconColor={it.tint || colors.primary}
+              iconBg={it.bg || colors.primarySoft}
+              title={it.label}
+              subtitle={it.sub}
+              onPress={() => go(it.route)}
+              last={i === ITEMS.length - 1}
             />
-          </Pressable>
-
-          {MAIN_MENU_ITEMS.map((menu, i) => (
-            <View key={i} style={[{ with: "50%" }, styles.roundedMd]}>
-              <TouchableOpacity onPress={(e) => onPressBtn({ id: i })}>
-                <View
-                  style={[
-                    styles.flexRow,
-                    styles.alignCenter,
-                    styles.paddingSmall,
-                  ]}
-                >
-                  <Image
-                    source={i === 0 ? { uri: user.profile } : menu.icon}
-                    style={[
-                      {
-                        marginRight: 12,
-                        width: 40,
-                        height: 40,
-                        borderRadius: 40,
-                      },
-                      styles.overflowHidden,
-                    ]}
-                  />
-
-                  <Text>{menu.label}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
           ))}
         </View>
-      </TouchableWithoutFeedback>
+      </Animated.View>
     </Modal>
   );
 }
 
 const st = StyleSheet.create({
-  header: {
-    backgroundColor: KOOP_BLUE,
-    color: "white",
+  backdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(11,18,32,0.45)" },
+  sheet: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: colors.bg,
+    borderTopLeftRadius: radius.xl + 4,
+    borderTopRightRadius: radius.xl + 4,
+    paddingHorizontal: space.lg,
+    paddingTop: space.sm,
+    gap: space.md,
   },
-  modalContainer: {
-    flex: 1,
-    //justifyContent: "center",
-    //alignItems: "center",
-    backgroundColor: KOOP_BLUE_TRANSLUCIDE,
+  grabber: {
+    alignSelf: "center",
+    width: 40,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: colors.line,
+    marginBottom: space.xs,
   },
-  spacer: {
-    height: 10,
-    borderBottomColor: KOOP_BLUE_DARK,
-    borderBottomWidth: 1,
+  profile: { flexDirection: "row", alignItems: "center", gap: space.sm },
+  list: {
+    backgroundColor: colors.card,
+    borderRadius: radius.lg,
+    paddingHorizontal: space.md,
   },
 });
